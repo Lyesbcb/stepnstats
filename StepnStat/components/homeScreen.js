@@ -166,7 +166,7 @@ export default function HomeScreen({ styles, setScreen }) {
             Sneakers
           </Text>
         </Pressable>
-        <Pressable style={styles.update} onPress={() => setScreen("run")}>
+        <Pressable style={styles.update} onPress={() => setScreen("runs")}>
           <Text style={styles.text}>Runs</Text>
         </Pressable>
         <Footer styles={styles}></Footer>

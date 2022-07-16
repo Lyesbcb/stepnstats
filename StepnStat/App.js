@@ -2,7 +2,8 @@ import { StyleSheet, View } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import SneakersScreen from "./components/sneakersScreen";
 import MisteryBoxScreen from "./components/misteryBoxScreen";
-import RunsScreen from "./components/runsScreens";
+import RunsScreen from "./components/runsScreen";
+import RunScreen from "./components/runScreen";
 import React, { useState } from "react";
 
 export default function App() {
@@ -18,8 +19,10 @@ export default function App() {
           styles={styles}
           setScreen={setScreen}
         ></MisteryBoxScreen>
-      ) : screen == "run" ? (
+      ) : screen == "runs" ? (
         <RunsScreen styles={styles} setScreen={setScreen}></RunsScreen>
+      ) : screen == "run" ? (
+        <RunScreen styles={styles} setScreen={setScreen}></RunScreen>
       ) : (
         ""
       )}

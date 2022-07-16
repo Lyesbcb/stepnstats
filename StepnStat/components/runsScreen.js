@@ -169,7 +169,7 @@ export default function RunsScreen({ styles, setScreen }) {
             flexDirection: "row",
           }}
           key={run.id}
-          onPress={() => setScreen("home", runs.find(el => el.id === run.id))}
+          onPress={() => setScreen("run")}
         >
           <View
             style={{
@@ -237,7 +237,6 @@ export default function RunsScreen({ styles, setScreen }) {
                   >
                     <Image
                       style={{
-                        resizeMode: "contain",
                         width: "50%",
                         height: "90%",
                       }}
@@ -348,7 +347,7 @@ export default function RunsScreen({ styles, setScreen }) {
   }
 
   return (
-    <View style={{ width: "100%", height: "100%", alignItems: "center"}}>
+    <View style={{ width: "100%", height: "100%", alignItems: "center" }}>
       <View style={styles.headerRuns}>
         <TouchableOpacity
           style={{ ...styles.return, top: "18%" }}
@@ -428,7 +427,7 @@ export default function RunsScreen({ styles, setScreen }) {
           </View>
         </View>
       </View>
-      <ScrollView style={{ height: "100%", width: "100%"}}>
+      <ScrollView style={{ height: "100%", width: "100%" }}>
         {displayRuns()}
       </ScrollView>
 
