@@ -1,0 +1,10 @@
+﻿{
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "hz*H9^iVh9JwsofW$j^znzJT",
+        "database": "stepnstats"
+    },
+    "secret": "C9ppwpE%ncTVzY9PHFLbjc$65L^U5!eS4DoRFjQXtTENbWHG*y$ZR8xHpuA!xjkFBpkZPrMQhadkiXCfGepktr#ckrNjEyhNG4rK6L8cUs^g7ih%&MgnZt&84Gqg8WWr"
+}
