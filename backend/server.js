@@ -18,7 +18,7 @@ app.use('/nfts', require('./nfts/nfts.controller'));
 app.use('/mps/solana', require('./mps/solana/solanaMps.controller'));
 app.use('/mps/bnb', require('./mps/bnb/bnbMps.controller'));
 app.use('/mps/ethereum', require('./mps/ethereum/ethereumMps.controller'));
-// getMp.getMp()
+getMp.getMp()
 
 setInterval(function(){ 
   getMp.getMp()

@@ -8,6 +8,7 @@ const screen = {
   width: 1920,
   height: 1080,
 };
+
 module.exports = {
   getMp,
 };
@@ -15,60 +16,58 @@ module.exports = {
 async function getMp() {
   let driver = new Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options().headless().windowSize(screen))
+    .setChromeOptions(new chrome.Options().windowSize(screen))
     .build();
   try {
     await driver.get("https://m.stepn.com/");
     await sleep(1000);
     await driver
-      .findElement(By.xpath("//div[contains(text(),'Account')]"))
+      .findElement(
+        By.xpath("/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div[4]")
+      )
       .click();
     await sleep(1000);
     // Enter mail
     await driver
-      .findElement(By.id("email-field"))
+      .findElement(
+        By.xpath("/html/body/div[2]/div/div/div/div[2]/div/div/div/div/input")
+      )
       .sendKeys("marketplace.stepn@gmail.com");
     await sleep(1000);
     // Enter password
     await driver
-      .findElement(By.id("standard-adornment-password"))
+      .findElement(
+        By.xpath(
+          "/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div[2]/input"
+        )
+      )
       .sendKeys("Azerty123@");
-    await sleep(1000);
-    // Click on connection button
+    // Click on login
     await driver
       .findElement(
-        By.xpath("//*[@id='headlessui-dialog-panel-:ri:']/div/div[6]/button")
+        By.xpath(
+          "/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div[3]/button"
+        )
       )
       .click();
-    await sleep(1000);
-    // Click on class
-    await driver
-      .findElement(By.xpath('/html/body/div/main/div[3]/div[1]/div/button[2]'))
-      .click();
-    await sleep(1000);
-    // Click on quality
-    await driver
-      .findElement(By.xpath("/html/body/div/main/div[3]/div[1]/div/button[3]"))
-      .click();
-    await sleep(1000);
-    // Click on type
-    await driver
-      .findElement(By.xpath('/html/body/div/main/div[3]/div[1]/div/button[1]'))
-      .click();
+
     await sleep(1000);
     await selectRealm(driver, "Solana");
+     // Click on sneakers
+     await driver
+     .findElement(By.xpath('/html/body/div/main/div/div[1]/div/div[3]/div/button[1]'))
+     .click()
+   await sleep(1000);
     await sleep(1000);
     var solanaMp = await getAllFloorPrice(driver);
     await sleep(1000);
     // Click on Sneakers tab
     await driver
-      .findElement(By.xpath('//*[@id="headlessui-tabs-tab-:r0:"]'))
+      .findElement(
+        By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
+      )
       .click();
     await sleep(1000);
-    // Click on quality
-    await driver
-      .findElement(By.xpath("/html/body/div/main/div[3]/div[1]/div/button[3]"))
-      .click();
     await sleep(1000);
     await selectRealm(driver, "BNB");
     await sleep(1000);
@@ -76,12 +75,9 @@ async function getMp() {
     await sleep(1000);
     // Click on Sneakers tab
     await driver
-      .findElement(By.xpath('//*[@id="headlessui-tabs-tab-:r0:"]'))
-      .click();
-    await sleep(1000);
-    // Click on quality
-    await driver
-      .findElement(By.xpath("/html/body/div/main/div[3]/div[1]/div/button[3]"))
+      .findElement(
+        By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
+      )
       .click();
     await sleep(1000);
     await selectRealm(driver, "Ethereum");
@@ -173,7 +169,9 @@ async function getAllFloorPrice(driver) {
   // GEMS
   await sleep(1000);
   await driver
-    .findElement(By.xpath('//*[@id="headlessui-tabs-tab-:r1:"]'))
+    .findElement(
+      By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[2]")
+    )
     .click();
   await sleep(1000);
   // Efficiency
@@ -414,16 +412,16 @@ function sleep(ms) {
 }
 
 async function selectRealm(driver, type) {
-  console.log("Select realm: " + type)
+  console.log("Select realm: " + type);
   await sleep(1000);
   await driver
-    .findElement(By.xpath('//*[@id="__next"]/main/nav/div/div/div[2]'))
+    .findElement(By.xpath("/html/body/div/main/nav/div/div/div[2]/button/div"))
     .click();
   await sleep(1000);
   await driver
     .findElement(
       By.xpath(
-        '//*[@id="__next"]/main/nav/div/div/div[2]/div[2]/div[1]/div/div[2]'
+        "/html/body/div/main/nav/div/div/div[2]/div/div/div/div[1]/div[2]"
       )
     )
     .click();
@@ -460,41 +458,33 @@ async function selectRealm(driver, type) {
 }
 
 async function selectType(driver, type) {
-  console.log("Select sneakers type: " + type)
+  console.log("Select sneakers type: " + type);
   switch (type) {
     case "Walker":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[3]/div/div/button[1]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[1]")
         )
         .click();
       break;
     case "Jogger":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[3]/div/div/button[2]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[2]")
         )
         .click();
       break;
     case "Runner":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[3]/div/div/button[3]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[3]")
         )
         .click();
       break;
     case "Trainer":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[3]/div/div/button[4]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[4]")
         )
         .click();
       break;
@@ -504,120 +494,99 @@ async function getFloorPrice(driver) {
   try {
     var element = await driver.findElement(
       By.xpath(
-        '//*[@id="__next"]/main/div[3]/div[2]/div/div[1]/div/div/div[1]/div/div[2]/div/div[3]/div[2]'
+        "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
     );
-    return element.getText();
+    return await element.getText().split(" ")[0]
   } catch {
     return "0";
   }
 }
 async function getGemFloorPrice(driver) {
-  return await driver
-    .findElement(
+  try {
+    var element = await driver.findElement(
       By.xpath(
-        '//*[@id="__next"]/main/div[3]/div[2]/div[2]/div[1]/div/div/div[1]/div/div[2]/div/div[2]/div[2]'
+        "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
-    )
-    .then(
-      async function (webElement) {
-        return await webElement.getText();
-      },
-      function (err) {
-        if (err.state && err.state === "no such element") {
-          return "0";
-        } else {
-          return "0";
-        }
-      }
     );
+    return await element.getText().split(" ")[0]
+  } catch {
+    return "0";
+  }
 }
 async function selectQuality(driver, quality) {
-  console.log("Select sneakers quaity: " + quality)
+  console.log("Select sneakers quaity: " + quality);
   switch (quality) {
     case "Common":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[4]/div/div/button[1]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[1]")
         )
         .click();
       break;
     case "Uncommon":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[4]/div/div/button[2]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[2]")
         )
         .click();
       break;
     case "Rare":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[4]/div/div/button[3]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[3]")
         )
         .click();
       break;
     case "Epic":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[4]/div/div/button[4]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[4]")
         )
         .click();
       break;
     case "Legendary":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[4]/div/div/button[5]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[5]")
         )
         .click();
       break;
   }
 }
 async function selectGemType(driver, type) {
-  console.log("Select gem type: " + type)
+  console.log("Select gem type: " + type);
+  await driver
+    .actions({ bridge: true })
+    .move({ x: 200, y: 370 })
+    .click()
+    .perform();
   switch (type) {
     case "Efficiency":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[2]/div/div/button[1]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
         )
         .click();
       break;
     case "Luck":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[2]/div/div/button[2]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[2]")
         )
         .click();
       break;
     case "Comfort":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[2]/div/div/button[3]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[3]")
         )
         .click();
       break;
     case "Resilience":
       await driver
         .findElement(
-          By.xpath(
-            "/html/body/div/main/div[3]/div[1]/div/div[2]/div/div/button[4]"
-          )
+          By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[4]")
         )
         .click();
       break;
@@ -638,7 +607,7 @@ async function selectGemType(driver, type) {
 //   );
 //   const actions = driver.actions();
 //   await sleep(1000);
-//   // await actions.dragAndDrop(minLevel, { x: 100, y: 470 })
+//   // await actions.dragAndDrop(minLevel, { x: 100, y: 370 })
 //   await actions
 //     .mouseMove(minLevel)
 //     .clickAndHold()
@@ -689,54 +658,54 @@ async function selectGemType(driver, type) {
 
 // async function selectMint(driver, mint) {}
 async function selectGemLevel(driver, level) {
-  console.log("Select gem level: " + level)
+  console.log("Select gem level: " + level);
   switch (level) {
     case 1:
       await driver
         .actions({ bridge: true })
-        .move({ x: 30, y: 470 })
+        .move({ x: 40, y: 370 })
         .click()
         .perform();
       break;
     case 2:
       await driver
         .actions({ bridge: true })
-        .move({ x: 60, y: 470 })
+        .move({ x: 60, y: 370 })
         .click()
         .perform();
       break;
     case 3:
       await driver
         .actions({ bridge: true })
-        .move({ x: 90, y: 470 })
+        .move({ x: 90, y: 370 })
         .click()
         .perform();
       break;
     case 4:
       await driver
         .actions({ bridge: true })
-        .move({ x: 120, y: 470 })
+        .move({ x: 120, y: 370 })
         .click()
         .perform();
       break;
     case 5:
       await driver
         .actions({ bridge: true })
-        .move({ x: 140, y: 470 })
+        .move({ x: 140, y: 370 })
         .click()
         .perform();
       break;
     case 6:
       await driver
         .actions({ bridge: true })
-        .move({ x: 160, y: 470 })
+        .move({ x: 160, y: 370 })
         .click()
         .perform();
       break;
     case 7:
       await driver
         .actions({ bridge: true })
-        .move({ x: 180, y: 470 })
+        .move({ x: 180, y: 370 })
         .click()
         .perform();
       break;
@@ -744,21 +713,21 @@ async function selectGemLevel(driver, level) {
     case 8:
       await driver
         .actions({ bridge: true })
-        .move({ x: 200, y: 470 })
+        .move({ x: 200, y: 370 })
         .click()
         .perform();
       break;
     case 9:
       await driver
         .actions({ bridge: true })
-        .move({ x: 200, y: 470 })
+        .move({ x: 200, y: 370 })
         .click()
         .perform();
       break;
     case 10:
       await driver
         .actions({ bridge: true })
-        .move({ x: 200, y: 470 })
+        .move({ x: 200, y: 370 })
         .click()
         .perform();
       break;
