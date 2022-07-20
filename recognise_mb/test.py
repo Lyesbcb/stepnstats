@@ -1,47 +1,33 @@
-import cv2
+import cv2 as cv
 import numpy as np
-# White backgroujd
-  # image = cv2.imread("test2.png")
-  # r = 150.0 / image.shape[1]
-  # dim = (150, int(image.shape[0] * r))
-  # lower_white = np.array([220, 220, 220], dtype=np.uint8)
-  # upper_white = np.array([255, 255, 255], dtype=np.uint8)
-  # mask = cv2.inRange(image, lower_white, upper_white) # could also use threshold
-  # coloured = image.copy()
-  # coloured[mask == 255] = (255, 255, 255)
-  # cv2.imwrite('res.png', coloured) # gives black background
-# Read image
-img = cv2.imread('res.png')
-hh, ww = img.shape[:2]
 
-# threshold on white
-# Define lower and uppper limits
-lower = np.array([200, 200, 200])
-upper = np.array([255, 255, 255])
+base = cv.imread('./input/gem/resilience/lvl1.png')
+test = cv.imread('result.png')
 
-# Create mask to only select black
-thresh = cv2.inRange(img, lower, upper)
+hsv_base = cv.cvtColor(base, cv.COLOR_BGR2HSV)
+hsv_test = cv.cvtColor(test, cv.COLOR_BGR2HSV)
 
-# apply morphology
-kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10,10))
-morph = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+h_bins = 50
+s_bins = 60
+histSize = [h_bins, s_bins]
+h_ranges = [0, 180]
+s_ranges = [0, 256]
+ranges = h_ranges + s_ranges
+channels = [0, 1]
 
-# invert morp image
-mask = 255 - morph
+hist_base = cv.calcHist([hsv_base], channels, None, histSize, ranges, accumulate=False)
+cv.normalize(hist_base, hist_base, alpha=0, beta=1, norm_type=cv.NORM_MINMAX)
+hist_test = cv.calcHist([hsv_test], channels, None, histSize, ranges, accumulate=False)
+cv.normalize(hist_test, hist_test, alpha=0, beta=1, norm_type=cv.NORM_MINMAX)
 
-# apply mask to image
-result = cv2.bitwise_and(img, img, mask=mask)
+compare_method = cv.HISTCMP_CORREL
 
+base_base = cv.compareHist(hist_base, hist_base, compare_method)
+base_test = cv.compareHist(hist_base, hist_test, compare_method)
 
-# save results
-cv2.imwrite('pills_thresh.jpg', thresh)
-cv2.imwrite('pills_morph.jpg', morph)
-cv2.imwrite('pills_mask.jpg', mask)
-cv2.imwrite('pills_result2.jpg', result)
+print('base_base Similarity = ', base_base)
+print('base_test Similarity = ', base_test)
 
-cv2.imshow('thresh', thresh)
-cv2.imshow('morph', morph)
-cv2.imshow('mask', mask)
-cv2.imshow('result', result)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv.imshow('base',base)
+cv.imshow('test1',test)
+cv.waitKey(0)

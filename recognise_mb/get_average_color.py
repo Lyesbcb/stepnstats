@@ -8,35 +8,61 @@ def closest_value(input_list, input_value):
   i = (np.abs(arr - input_value)).argmin()
  
   return arr[i]
- 
-list=[]
-img1 = io.imread('./res.png')
-img2 = io.imread('./input/gem/resilience/lvl1.png')
-img3 = io.imread('./input/gem/resilience/lvl2.png')
-img4 = io.imread('./input/gem/resilience/lvl3.png')
-img5 = io.imread('./input/gem/resilience/lvl4.png')
-img6 = io.imread('./input/gem/resilience/lvl5.png')
-img7 = io.imread('./input/gem/resilience/lvl6.png')
-img8 = io.imread('./input/gem/resilience/lvl7.png')
-img9 = io.imread('./input/gem/resilience/lvl8.png')
-img10 = io.imread('./input/gem/resilience/lvl9.png')
 
-average1 = img1.mean(axis=0).mean(axis=0)
-average2 = img2.mean(axis=0).mean(axis=0)
-average3 = img3.mean(axis=0).mean(axis=0)
-average4 = img4.mean(axis=0).mean(axis=0)
-average5 = img5.mean(axis=0).mean(axis=0)
-average6 = img6.mean(axis=0).mean(axis=0)
-average7 = img7.mean(axis=0).mean(axis=0)
-average8 = img8.mean(axis=0).mean(axis=0)
-average9 = img9.mean(axis=0).mean(axis=0)
-average10 = img10.mean(axis=0).mean(axis=0)
+paths = [
+    "./input/gem/luck/lvl1.png",
+    "./input/gem/luck/lvl2.png",
+    "./input/gem/luck/lvl3.png",
+    "./input/gem/luck/lvl4.png",
+    "./input/gem/luck/lvl5.png",
+    "./input/gem/luck/lvl6.png",
+    "./input/gem/luck/lvl7.png",
+    "./input/gem/luck/lvl8.png",
+    "./input/gem/luck/lvl9.png",
+    "./input/gem/comfort/lvl1.png",
+    "./input/gem/comfort/lvl2.png",
+    "./input/gem/comfort/lvl3.png",
+    "./input/gem/comfort/lvl4.png",
+    "./input/gem/comfort/lvl5.png",
+    "./input/gem/comfort/lvl6.png",
+    "./input/gem/comfort/lvl7.png",
+    "./input/gem/comfort/lvl8.png",
+    "./input/gem/comfort/lvl9.png",
+    "./input/gem/efficiency/lvl1.png",
+    "./input/gem/efficiency/lvl2.png",
+    "./input/gem/efficiency/lvl3.png",
+    "./input/gem/efficiency/lvl4.png",
+    "./input/gem/efficiency/lvl5.png",
+    "./input/gem/efficiency/lvl6.png",
+    "./input/gem/efficiency/lvl7.png",
+    "./input/gem/efficiency/lvl8.png",
+    "./input/gem/efficiency/lvl9.png",
+    "./input/gem/resilience/lvl1.png",
+    "./input/gem/resilience/lvl2.png",
+    "./input/gem/resilience/lvl3.png",
+    "./input/gem/resilience/lvl4.png",
+    "./input/gem/resilience/lvl5.png",
+    "./input/gem/resilience/lvl6.png",
+    "./input/gem/resilience/lvl7.png",
+    "./input/gem/resilience/lvl8.png",
+    "./input/gem/resilience/lvl9.png",
+    "./input/scroll/common.png",
+    "./input/scroll/uncommon.png",
+    "./input/scroll/rare.png",
+    "./input/scroll/epic.png",
+    "./input/scroll/legendary.png",
+    "./input/gst.png"
+]
+images = []
+average = []
 
-for i in [average2, average3, average4, average5, average6, average7, average8, average9, average10]:
-  print((i[0]+i[1]+i[2])/3)
-  list.append((i[0]+i[1]+i[2])/3)
-    
-print("test image: ")
-print(average1)
-print((average1[0]+average1[1]+average1[2])/3)
-# print(closest_value(list, (average1[0]+average1[1]+average1[2])/3))
+
+
+for path in paths:
+  image = io.imread(path)
+  images.append(image)
+  image_colors = image.mean(axis=0).mean(axis=0)
+  average_color= (image_colors[0]+image_colors[1]+image_colors[2])/3
+  average.append(average_color)
+  print(path + " :")
+  print(average_color)

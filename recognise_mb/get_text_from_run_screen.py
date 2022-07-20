@@ -17,22 +17,17 @@ def get_text_from_run_screen(img):
     text_result = []
     for text in result:
         text_result.append(text[-1])
-        print(text[-1])
-
     # If you want to see the recognition
-    spacer = 100
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    for detection in result: 
-        top_left = tuple(detection[0][0])
-        bottom_right = tuple(detection[0][2])
-        text = detection[1]
-        img = cv2.rectangle(img,top_left,bottom_right,(0,255,0),3)
-        img = cv2.putText(img,text,(20,spacer), font, 0.5,(0,255,0),2,cv2.LINE_AA)
-        spacer+=15
+    # spacer = 100
+    # font = cv2.FONT_HERSHEY_SIMPLEX
+    # for detection in result: 
+    #     top_left = tuple(detection[0][0])
+    #     bottom_right = tuple(detection[0][2])
+    #     text = detection[1]
+    #     img = cv2.rectangle(img,top_left,bottom_right,(0,255,0),3)
+    #     img = cv2.putText(img,text,(20,spacer), font, 0.5,(0,255,0),2,cv2.LINE_AA)
+    #     spacer+=15
 
-    plt.figure(figsize=(10,10))
-    plt.imsave("output.png", img)
-
-test = cv2.imread('input/screens/run/stepn1.png')
-
-get_text_from_run_screen(test)
+    # plt.figure(figsize=(10,10))
+    # plt.imsave("output.png", img)
+    return text_result
