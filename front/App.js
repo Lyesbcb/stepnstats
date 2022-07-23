@@ -131,7 +131,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "22%",
     alignContent: "center",
-    justifyContent: "center",
   },
   halo: {
     // box-shadow: 0px 0px 0px 10px red, 0px 0px 0px 20px green, 0px 0px 0px 30px yellow, 0px 0px 0px 40px pink;

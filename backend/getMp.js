@@ -60,6 +60,7 @@ async function getMp() {
    await sleep(1000);
     await sleep(1000);
     var solanaMp = await getAllFloorPrice(driver);
+    console.log(solanaMp)
     await sleep(1000);
     // Click on Sneakers tab
     await driver
@@ -91,7 +92,7 @@ async function getMp() {
   }
 }
 async function getAllFloorPrice(driver) {
-  // // SNEAKERS
+  // SNEAKERS
   await sleep(1000);
   // COMMON
   await selectQuality(driver, "Common");
@@ -99,72 +100,88 @@ async function getAllFloorPrice(driver) {
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerCommon = await getFloorPrice(driver);
+  console.log(walkerCommon)
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerCommon = await getFloorPrice(driver);
+  console.log(joggerCommon)
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerCommon = await getFloorPrice(driver);
+  console.log(runnerCommon)
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerCommon = await getFloorPrice(driver);
+  console.log(trainerCommon)
   // UNCOMMON
   await selectQuality(driver, "Uncommon");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerUncommon = await getFloorPrice(driver);
+  console.log(walkerUncommon)
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerUncommon = await getFloorPrice(driver);
+  console.log(joggerUncommon)
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerUncommon = await getFloorPrice(driver);
+  console.log(runnerUncommon)
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerUncommon = await getFloorPrice(driver);
+  console.log(trainerUncommon)
   // RARE
   await selectQuality(driver, "Rare");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerRare = await getFloorPrice(driver);
+  console.log(walkerRare)
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerRare = await getFloorPrice(driver);
+  console.log(joggerRare)
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerRare = await getFloorPrice(driver);
+  console.log(runnerRare)
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerRare = await getFloorPrice(driver);
+  console.log(trainerRare)
   // EPIC
   await selectQuality(driver, "Epic");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerEpic = await getFloorPrice(driver);
+  console.log(walkerEpic)
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerEpic = await getFloorPrice(driver);
+  console.log(joggerEpic)
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerEpic = await getFloorPrice(driver);
+  console.log(runnerEpic)
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerEpic = await getFloorPrice(driver);
+  console.log(trainerEpic)
 
   // GEMS
   await sleep(1000);
@@ -213,10 +230,6 @@ async function getAllFloorPrice(driver) {
   await sleep(1000);
   var efficiencyLvl9 = await getGemFloorPrice(driver);
   await sleep(1000);
-  await selectGemLevel(driver, 10);
-  await sleep(1000);
-  var efficiencyLvl10 = await getGemFloorPrice(driver);
-  await sleep(1000);
   // Luck
   await selectGemType(driver, "Luck");
   await sleep(1000);
@@ -255,10 +268,6 @@ async function getAllFloorPrice(driver) {
   await selectGemLevel(driver, 9);
   await sleep(1000);
   var luckLvl9 = await getGemFloorPrice(driver);
-  await sleep(1000);
-  await selectGemLevel(driver, 10);
-  await sleep(1000);
-  var luckLvl10 = await getGemFloorPrice(driver);
   await sleep(1000);
   // Comfort
   await selectGemType(driver, "Comfort");
@@ -299,10 +308,6 @@ async function getAllFloorPrice(driver) {
   await sleep(1000);
   var comfortLvl9 = await getGemFloorPrice(driver);
   await sleep(1000);
-  await selectGemLevel(driver, 10);
-  await sleep(1000);
-  var comfortLvl10 = await getGemFloorPrice(driver);
-  await sleep(1000);
   // Resilience
   await selectGemType(driver, "Resilience");
   await sleep(1000);
@@ -342,9 +347,6 @@ async function getAllFloorPrice(driver) {
   await sleep(1000);
   var resilienceLvl9 = await getGemFloorPrice(driver);
   await sleep(1000);
-  await selectGemLevel(driver, 10);
-  await sleep(1000);
-  var resilienceLvl10 = await getGemFloorPrice(driver);
   var json = {
     walkerCommon,
     joggerCommon,
@@ -371,7 +373,6 @@ async function getAllFloorPrice(driver) {
     efficiencyLvl7,
     efficiencyLvl8,
     efficiencyLvl9,
-    efficiencyLvl10,
     luckLvl1,
     luckLvl2,
     luckLvl3,
@@ -381,7 +382,6 @@ async function getAllFloorPrice(driver) {
     luckLvl7,
     luckLvl8,
     luckLvl9,
-    luckLvl10,
     resilienceLvl1,
     resilienceLvl2,
     resilienceLvl3,
@@ -391,7 +391,6 @@ async function getAllFloorPrice(driver) {
     resilienceLvl7,
     resilienceLvl8,
     resilienceLvl9,
-    resilienceLvl10,
     comfortLvl1,
     comfortLvl2,
     comfortLvl3,
@@ -401,7 +400,6 @@ async function getAllFloorPrice(driver) {
     comfortLvl7,
     comfortLvl8,
     comfortLvl9,
-    comfortLvl10,
   };
   return json;
 }
@@ -463,28 +461,28 @@ async function selectType(driver, type) {
     case "Walker":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[1]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[1]")
         )
         .click();
       break;
     case "Jogger":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[2]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[2]")
         )
         .click();
       break;
     case "Runner":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[3]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[3]")
         )
         .click();
       break;
     case "Trainer":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[4]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[4]")
         )
         .click();
       break;
@@ -497,7 +495,9 @@ async function getFloorPrice(driver) {
         "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
     );
-    return await element.getText().split(" ")[0]
+    var result = await element.getText()
+    result = result.split(" ")[0]
+    return result
   } catch {
     return "0";
   }
@@ -509,7 +509,9 @@ async function getGemFloorPrice(driver) {
         "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
     );
-    return await element.getText().split(" ")[0]
+    var result = await element.getText()
+    result = result.split(" ")[0]
+    return result
   } catch {
     return "0";
   }
@@ -520,35 +522,35 @@ async function selectQuality(driver, quality) {
     case "Common":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[1]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[1]")
         )
         .click();
       break;
     case "Uncommon":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[2]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[2]")
         )
         .click();
       break;
     case "Rare":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[3]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[3]")
         )
         .click();
       break;
     case "Epic":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[4]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[4]")
         )
         .click();
       break;
     case "Legendary":
       await driver
         .findElement(
-          By.xpath("/html/body/div/main/div/div[1]/div/div[7]/div/button[5]")
+          By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[5]")
         )
         .click();
       break;
@@ -718,13 +720,6 @@ async function selectGemLevel(driver, level) {
         .perform();
       break;
     case 9:
-      await driver
-        .actions({ bridge: true })
-        .move({ x: 200, y: 370 })
-        .click()
-        .perform();
-      break;
-    case 10:
       await driver
         .actions({ bridge: true })
         .move({ x: 200, y: 370 })

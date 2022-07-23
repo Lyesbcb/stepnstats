@@ -29,7 +29,6 @@ function model(sequelize) {
     efficiencyLvl7: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     efficiencyLvl8: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     efficiencyLvl9: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
-    efficiencyLvl10: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     luckLvl1: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     luckLvl2: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     luckLvl3: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
@@ -39,7 +38,6 @@ function model(sequelize) {
     luckLvl7: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     luckLvl8: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     luckLvl9: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
-    luckLvl10: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     resilienceLvl1: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     resilienceLvl2: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     resilienceLvl3: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
@@ -49,7 +47,6 @@ function model(sequelize) {
     resilienceLvl7: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     resilienceLvl8: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     resilienceLvl9: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
-    resilienceLvl10: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl1: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl2: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl3: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
@@ -59,7 +56,6 @@ function model(sequelize) {
     comfortLvl7: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl8: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl9: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
-    comfortLvl10: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
   };
 
   const options = {

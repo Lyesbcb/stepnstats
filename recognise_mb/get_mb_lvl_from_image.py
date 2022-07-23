@@ -25,7 +25,6 @@ def get_mb_lvl_from_image(img , type):
 			cv2.cvtColor(cv2.imread("./input/mb/lvl7.png"), cv2.COLOR_BGR2RGB),
 			cv2.cvtColor(cv2.imread("./input/mb/lvl8.png"), cv2.COLOR_BGR2RGB),
 			cv2.cvtColor(cv2.imread("./input/mb/lvl9.png"), cv2.COLOR_BGR2RGB),
-			cv2.cvtColor(cv2.imread("./input/mb/lvl10.png"), cv2.COLOR_BGR2RGB)
 			]
 	else:
 		mbs = [
@@ -38,7 +37,6 @@ def get_mb_lvl_from_image(img , type):
 			cv2.cvtColor(cv2.imread("./input/open_mb/lvl7.png"), cv2.COLOR_BGR2RGB),
 			cv2.cvtColor(cv2.imread("./input/open_mb/lvl8.png"), cv2.COLOR_BGR2RGB),
 			cv2.cvtColor(cv2.imread("./input/open_mb/lvl9.png"), cv2.COLOR_BGR2RGB),
-			cv2.cvtColor(cv2.imread("./input/open_mb/lvl10.png"), cv2.COLOR_BGR2RGB)
 			]
 	precisions = [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
 	result = []
