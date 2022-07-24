@@ -3,13 +3,29 @@ const db = require("_helpers/db");
 
 module.exports = {
   getAll,
+  getDate,
   create,
 };
 
 async function getAll(req) {
-  return await db.BNBMp.findAll({offset: (req.query.page - 1) * 1,
+  return await db.BNBMp.findAll({
+    offset: (req.query.page - 1) * 1,
     limit: 10,
-    subQuery: false,});
+    subQuery: false,
+  });
+}
+
+async function getDate(req) {
+  return await db.BNBMp.findAll({
+    where: {
+      createdAt: {
+        [db.Op.lte]: req.query.date,
+      },
+    },
+    limit: 1,
+    order: ["createdAt", "DESC"],
+    subQuery: false,
+  });
 }
 
 async function create(params) {

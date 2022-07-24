@@ -1,10 +1,14 @@
 ﻿{
     "database": {
-        "host": "localhost",
-        "port": 3306,
-        "user": "root",
-        "password": "hz*H9^iVh9JwsofW$j^znzJT",
+        "host": "159.65.89.5",
+        "port": "3306",
+        "user": "backend",
+        "password": "UF!ZRAK2*3#rH9JZyVNzB#Wf",
         "database": "stepnstats"
     },
-    "secret": "C9ppwpE%ncTVzY9PHFLbjc$65L^U5!eS4DoRFjQXtTENbWHG*y$ZR8xHpuA!xjkFBpkZPrMQhadkiXCfGepktr#ckrNjEyhNG4rK6L8cUs^g7ih%&MgnZt&84Gqg8WWr"
+    "secret": "C9ppwpE%ncTVzY9PHFLbjc$65L^U5!eS4DoRFjQXtTENbWHG*y$ZR8xHpuA!xjkFBpkZPrMQhadkiXCfGepktr#ckrNjEyhNG4rK6L8cUs^g7ih%&MgnZt&84Gqg8WWr",
+    "marketplace":{
+        "mail": "marketplace.stepn@gmail.com",
+        "password": "Azerty123@"
+    }
 }

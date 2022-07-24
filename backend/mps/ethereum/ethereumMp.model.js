@@ -69,5 +69,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("EthereumMp", attributes, options);
+  return sequelize.define("ethereummps", attributes, options);
 }

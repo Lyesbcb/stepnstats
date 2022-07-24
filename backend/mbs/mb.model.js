@@ -38,5 +38,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("Mb", attributes, options);
+  return sequelize.define("mbs", attributes, options);
 }

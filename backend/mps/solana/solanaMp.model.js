@@ -73,5 +73,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("SolanaMp", attributes, options);
+  return sequelize.define("solanamps", attributes, options);
 }

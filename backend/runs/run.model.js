@@ -34,5 +34,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("Run", attributes, options);
+  return sequelize.define("runs", attributes, options);
 }

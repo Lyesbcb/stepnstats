@@ -69,5 +69,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("BNBMp", attributes, options);
+  return sequelize.define("bnbmps", attributes, options);
 }

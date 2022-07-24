@@ -1,4 +1,5 @@
 const webdriver = require("selenium-webdriver");
+const config = require("./config.json");
 const chrome = require("selenium-webdriver/chrome");
 const { Builder, Browser, By, Key, until } = require("selenium-webdriver");
 const solanaMpService = require("./mps/solana/solanaMp.service");
@@ -12,11 +13,19 @@ const screen = {
 module.exports = {
   getMp,
 };
-
 async function getMp() {
-  let driver = new Builder()
+  const options = new chrome.Options();
+  options.addArguments("--disable-dev-shm-usage");
+  options.addArguments("--no-sandbox");
+  const driver = new Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options().windowSize(screen))
+    .setChromeOptions(
+      new chrome.Options()
+        .addArguments("--no-sandbox")
+        .addArguments("--disable-dev-shm-usage")
+        .headless()
+        .windowSize(screen)
+    )
     .build();
   try {
     await driver.get("https://m.stepn.com/");
@@ -32,7 +41,7 @@ async function getMp() {
       .findElement(
         By.xpath("/html/body/div[2]/div/div/div/div[2]/div/div/div/div/input")
       )
-      .sendKeys("marketplace.stepn@gmail.com");
+      .sendKeys(config.marketplace.mail);
     await sleep(1000);
     // Enter password
     await driver
@@ -41,7 +50,7 @@ async function getMp() {
           "/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div[2]/input"
         )
       )
-      .sendKeys("Azerty123@");
+      .sendKeys(config.marketplace.password);
     // Click on login
     await driver
       .findElement(
@@ -53,14 +62,16 @@ async function getMp() {
 
     await sleep(1000);
     await selectRealm(driver, "Solana");
-     // Click on sneakers
-     await driver
-     .findElement(By.xpath('/html/body/div/main/div/div[1]/div/div[3]/div/button[1]'))
-     .click()
-   await sleep(1000);
+    // Click on sneakers
+    await driver
+      .findElement(
+        By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
+      )
+      .click();
+    await sleep(1000);
     await sleep(1000);
     var solanaMp = await getAllFloorPrice(driver);
-    console.log(solanaMp)
+    console.log(solanaMp);
     await sleep(1000);
     // Click on Sneakers tab
     await driver
@@ -100,88 +111,88 @@ async function getAllFloorPrice(driver) {
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerCommon = await getFloorPrice(driver);
-  console.log(walkerCommon)
+  console.log(walkerCommon);
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerCommon = await getFloorPrice(driver);
-  console.log(joggerCommon)
+  console.log(joggerCommon);
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerCommon = await getFloorPrice(driver);
-  console.log(runnerCommon)
+  console.log(runnerCommon);
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerCommon = await getFloorPrice(driver);
-  console.log(trainerCommon)
+  console.log(trainerCommon);
   // UNCOMMON
   await selectQuality(driver, "Uncommon");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerUncommon = await getFloorPrice(driver);
-  console.log(walkerUncommon)
+  console.log(walkerUncommon);
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerUncommon = await getFloorPrice(driver);
-  console.log(joggerUncommon)
+  console.log(joggerUncommon);
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerUncommon = await getFloorPrice(driver);
-  console.log(runnerUncommon)
+  console.log(runnerUncommon);
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerUncommon = await getFloorPrice(driver);
-  console.log(trainerUncommon)
+  console.log(trainerUncommon);
   // RARE
   await selectQuality(driver, "Rare");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerRare = await getFloorPrice(driver);
-  console.log(walkerRare)
+  console.log(walkerRare);
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerRare = await getFloorPrice(driver);
-  console.log(joggerRare)
+  console.log(joggerRare);
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerRare = await getFloorPrice(driver);
-  console.log(runnerRare)
+  console.log(runnerRare);
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerRare = await getFloorPrice(driver);
-  console.log(trainerRare)
+  console.log(trainerRare);
   // EPIC
   await selectQuality(driver, "Epic");
   await sleep(1000);
   await selectType(driver, "Walker");
   await sleep(1000);
   var walkerEpic = await getFloorPrice(driver);
-  console.log(walkerEpic)
+  console.log(walkerEpic);
   await sleep(1000);
   await selectType(driver, "Jogger");
   await sleep(1000);
   var joggerEpic = await getFloorPrice(driver);
-  console.log(joggerEpic)
+  console.log(joggerEpic);
   await sleep(1000);
   await selectType(driver, "Runner");
   await sleep(1000);
   var runnerEpic = await getFloorPrice(driver);
-  console.log(runnerEpic)
+  console.log(runnerEpic);
   await sleep(1000);
   await selectType(driver, "Trainer");
   await sleep(1000);
   var trainerEpic = await getFloorPrice(driver);
-  console.log(trainerEpic)
+  console.log(trainerEpic);
 
   // GEMS
   await sleep(1000);
@@ -495,9 +506,9 @@ async function getFloorPrice(driver) {
         "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
     );
-    var result = await element.getText()
-    result = result.split(" ")[0]
-    return result
+    var result = await element.getText();
+    result = result.split(" ")[0];
+    return result;
   } catch {
     return "0";
   }
@@ -509,9 +520,9 @@ async function getGemFloorPrice(driver) {
         "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
       )
     );
-    var result = await element.getText()
-    result = result.split(" ")[0]
-    return result
+    var result = await element.getText();
+    result = result.split(" ")[0];
+    return result;
   } catch {
     return "0";
   }

@@ -38,5 +38,5 @@ function model(sequelize) {
     },
   };
 
-  return sequelize.define("Nft", attributes, options);
+  return sequelize.define("nfts", attributes, options);
 }
