@@ -20,6 +20,7 @@ function createSchema(req, res, next) {
   const schema = Joi.object({
     lvl: Joi.string().required(),
     realm: Joi.string().required(),
+    dropRate: Joi.string().required(),
     fileName: Joi.string().required(),
     content1: Joi.string().required(),
     content1Quantity: Joi.string().required(),
@@ -70,6 +71,7 @@ function updateSchema(req, res, next) {
     lvl: Joi.string().empty(""),
     fileName: Joi.string().empty(""),
     realm: Joi.string().empty(""),
+    dropRate: Joi.string().empty(""),
     content1: Joi.string().empty(""),
     content1Quantity: Joi.string().empty(""),
     content2: Joi.string().empty(""),

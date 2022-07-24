@@ -1,12 +1,14 @@
 import Icon from "react-native-elements/dist/icons/Icon";
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 
-export default function DetailMisteryBox({ styles, data }) {
+export default function DetailMisteryBox({ data, nextMb, previousMb }) {
   const [price, setPrice] = useState("--.--");
   const [date, setDate] = useState("--/--/----");
-  const [purcentage, setPurcentage] = useState("--.--");
   var mbPrices = {
+    gst: "0.08",
+    solana: "42.23",
+    gmt: "1.12",
     walkerCommon: "0.66",
     joggerCommon: "0.699",
     runnerCommon: "0.669",
@@ -63,10 +65,127 @@ export default function DetailMisteryBox({ styles, data }) {
     createdAt: "2022-07-23T19:49:55.599Z",
     updatedAt: "2022-07-23T19:49:55.599Z",
   };
+
+  const mbsColor = [
+    "#B2B2B2",
+    "#B2B2B2",
+    "#80FF1D",
+    "#80FF1D",
+    "#00A5F6",
+    "#00A5F6",
+    "#9F80FF",
+    "#9F80FF",
+    "#FA6C00",
+    "#FA6C00",
+  ];
+
+  const mbsImage = [
+    require("../assets/mb/lvl1.png"),
+    require("../assets/mb/lvl2.png"),
+    require("../assets/mb/lvl3.png"),
+    require("../assets/mb/lvl4.png"),
+    require("../assets/mb/lvl5.png"),
+    require("../assets/mb/lvl6.png"),
+    require("../assets/mb/lvl7.png"),
+    require("../assets/mb/lvl8.png"),
+    require("../assets/mb/lvl9.png"),
+    require("../assets/mb/lvl10.png"),
+  ];
+
+  const contents = [
+    "efficiencyLvl1",
+    "efficiencyLvl2",
+    "efficiencyLvl3",
+    "efficiencyLvl4",
+    "efficiencyLvl5",
+    "efficiencyLvl6",
+    "efficiencyLvl7",
+    "efficiencyLvl8",
+    "efficiencyLvl9",
+    "luckLvl1",
+    "luckLvl2",
+    "luckLvl3",
+    "luckLvl4",
+    "luckLvl5",
+    "luckLvl6",
+    "luckLvl7",
+    "luckLvl8",
+    "luckLvl9",
+    "comfortLvl1",
+    "comfortLvl2",
+    "comfortLvl3",
+    "comfortLvl4",
+    "comfortLvl5",
+    "comfortLvl6",
+    "comfortLvl7",
+    "comfortLvl8",
+    "comfortLvl9",
+    "resilienceLvl1",
+    "resilienceLvl2",
+    "resilienceLvl3",
+    "resilienceLvl4",
+    "resilienceLvl5",
+    "resilienceLvl6",
+    "resilienceLvl7",
+    "resilienceLvl8",
+    "resilienceLvl9",
+    "scrollCommon",
+    "scrollUncommon",
+    "scrollRare",
+    "scrollEpic",
+    "scrollLegendary",
+    "gst",
+  ];
+  const contentImage = [
+    require("../assets/gem/efficiency/lvl1.png"),
+    require("../assets/gem/efficiency/lvl2.png"),
+    require("../assets/gem/efficiency/lvl3.png"),
+    require("../assets/gem/efficiency/lvl4.png"),
+    require("../assets/gem/efficiency/lvl5.png"),
+    require("../assets/gem/efficiency/lvl6.png"),
+    require("../assets/gem/efficiency/lvl7.png"),
+    require("../assets/gem/efficiency/lvl8.png"),
+    require("../assets/gem/efficiency/lvl9.png"),
+    require("../assets/gem/luck/lvl1.png"),
+    require("../assets/gem/luck/lvl2.png"),
+    require("../assets/gem/luck/lvl3.png"),
+    require("../assets/gem/luck/lvl4.png"),
+    require("../assets/gem/luck/lvl5.png"),
+    require("../assets/gem/luck/lvl6.png"),
+    require("../assets/gem/luck/lvl7.png"),
+    require("../assets/gem/luck/lvl8.png"),
+    require("../assets/gem/luck/lvl9.png"),
+    require("../assets/gem/comfort/lvl1.png"),
+    require("../assets/gem/comfort/lvl2.png"),
+    require("../assets/gem/comfort/lvl3.png"),
+    require("../assets/gem/comfort/lvl4.png"),
+    require("../assets/gem/comfort/lvl5.png"),
+    require("../assets/gem/comfort/lvl6.png"),
+    require("../assets/gem/comfort/lvl7.png"),
+    require("../assets/gem/comfort/lvl8.png"),
+    require("../assets/gem/comfort/lvl9.png"),
+    require("../assets/gem/resilience/lvl1.png"),
+    require("../assets/gem/resilience/lvl2.png"),
+    require("../assets/gem/resilience/lvl3.png"),
+    require("../assets/gem/resilience/lvl4.png"),
+    require("../assets/gem/resilience/lvl5.png"),
+    require("../assets/gem/resilience/lvl6.png"),
+    require("../assets/gem/resilience/lvl7.png"),
+    require("../assets/gem/resilience/lvl8.png"),
+    require("../assets/gem/resilience/lvl9.png"),
+    require("../assets/scroll/common.png"),
+    require("../assets/scroll/uncommon.png"),
+    require("../assets/scroll/rare.png"),
+    require("../assets/scroll/epic.png"),
+    require("../assets/scroll/legendary.png"),
+    require("../assets/gst.png"),
+  ];
+
   useEffect(() => {
-    // Update the document title using the browser API
-    getDate();
-    getPrice();
+    if (data != 0) {
+      getDate();
+      getPrice();
+    }
   });
 
   function getDate() {
@@ -77,26 +196,10 @@ export default function DetailMisteryBox({ styles, data }) {
     date = `${day}/${month}/${year}`;
     setDate(date);
   }
-  // id: 1,
-  // userId: 2,
-  // lvl: 6,
-  // fileName: "myScreen.png",
-  // content1: "efficiencyLvl1",
-  // content1Quantity: 6,
-  // content2: "efficiencyLvl2",
-  // content2Quantity: 2,
-  // content3: "efficiencyLvl3",
-  // content3Quantity: 1,
-  // content4: "scrollLvl1",
-  // content4Quantity: 2,
-  // content5: "",
-  // content5Quantity: "",
-  // content6: "",
-  // content6Quantity: "",
-  // createdAt: "2000-12-17T23:20:36.000Z",
-  // updatedAt: "2000-12-17T23:20:36.000Z",
+
   function getPrice() {
     // Here request to have price of marketplace at specific date
+    var total = 0;
     const content1 = data.content1;
     const content1Quantity = data.content1Quantity;
     const content2 = data.content2;
@@ -109,15 +212,274 @@ export default function DetailMisteryBox({ styles, data }) {
     const content5Quantity = data.content5Quantity;
     const content6 = data.content6;
     const content6Quantity = data.content6Quantity;
-
-    console.log(content1)
+    if (mbPrices[content1]) {
+      total += mbPrices[content1] * content1Quantity;
+    }
+    if (mbPrices[content2]) {
+      total += mbPrices[content2] * content2Quantity;
+    }
+    if (mbPrices[content3]) {
+      total += mbPrices[content3] * content3Quantity;
+    }
+    if (mbPrices[content4]) {
+      total += mbPrices[content4] * content4Quantity;
+    }
+    if (mbPrices[content5]) {
+      total += mbPrices[content5] * content5Quantity;
+    }
+    if (mbPrices[content6]) {
+      total += mbPrices[content6] * content6Quantity;
+    }
+    setPrice((total * mbPrices.solana).toFixed(2));
   }
 
+  function showContent() {
+    return (
+      <View
+        style={{
+          width: "100%",
+          height: "40%",
+          justifyContent: "center",
+          top: "20%",
+          flexDirection: "column",
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            height: "50%",
+            justifyContent: "space-evenly",
+            flexDirection: "row",
+          }}
+        >
+          {data.content1 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content1)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content1Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+          {data.content2 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content2)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content2Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+          {data.content3 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content3)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content3Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+        </View>
+        <View
+          style={{
+            width: "100%",
+            height: "50%",
+            justifyContent: "space-evenly",
+            flexDirection: "row",
+          }}
+        >
+          {data.content4 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content4)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content4Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+          {data.content5 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content5)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content5Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+          {data.content6 != "" ? (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={contentImage[contents.indexOf(data.content6)]}
+                style={{ width: "60%", height: "80%", resizeMode: "contain" }}
+              ></Image>
+              <Text
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  margin: "1%",
+                }}
+              >
+                x{data.content6Quantity}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "28%",
+                height: "90%",
+                borderRadius: 10,
+              }}
+            ></View>
+          )}
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <View
         style={{
-          backgroundColor: "#BABCBE",
+          backgroundColor: mbsColor[data.lvl],
           width: "15%",
           height: "4%",
           borderRadius: 5,
@@ -128,36 +490,70 @@ export default function DetailMisteryBox({ styles, data }) {
         }}
       >
         <Text style={{ color: "white", fontSize: 12 }}>
-          Lvl {data !== "" ? data.lvl : "-"}
+          Lvl {data != 0 ? data.lvl : "-"}
         </Text>
       </View>
       <View
         style={{
           flexDirection: "row",
           width: "100%",
-          height: "30%",
+          height: "22%",
           justifyContent: "space-around",
           top: "20%",
           alignItems: "center",
         }}
       >
-        <Icon type="antdesign" name="left" size={50} color="black"></Icon>
-        <Icon type="antdesign" name="plus" size={50} color="black"></Icon>
-        <Icon type="antdesign" name="right" size={50} color="black"></Icon>
+        <Icon
+          type="antdesign"
+          name="left"
+          size={60}
+          color="black"
+          onPress={() => {
+            previousMb();
+          }}
+        ></Icon>
+        <View
+          style={{ width: "30%", alignContent: "center", alignItems: "center" }}
+        >
+          {data != 0 ? (
+            <Image
+              source={mbsImage[data.lvl]}
+              style={{ width: "100%", resizeMode: "contain" }}
+            ></Image>
+          ) : (
+            <Icon
+              style={{ width: "100%" }}
+              size={100}
+              type="antdesign"
+              name="plus"
+              color="black"
+            ></Icon>
+          )}
+        </View>
+        <Icon
+          type="antdesign"
+          name="right"
+          size={60}
+          color="black"
+          onPress={() => {
+            nextMb();
+          }}
+        ></Icon>
       </View>
 
       <View
         style={{
           flexDirection: "row",
           width: "100%",
+          height: "4%",
           justifyContent: "center",
           top: "30%",
         }}
       >
         <View
           style={{
-            backgroundColor: "#BABCBE",
-            width: "15%",
+            backgroundColor: mbsColor[data.lvl],
+            width: "20%",
             borderRadius: 50,
             marginLeft: "4%",
             alignItems: "center",
@@ -165,12 +561,12 @@ export default function DetailMisteryBox({ styles, data }) {
           }}
         >
           <Text style={{ color: "white", fontSize: 12 }}>
-            {data !== "" ? price : "..-.."} $
+            {data != 0 ? price : "--.--"} $
           </Text>
         </View>
         <View
           style={{
-            backgroundColor: "#BABCBE",
+            backgroundColor: mbsColor[data.lvl],
             width: "40%",
             borderRadius: 50,
             marginLeft: "4%",
@@ -179,13 +575,13 @@ export default function DetailMisteryBox({ styles, data }) {
           }}
         >
           <Text style={{ color: "white", fontSize: 12 }}>
-            {data !== "" ? date : "../../...."}{" "}
+            {data != 0 ? date : "../../...."}{" "}
           </Text>
         </View>
         <View
           style={{
-            backgroundColor: "#BABCBE",
-            width: "15%",
+            backgroundColor: mbsColor[data.lvl],
+            width: "20%",
             borderRadius: 50,
             marginLeft: "4%",
             alignItems: "center",
@@ -193,10 +589,11 @@ export default function DetailMisteryBox({ styles, data }) {
           }}
         >
           <Text style={{ color: "white", fontSize: 12 }}>
-            {data !== "" ? purcentage : "..-.."} %
+            {data != 0 ? data.dropRate : "..-.."} %
           </Text>
         </View>
       </View>
+      {data != 0 ? showContent() : <View></View>}
     </View>
   );
 }

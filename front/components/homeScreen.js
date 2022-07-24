@@ -146,7 +146,10 @@ export default function HomeScreen({ styles, setScreen }) {
           }}
           bezier
         />
-        <Pressable style={styles.roi} onPress={() => setScreen("misteryBox")}>
+        <Pressable
+          style={styles.roi}
+          onPress={() => setScreen("allMisteryBoxScreen")}
+        >
           <Text
             style={{
               fontSize: 12,
@@ -156,7 +159,10 @@ export default function HomeScreen({ styles, setScreen }) {
             Mistery Box
           </Text>
         </Pressable>
-        <Pressable style={styles.inventory} onPress={() => setScreen("sneakers")}>
+        <Pressable
+          style={styles.inventory}
+          onPress={() => setScreen("sneakers")}
+        >
           <Text
             style={{
               fontSize: 12,

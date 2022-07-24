@@ -13,6 +13,7 @@ function model(sequelize) {
     },
     realm: { type: DataTypes.CHAR, allowNull: false },
     lvl: { type: DataTypes.INTEGER, allowNull: false },
+    dropRate: { type: DataTypes.FLOAT, allowNull: false },
     fileName: { type: DataTypes.CHAR, allowNull: false },
     content1: { type: DataTypes.CHAR, allowNull: false },
     content1Quantity: { type: DataTypes.FLOAT, allowNull: false },

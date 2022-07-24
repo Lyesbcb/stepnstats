@@ -1,12 +1,25 @@
 import { StyleSheet, View } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import SneakersScreen from "./components/sneakersScreen";
-import MisteryBoxScreen from "./components/misteryBoxScreen";
+import OneMisteryBoxScreen from "./components/oneMisteryBoxScreen";
+import AllMisteryBoxScreen from "./components/allMisteryBoxScreen";
 import RunsScreen from "./components/runsScreen";
 import RunScreen from "./components/runScreen";
 import React, { useState } from "react";
+import * as Sentry from "@sentry/react-native";
 
-export default function App() {
+Sentry.init({
+  dsn: "https://aba7681e4758413f9025831056b576e1@o1332793.ingest.sentry.io/6597674",
+  tracesSampleRate: 2.0,
+  enableNative: false,
+  integrations: [
+    new Sentry.ReactNativeTracing({
+      tracingOrigins: ["localhost", /^\//],
+    }),
+  ],
+});
+
+function App() {
   const [screen, setScreen] = useState("home");
   return (
     <View style={{ width: "100%", height: "100%" }}>
@@ -14,17 +27,22 @@ export default function App() {
         <HomeScreen styles={styles} setScreen={setScreen}></HomeScreen>
       ) : screen == "sneakers" ? (
         <SneakersScreen styles={styles} setScreen={setScreen}></SneakersScreen>
-      ) : screen == "misteryBox" ? (
-        <MisteryBoxScreen
+      ) : screen == "OneMisteryBoxScreen" ? (
+        <OneMisteryBoxScreen
           styles={styles}
           setScreen={setScreen}
-        ></MisteryBoxScreen>
+        ></OneMisteryBoxScreen>
       ) : screen == "runs" ? (
         <RunsScreen styles={styles} setScreen={setScreen}></RunsScreen>
       ) : screen == "run" ? (
         <RunScreen styles={styles} setScreen={setScreen}></RunScreen>
+      ) : screen == "allMisteryBoxScreen" ? (
+        <AllMisteryBoxScreen
+          styles={styles}
+          setScreen={setScreen}
+        ></AllMisteryBoxScreen>
       ) : (
-        ""
+        <HomeScreen styles={styles} setScreen={setScreen}></HomeScreen>
       )}
     </View>
   );
@@ -37,7 +55,7 @@ const styles = StyleSheet.create({
     height: "37%",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection:"column",
+    flexDirection: "column",
   },
   unofficial: {
     justifyContent: "center",
@@ -315,3 +333,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+
+export default Sentry.wrap(App);
