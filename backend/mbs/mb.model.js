@@ -11,6 +11,7 @@ function model(sequelize) {
         key: "id",
       },
     },
+    realm: { type: DataTypes.CHAR, allowNull: false },
     lvl: { type: DataTypes.INTEGER, allowNull: false },
     fileName: { type: DataTypes.CHAR, allowNull: false },
     content1: { type: DataTypes.CHAR, allowNull: false },

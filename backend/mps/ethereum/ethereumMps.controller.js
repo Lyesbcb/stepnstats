@@ -8,12 +8,20 @@ const Role = require("_helpers/role");
 
 // routes
 router.get("/", authorize(), getAll);
+router.get("/date", authorize(), getDate);
 
 module.exports = router;
 
 function getAll(req, res, next) {
   ethereumMpService
     .getAll(req)
+    .then((mps) => res.json(mps))
+    .catch(next);
+}
+
+function getDate(req, res, next) {
+  ethereumMpService
+    .getDate(req)
     .then((mps) => res.json(mps))
     .catch(next);
 }

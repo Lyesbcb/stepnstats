@@ -11,6 +11,7 @@ function model(sequelize) {
         key: "id",
       },
     },
+    realm: { type: DataTypes.CHAR, allowNull: false },
     date: { type: DataTypes.DATE, allowNull: false },
     duration: { type: DataTypes.TIME, allowNull: false },
     energy: { type: DataTypes.FLOAT, allowNull: false },

@@ -12,6 +12,7 @@ function model(sequelize) {
       },
     },
     lvl: { type: DataTypes.INTEGER, allowNull: false },
+    realm: { type: DataTypes.CHAR, allowNull: false },
     fileName: { type: DataTypes.CHAR, allowNull: false },
     type: { type: DataTypes.CHAR, allowNull: false },
     quality: { type: DataTypes.CHAR, allowNull: false },

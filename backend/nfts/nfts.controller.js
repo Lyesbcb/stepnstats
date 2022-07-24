@@ -19,6 +19,7 @@ module.exports = router;
 function createSchema(req, res, next) {
   const schema = Joi.object({
     lvl: Joi.string().required(),
+    realm: Joi.string().required(),
     fileName: Joi.string().required(),
     type: Joi.string().required(),
     quality: Joi.string().required(),
@@ -67,6 +68,7 @@ function getById(req, res, next) {
 function updateSchema(req, res, next) {
   const schema = Joi.object({
     lvl: Joi.string().empty(""),
+    realm: Joi.string().empty(""),
     fileName: Joi.string().empty(""),
     type: Joi.string().empty(""),
     quality: Joi.string().empty(""),

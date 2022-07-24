@@ -23,7 +23,7 @@ async function getDate(req) {
       },
     },
     limit: 1,
-    order: ["createdAt", "DESC"],
+    order: [["createdAt", "DESC"]],
     subQuery: false,
   });
 }

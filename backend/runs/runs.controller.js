@@ -19,6 +19,7 @@ module.exports = router;
 function createSchema(req, res, next) {
   const schema = Joi.object({
     date: Joi.string().required(),
+    realm: Joi.string().required(),
     duration: Joi.string().required(),
     energy: Joi.string().required(),
     type: Joi.string().required(),
@@ -63,6 +64,7 @@ function getById(req, res, next) {
 function updateSchema(req, res, next) {
   const schema = Joi.object({
     date: Joi.string().empty(""),
+    realm: Joi.string().empty(""),
     duration: Joi.string().empty(""),
     energy: Joi.string().empty(""),
     type: Joi.string().empty(""),
