@@ -9,7 +9,37 @@ module.exports = {
   create,
   update,
   delete: _delete,
+  uploadFile
 };
+
+async function uploadFile(req, res) {
+  try {
+    var params;
+    if (req.file == undefined) {
+      return res.send(`You must select a file.`);
+    }
+    // TODO traitement avec python puis push en BDD
+
+    // const pythonProcess = spawn('python',["./getNftFromScreen.py", req.file.filename]);
+    // pythonProcess.stdout.on('data', (data) => {
+    //   params = data
+    // });
+    if (
+      await db.Nft.findOne({
+        where: { userId: req.user.id, fileName: req.file.filename },
+      })
+    ) {
+      throw "This nft is already exist.";
+    }
+    params.userId = req.user.id;
+    // save rmbun
+    return await db.Nft.create(params);
+  } catch (error) {
+    console.log(error);
+    return res.send(`Error when trying upload images: ${error}`);
+  }
+}
+
 
 async function getAll(req) {
   return await db.Nft.findAndCountAll({

@@ -5,9 +5,11 @@ const validateRequest = require("_middleware/validate-request");
 const authorize = require("_middleware/authorize");
 const runService = require("./run.service");
 const Role = require("_helpers/role");
+const upload = require("_middleware/uploadRun");
 
 // routes
 router.post("/create", authorize(), createSchema, create);
+router.post("/upload", authorize(), upload.single("file"), runService.uploadFile);
 router.get("/", authorize(Role.Admin), getAll);
 router.get("/my", authorize(), getAllMy);
 router.get("/:id", authorize(), getById);

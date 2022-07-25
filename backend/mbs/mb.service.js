@@ -1,6 +1,7 @@
 ﻿const config = require("config.json");
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
+const spawn = require("child_process").spawn;
 
 module.exports = {
   getAll,
@@ -9,7 +10,36 @@ module.exports = {
   create,
   update,
   delete: _delete,
+  uploadFile,
 };
+
+async function uploadFile(req, res) {
+  try {
+    var params;
+    if (req.file == undefined) {
+      return res.send(`You must select a file.`);
+    }
+    // TODO traitement avec python puis push en BDD
+
+    // const pythonProcess = spawn('python',["./getMbFromScreen.py", req.file.filename]);
+    // pythonProcess.stdout.on('data', (data) => {
+    //   params = data
+    // });
+    if (
+      await db.Mb.findOne({
+        where: { userId: req.user.id, fileName: req.file.filename },
+      })
+    ) {
+      throw "This mb is already exist.";
+    }
+    params.userId = req.user.id;
+    // save rmbun
+    return await db.Mb.create(params);
+  } catch (error) {
+    console.log(error);
+    return res.send(`Error when trying upload images: ${error}`);
+  }
+}
 
 async function getAll(req) {
   return await db.Mb.findAll({
