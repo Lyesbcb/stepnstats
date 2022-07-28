@@ -5,6 +5,7 @@ module.exports = {
   getAll,
   getDate,
   create,
+  getLastRecords
 };
 
 async function getAll(req) {
@@ -23,6 +24,14 @@ async function getDate(req) {
       },
     },
     limit: 1,
+    order: [["createdAt", "DESC"]],
+    subQuery: false,
+  });
+}
+
+async function getLastRecords(nbRecords) {
+  return await db.BNBMp.findAll({
+    limit: nbRecords,
     order: [["createdAt", "DESC"]],
     subQuery: false,
   });

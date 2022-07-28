@@ -4,7 +4,8 @@ const db = require("_helpers/db");
 module.exports = {
   getAll,
   create,
-  getDate
+  getDate,
+  getLastRecords
 };
 
 async function getAll(req) {
@@ -21,6 +22,14 @@ async function getDate(req) {
       },
     },
     limit: 1,
+    order: [["createdAt", "DESC"]],
+    subQuery: false,
+  });
+}
+
+async function getLastRecords(nbRecords) {
+  return await db.EthereumMp.findAll({
+    limit: nbRecords,
     order: [["createdAt", "DESC"]],
     subQuery: false,
   });

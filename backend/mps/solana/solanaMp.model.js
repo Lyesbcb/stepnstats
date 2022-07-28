@@ -60,6 +60,15 @@ function model(sequelize) {
     comfortLvl7: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl8: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
     comfortLvl9: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    commonScroll: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    uncommonScroll: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    rareScroll: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    epicScroll: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    legendaryScroll: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0,
+    },
   };
 
   const options = {

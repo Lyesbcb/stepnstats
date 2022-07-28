@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const errorHandler = require("_middleware/error-handler");
 const getMp = require("./getMp");
+const buyAndSell = require("./buyAndSell");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -19,11 +20,12 @@ app.use("/mps/solana", require("./mps/solana/solanaMps.controller"));
 app.use("/mps/bnb", require("./mps/bnb/bnbMps.controller"));
 app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
 try {
-  // getMp.getMp();
+  getMp.getMp();
 } catch {
   console.log("Error to get marketplace");
 }
 
+// buyAndSell.buyAndSell()
 setInterval(function () {
   try {
     getMp.getMp();

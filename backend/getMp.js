@@ -21,9 +21,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
+        // .addArguments("--no-sandbox")
+        // .addArguments("--disable-dev-shm-usage")
+        // .headless()
         .windowSize(screen)
     )
     .build();
@@ -358,6 +358,37 @@ async function getAllFloorPrice(driver) {
   await sleep(1000);
   var resilienceLvl9 = await getGemFloorPrice(driver);
   await sleep(1000);
+  // SCROLL
+  await driver
+    .findElement(
+      By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[3]")
+    )
+    .click();
+  await sleep(1000);
+  await selectScrollQuality(driver, "Common");
+  await sleep(1000);
+  var commonScroll = await getGemScrollPrice(driver);
+  console.log(commonScroll);
+  await sleep(1000);
+  await selectScrollQuality(driver, "Uncommon");
+  await sleep(1000);
+  var uncommonScroll = await getGemScrollPrice(driver);
+  console.log(uncommonScroll);
+  await sleep(1000);
+  await selectScrollQuality(driver, "Rare");
+  await sleep(1000);
+  var rareScroll = await getGemScrollPrice(driver);
+  console.log(rareScroll);
+  await sleep(1000);
+  await selectScrollQuality(driver, "Epic");
+  await sleep(1000);
+  var epicScroll = await getGemScrollPrice(driver);
+  console.log(epicScroll);
+  await sleep(1000);
+  await selectScrollQuality(driver, "Legendary");
+  await sleep(1000);
+  var legendaryScroll = await getGemScrollPrice(driver);
+  console.log(legendaryScroll);
   var json = {
     walkerCommon,
     joggerCommon,
@@ -411,6 +442,11 @@ async function getAllFloorPrice(driver) {
     comfortLvl7,
     comfortLvl8,
     comfortLvl9,
+    commonScroll,
+    uncommonScroll,
+    rareScroll,
+    epicScroll,
+    legendaryScroll
   };
   return json;
 }
@@ -499,6 +535,7 @@ async function selectType(driver, type) {
       break;
   }
 }
+
 async function getFloorPrice(driver) {
   try {
     var element = await driver.findElement(
@@ -513,7 +550,23 @@ async function getFloorPrice(driver) {
     return "0";
   }
 }
+
 async function getGemFloorPrice(driver) {
+  try {
+    var element = await driver.findElement(
+      By.xpath(
+        "/html/body/div/main/div/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div[2]/div/div"
+      )
+    );
+    var result = await element.getText();
+    result = result.split(" ")[0];
+    return result;
+  } catch {
+    return "0";
+  }
+}
+
+async function getGemScrollPrice(driver) {
   try {
     var element = await driver.findElement(
       By.xpath(
@@ -605,71 +658,6 @@ async function selectGemType(driver, type) {
       break;
   }
 }
-// async function selectLevel(driver, level) {
-//   await driver
-//     .findElement(By.xpath('//*[@id="headlessui-disclosure-button-:r9:"]'))
-//     .click();
-//   await sleep(1000);
-
-//   var minLevel = driver.findElement(
-//     By.xpath('//*[@id="headlessui-disclosure-panel-:ra:"]/span/span[3]')
-//   );
-
-//   var maxLevel = driver.findElement(
-//     By.xpath('//*[@id="headlessui-disclosure-panel-:ra:"]/span/span[4]')
-//   );
-//   const actions = driver.actions();
-//   await sleep(1000);
-//   // await actions.dragAndDrop(minLevel, { x: 100, y: 370 })
-//   await actions
-//     .mouseMove(minLevel)
-//     .clickAndHold()
-//     .perform()
-//     .pause(100)
-//     .moveByOffset(1, 0)
-//     .pause(100)
-//     .release()
-//     .perform();
-//   switch (level) {
-//     case "0":
-//       await driver
-//         .findElement(
-//           By.xpath('//*[@id="headlessui-disclosure-panel-:r8:"]/div/button[1]')
-//         )
-//         .click();
-//       break;
-//     case "5":
-//       await driver
-//         .findElement(
-//           By.xpath('//*[@id="headlessui-disclosure-panel-:r8:"]/div/button[2]')
-//         )
-//         .click();
-//       break;
-//     case "10":
-//       await driver
-//         .findElement(
-//           By.xpath('//*[@id="headlessui-disclosure-panel-:r8:"]/div/button[3]')
-//         )
-//         .click();
-//       break;
-//     case "20":
-//       await driver
-//         .findElement(
-//           By.xpath('//*[@id="headlessui-disclosure-panel-:r8:"]/div/button[4]')
-//         )
-//         .click();
-//       break;
-//     case "30":
-//       await driver
-//         .findElement(
-//           By.xpath('//*[@id="headlessui-disclosure-panel-:r8:"]/div/button[5]')
-//         )
-//         .click();
-//       break;
-//   }
-// }
-
-// async function selectMint(driver, mint) {}
 async function selectGemLevel(driver, level) {
   console.log("Select gem level: " + level);
   switch (level) {
@@ -736,6 +724,47 @@ async function selectGemLevel(driver, level) {
         .move({ x: 200, y: 370 })
         .click()
         .perform();
+      break;
+  }
+}
+
+async function selectScrollQuality(driver, quality) {
+  console.log("Select scroll quaity: " + quality);
+  switch (quality) {
+    case "Common":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[1]")
+        )
+        .click();
+      break;
+    case "Uncommon":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[2]")
+        )
+        .click();
+      break;
+    case "Rare":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[3]")
+        )
+        .click();
+      break;
+    case "Epic":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[4]")
+        )
+        .click();
+      break;
+    case "Legendary":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[5]")
+        )
+        .click();
       break;
   }
 }

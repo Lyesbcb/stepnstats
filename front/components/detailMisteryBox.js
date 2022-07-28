@@ -479,7 +479,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     <View style={{ height: "100%", width: "100%" }}>
       <View
         style={{
-          backgroundColor: mbsColor[data.lvl],
+          backgroundColor: mbsColor[data.lvl- 1],
           width: "15%",
           height: "4%",
           borderRadius: 5,
@@ -517,7 +517,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
         >
           {data != 0 ? (
             <Image
-              source={mbsImage[data.lvl]}
+              source={mbsImage[data.lvl- 1]}
               style={{ width: "100%", resizeMode: "contain" }}
             ></Image>
           ) : (
@@ -552,7 +552,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
       >
         <View
           style={{
-            backgroundColor: mbsColor[data.lvl],
+            backgroundColor: mbsColor[data.lvl- 1],
             width: "20%",
             borderRadius: 50,
             marginLeft: "4%",
@@ -566,7 +566,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
         </View>
         <View
           style={{
-            backgroundColor: mbsColor[data.lvl],
+            backgroundColor: mbsColor[data.lvl- 1],
             width: "40%",
             borderRadius: 50,
             marginLeft: "4%",
@@ -575,12 +575,12 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
           }}
         >
           <Text style={{ color: "white", fontSize: 12 }}>
-            {data != 0 ? date : "../../...."}{" "}
+            {data != 0 ? date : "../../...."}
           </Text>
         </View>
         <View
           style={{
-            backgroundColor: mbsColor[data.lvl],
+            backgroundColor: mbsColor[data.lvl - 1],
             width: "20%",
             borderRadius: 50,
             marginLeft: "4%",
