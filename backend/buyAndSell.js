@@ -19,9 +19,9 @@ async function buyAndSell() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        // .addArguments("--no-sandbox")
-        // .addArguments("--disable-dev-shm-usage")
-        // .headless()
+        .addArguments("--no-sandbox")
+        .addArguments("--disable-dev-shm-usage")
+        .headless()
         .windowSize(screen)
     )
     .build();
