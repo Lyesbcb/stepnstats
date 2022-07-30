@@ -6,7 +6,7 @@
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
           "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
-          "isAccessMediaLocationEnabled": true
+          "isAccessMediaLocationEnabled": "true"
         }
       ],
       [
@@ -16,9 +16,9 @@
         }
       ]
     ],
-    "name": "StepnStat",
-    "slug": "StepnStat",
-    "version": "1.0.0",
+    "name": "Stepn Stats",
+    "slug": "StepnStats",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -31,28 +31,20 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
-    },
+      "supportsTablet": false,
+      "bundleIdentifier": "com.lyesbenchoubane.stepnstats",
+      "buildNumber": "0.1.0"
+    },  
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.lyesbenchoubane.stepnstats",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "your sentry organization's short name here",
-            "project": "your sentry project's name here",
-            "authToken": "your auth token here"
-          }
-        }
-      ]
     }
   }
 }

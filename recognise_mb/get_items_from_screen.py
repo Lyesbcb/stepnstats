@@ -73,7 +73,6 @@ def remove_countours(image):
     # replace with white
     return ROI
 
-
 def get_items_from_screen(img_path):
     image = crop_bottom_half(cv2.imread(img_path))
     img = crop_bottom_half(cv2.imread(img_path, 0))
@@ -103,4 +102,3 @@ def get_items_from_screen(img_path):
             crop = remove_text_and_border(crop)
             results.append([crop, text])
     return results
-

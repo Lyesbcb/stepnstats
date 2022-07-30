@@ -1,11 +1,3 @@
-import cv2
-from get_items_from_screen import get_items_from_screen
-from compare_shape import compare_image
-from skimage.metrics import structural_similarity
-
-results = get_items_from_screen("./input/screens/open_mb/lvl2/image_44.png")
-array = []
-array2 = []
 paths = [
     "./input/gem/luck/lvl1.png",
     "./input/gem/luck/lvl2.png",
@@ -48,23 +40,5 @@ paths = [
     "./input/scroll/rare.png",
     "./input/scroll/epic.png",
     "./input/scroll/legendary.png",
-    "./input/gst.png"
+    "./input/gst.png",
 ]
-
-# for path in paths:
-#     img = cv2.imread(path, 0)
-#     img_gray = cv2.cvtColor(results[2], cv2.COLOR_BGR2GRAY)
-#     array.append(compare_image(img_gray, img))
-#     array2.append(path)
-    
-
-# index_min = min(range(len(array)), key=array.__getitem__)
-
-# print(array2[index_min])
-# img1 = cv2.imread("./input/gem/resilience/lvl3.png", 0)
-
-for result in results:
-    cv2.imshow("result", result[0])
-    cv2.waitKey(0)
-    print(result[1])
-# print(compare_image(img1, img2))

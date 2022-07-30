@@ -13,21 +13,19 @@ const screen = {
 module.exports = {
   getMp,
 };
+
 async function getMp() {
-  const options = new chrome.Options();
-  options.addArguments("--disable-dev-shm-usage");
-  options.addArguments("--no-sandbox");
-  const driver = new Builder()
-    .forBrowser("chrome")
-    .setChromeOptions(
-      new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
-        .windowSize(screen)
-    )
-    .build();
   try {
+    const driver = new Builder()
+      .forBrowser("chrome")
+      .setChromeOptions(
+        new chrome.Options()
+          .addArguments("--no-sandbox")
+          .addArguments("--disable-dev-shm-usage")
+          .headless()
+          .windowSize(screen)
+      )
+      .build();
     await driver.get("https://m.stepn.com/");
     await sleep(1000);
     await driver
@@ -98,10 +96,13 @@ async function getMp() {
     solanaMpService.create(solanaMp).then((mp) => console.log(mp));
     bnbMpService.create(bnbMp).then((mp) => console.log(mp));
     ethereumMpService.create(ethereummMp).then((mp) => console.log(mp));
+  } catch (error) {
+    console.log(error);
   } finally {
     await driver.quit();
   }
 }
+
 async function getAllFloorPrice(driver) {
   // SNEAKERS
   await sleep(1000);
@@ -446,10 +447,11 @@ async function getAllFloorPrice(driver) {
     uncommonScroll,
     rareScroll,
     epicScroll,
-    legendaryScroll
+    legendaryScroll,
   };
   return json;
 }
+
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -580,6 +582,7 @@ async function getGemScrollPrice(driver) {
     return "0";
   }
 }
+
 async function selectQuality(driver, quality) {
   console.log("Select sneakers quaity: " + quality);
   switch (quality) {
@@ -620,6 +623,7 @@ async function selectQuality(driver, quality) {
       break;
   }
 }
+
 async function selectGemType(driver, type) {
   console.log("Select gem type: " + type);
   await driver
@@ -658,6 +662,7 @@ async function selectGemType(driver, type) {
       break;
   }
 }
+
 async function selectGemLevel(driver, level) {
   console.log("Select gem level: " + level);
   switch (level) {
