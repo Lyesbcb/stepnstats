@@ -15,17 +15,17 @@ module.exports = {
 };
 
 async function getMp() {
+  const driver = new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(
+      new chrome.Options()
+        .addArguments("--no-sandbox")
+        .addArguments("--disable-dev-shm-usage")
+        .headless()
+        .windowSize(screen)
+    )
+    .build();
   try {
-    const driver = new Builder()
-      .forBrowser("chrome")
-      .setChromeOptions(
-        new chrome.Options()
-          .addArguments("--no-sandbox")
-          .addArguments("--disable-dev-shm-usage")
-          .headless()
-          .windowSize(screen)
-      )
-      .build();
     await driver.get("https://m.stepn.com/");
     await sleep(1000);
     await driver
@@ -99,7 +99,8 @@ async function getMp() {
   } catch (error) {
     console.log(error);
   } finally {
-    console.log("Récupération des marketplace terminées !")
+    console.log("Récupération des marketplace terminées !");
+    driver.stop();
   }
 }
 
