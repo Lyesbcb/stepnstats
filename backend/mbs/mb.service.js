@@ -1,7 +1,7 @@
 ﻿const config = require("config.json");
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
-const spawn = require("child_process").spawn;
+var spawn = require("child_process").spawn;
 
 module.exports = {
   getAll,
@@ -19,12 +19,6 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    // TODO traitement avec python puis push en BDD
-
-    // const pythonProcess = spawn('python',["./getMbFromScreen.py", req.file.filename]);
-    // pythonProcess.stdout.on('data', (data) => {
-    //   params = data
-    // });
     if (
       await db.Mb.findOne({
         where: { userId: req.user.id, fileName: req.file.filename },
@@ -32,9 +26,46 @@ async function uploadFile(req, res) {
     ) {
       throw "This mb is already exist.";
     }
-    params.userId = req.user.id;
-    // save rmbun
-    return await db.Mb.create(params);
+    var get_content_from_screen = await spawn("python", [
+      "./python/get_content_from_screen.py",
+      req.file.path,
+    ]);
+
+    get_content_from_screen.stdout.setEncoding("utf8");
+    await get_content_from_screen.stdout.on("data", async function (data) {
+      data = data.replace(/'/g, '"');
+      params = JSON.parse(data);
+      params.userId = req.user.id;
+      params.realm = req.body.realm;
+      params.fileName = req.file.filename;
+      console.log("ici");
+      var get_mb_lvl_from_image = await spawn("python", [
+        "./python/get_mb_lvl_from_image.py",
+        req.file.path,
+        "open_mb",
+      ]);
+      get_mb_lvl_from_image.stdout.setEncoding("utf8");
+      await get_mb_lvl_from_image.stdout.on("data", async function (data) {
+        console.log("ici");
+        params.lvl = Number(data);
+        // save rmbun
+        res.send(await db.Mb.create(params));
+      });
+      get_mb_lvl_from_image.stderr.setEncoding("utf8");
+      await get_mb_lvl_from_image.stderr.on(
+        "data",
+        await function (data) {
+          res.send(data);
+        }
+      );
+    });
+    get_content_from_screen.stderr.setEncoding("utf8");
+    await get_content_from_screen.stderr.on(
+      "data",
+      await function (data) {
+        res.send(data);
+      }
+    );
   } catch (error) {
     console.log(error);
     return res.send(`Error when trying upload images: ${error}`);

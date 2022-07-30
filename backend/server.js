@@ -19,20 +19,20 @@ app.use("/nfts", require("./nfts/nfts.controller"));
 app.use("/mps/solana", require("./mps/solana/solanaMps.controller"));
 app.use("/mps/bnb", require("./mps/bnb/bnbMps.controller"));
 app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
-try {
-  getMp.getMp();
-} catch {
-  console.log("Error to get marketplace");
-}
+// try {
+//   getMp.getMp();
+// } catch {
+//   console.log("Error to get marketplace");
+// }
 
-// buyAndSell.buyAndSell()
-setInterval(function () {
-  try {
-    getMp.getMp();
-  } catch {
-    console.log("Error to get marketplace");
-  }
-}, 600000);
+// // buyAndSell.buyAndSell()
+// setInterval(function () {
+//   try {
+//     getMp.getMp();
+//   } catch {
+//     console.log("Error to get marketplace");
+//   }
+// }, 600000);
 
 // global error handler
 app.use(errorHandler);

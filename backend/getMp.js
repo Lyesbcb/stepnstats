@@ -100,7 +100,7 @@ async function getMp() {
     console.log(error);
   } finally {
     console.log("Récupération des marketplace terminées !");
-    driver.stop();
+    driver.close()
   }
 }
 
