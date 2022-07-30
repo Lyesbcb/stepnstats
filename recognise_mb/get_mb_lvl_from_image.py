@@ -1,7 +1,4 @@
 import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-from resize import resize
 from crop import crop_bottom_half_and_top_half
 
 def get_mb_lvl_from_image(img , type):
