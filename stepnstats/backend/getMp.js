@@ -19,9 +19,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
+        // .addArguments("--no-sandbox")
+        // .addArguments("--disable-dev-shm-usage")
+        // .headless()
         .windowSize(screen)
     )
     .build();
@@ -100,7 +100,7 @@ async function getMp() {
     console.log(error);
   } finally {
     console.log("Récupération des marketplace terminées !");
-    driver.close()
+    driver.close();
   }
 }
 
@@ -195,6 +195,55 @@ async function getAllFloorPrice(driver) {
   await sleep(1000);
   var trainerEpic = await getFloorPrice(driver);
   console.log(trainerEpic);
+
+  // GENESIS
+  // Unselect trainer 
+  await selectType(driver, "Trainer");
+  await sleep(1000);
+  await selectRarity(driver, "Genesis");
+  await sleep(1000);
+  await selectQuality(driver, "Common");
+  await sleep(1000);
+  var genesisCommon = await getFloorPrice(driver);
+  console.log(genesisCommon);
+  await sleep(1000);
+  await selectQuality(driver, "Uncommon");
+  await sleep(1000);
+  var genesisUncommon = await getFloorPrice(driver);
+  console.log(genesisUncommon);
+  await sleep(1000);
+  await selectQuality(driver, "Rare");
+  await sleep(1000);
+  var genesisRare = await getFloorPrice(driver);
+  console.log(genesisRare);
+  await sleep(1000);
+  await selectQuality(driver, "Epic");
+  await sleep(1000);
+  var genesisEpic = await getFloorPrice(driver);
+  console.log(genesisEpic);
+
+  // OG
+  await selectRarity(driver, "OG");
+  await sleep(1000);
+  await selectQuality(driver, "Common");
+  await sleep(1000);
+  var ogCommon = await getFloorPrice(driver);
+  console.log(ogCommon);
+  await sleep(1000);
+  await selectQuality(driver, "Uncommon");
+  await sleep(1000);
+  var ogUncommon = await getFloorPrice(driver);
+  console.log(ogUncommon);
+  await sleep(1000);
+  await selectQuality(driver, "Rare");
+  await sleep(1000);
+  var ogRare = await getFloorPrice(driver);
+  console.log(ogRare);
+  await sleep(1000);
+  await selectQuality(driver, "Epic");
+  await sleep(1000);
+  var ogEpic = await getFloorPrice(driver);
+  console.log(ogEpic);
 
   // GEMS
   await sleep(1000);
@@ -408,6 +457,14 @@ async function getAllFloorPrice(driver) {
     joggerEpic,
     runnerEpic,
     trainerEpic,
+    genesisCommon,
+    genesisUncommon,
+    genesisRare,
+    genesisEpic,
+    ogCommon,
+    ogUncommon,
+    ogRare,
+    ogEpic,
     efficiencyLvl1,
     efficiencyLvl2,
     efficiencyLvl3,
@@ -619,6 +676,26 @@ async function selectQuality(driver, quality) {
       await driver
         .findElement(
           By.xpath("/html/body/div/main/div/div[1]/div/div[9]/div/button[5]")
+        )
+        .click();
+      break;
+  }
+}
+
+async function selectRarity(driver, rarity) {
+  console.log("Select sneakers rarity: " + rarity);
+  switch (rarity) {
+    case "Genesis":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[1]")
+        )
+        .click();
+      break;
+    case "OG":
+      await driver
+        .findElement(
+          By.xpath("/html/body/div/main/div/div[1]/div/div[5]/div/button[2]")
         )
         .click();
       break;
