@@ -110,7 +110,7 @@ async function logoutUser(){
     "password": generatePassword(24),
     "anonymous": true
   }
-  await register(params)
+  await registerUser(params)
 }
 
 function generatePassword(length) {

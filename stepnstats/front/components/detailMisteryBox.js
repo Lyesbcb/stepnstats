@@ -252,7 +252,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
             flexDirection: "row",
           }}
         >
-          {data.content1 != "" ? (
+          {data.content1 != null ? (
             <View
               style={{
                 width: "28%",
@@ -287,7 +287,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
               }}
             ></View>
           )}
-          {data.content2 != "" ? (
+          {data.content2 != null ? (
             <View
               style={{
                 width: "28%",
@@ -322,7 +322,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
               }}
             ></View>
           )}
-          {data.content3 != "" ? (
+          {data.content3 != null ? (
             <View
               style={{
                 width: "28%",
@@ -366,7 +366,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
             flexDirection: "row",
           }}
         >
-          {data.content4 != "" ? (
+          {data.content4 != null ? (
             <View
               style={{
                 width: "28%",
@@ -401,7 +401,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
               }}
             ></View>
           )}
-          {data.content5 != "" ? (
+          {data.content5 != null ? (
             <View
               style={{
                 width: "28%",
@@ -436,7 +436,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
               }}
             ></View>
           )}
-          {data.content6 != "" ? (
+          {data.content6 != null ? (
             <View
               style={{
                 width: "28%",

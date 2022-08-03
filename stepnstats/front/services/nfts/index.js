@@ -2,20 +2,17 @@ import axios from "axios";
 import config from "../../config.json";
 import {
   getSecuretValueFor,
-  secureSave,
-  deleteSecuretValueFor,
 } from "../secureStorage/index";
 
 module.exports = {
-  createRun,
-  deleteRun,
-  uploadRun,
-  updateRun,
-  getAllMyRun,
+  createNft,
+  deleteNft,
+  uploadNft,
+  updateNft,
+  getAllMyNft,
 };
-const baseURL = config.baseUrl + "/runs";
-
-async function createRun(params) {
+const baseURL = config.baseUrl + "/nfts";
+async function createNft(params) {
   console.log(params);
   var token = await getSecuretValueFor("token");
   var config = {
@@ -38,9 +35,8 @@ async function createRun(params) {
     });
 }
 
-async function updateRun(id, params) {
+async function updateNft(id, params) {
   var token = await getSecuretValueFor("token");
-
   var config = {
     method: "put",
     url: baseURL + "/" + id,
@@ -60,7 +56,7 @@ async function updateRun(id, params) {
     });
 }
 
-async function uploadRun(image, realm) {
+async function uploadNft(image, realm) {
   if (!image.cancelled) {
     var token = await getSecuretValueFor("token");
     let uriParts = image.uri.split(".");
@@ -94,7 +90,7 @@ async function uploadRun(image, realm) {
   }
 }
 
-async function deleteRun(id) {
+async function deleteNft(id) {
   var token = await getSecuretValueFor("token");
   var config = {
     method: "delete",
@@ -108,14 +104,14 @@ async function deleteRun(id) {
   await axios(config)
     .then(async function (response) {
       console.log(response.data);
-      // re run getAllMyRun to actualize
+      // re Nft getAllMyNft to actualize
     })
     .catch(function (error) {
       console.log(error.response.data.message);
     });
 }
 
-async function getAllMyRun(page) {
+async function getAllMyNft(page) {
   var token = await getSecuretValueFor("token");
   var config = {
     method: "get",
@@ -127,9 +123,9 @@ async function getAllMyRun(page) {
     },
   };
 
-  return await axios(config)
+  await axios(config)
     .then(async function (response) {
-      return response.data.rows
+      console.log(response.data);
       // Set store with the data
     })
     .catch(function (error) {

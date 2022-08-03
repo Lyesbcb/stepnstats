@@ -21,7 +21,7 @@ async function getDate(req) {
         [db.Op.lte]: req.query.date,
       },
     },
-    limit: 1,
+    limit: 100,
     order: [["createdAt", "DESC"]],
     subQuery: false,
   });

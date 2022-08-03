@@ -17,7 +17,6 @@ async function uploadFile(req, res) {
   try {
     var params;
     if (req.file == undefined) {
-      console.log(req)
       return res.send(`You must select a file.`);
     }
     if (
@@ -37,9 +36,8 @@ async function uploadFile(req, res) {
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
-      params.realm = req.body.realm;
+      params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
-      console.log("ici");
       var get_mb_lvl_from_image = await spawn("python", [
         "./python/get_mb_lvl_from_image.py",
         req.file.path,
@@ -47,16 +45,20 @@ async function uploadFile(req, res) {
       ]);
       get_mb_lvl_from_image.stdout.setEncoding("utf8");
       await get_mb_lvl_from_image.stdout.on("data", async function (data) {
-        console.log("ici");
         params.lvl = Number(data);
         // save rmbun
-        res.send(await db.Mb.create(params));
+        try {
+          res.send(await db.Mb.create(params));
+        } catch (error) {
+          console.log(error)
+          res.status(400).send(error);
+        }
       });
       get_mb_lvl_from_image.stderr.setEncoding("utf8");
       await get_mb_lvl_from_image.stderr.on(
         "data",
         await function (data) {
-          res.send(data);
+          return res.send("here");
         }
       );
     });
@@ -64,7 +66,7 @@ async function uploadFile(req, res) {
     await get_content_from_screen.stderr.on(
       "data",
       await function (data) {
-        res.send(data);
+        return res.send(data);
       }
     );
   } catch (error) {

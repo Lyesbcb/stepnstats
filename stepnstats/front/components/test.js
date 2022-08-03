@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import {
   registerUser,
   authenticateUser,
@@ -29,9 +29,17 @@ import {
   updateMb,
   deleteMb,
 } from "../services/mbs/index";
-export default function TestScreen({ styles, setScreen }) {
+import {
+  createNft,
+  uploadNft,
+  getAllMyNft,
+  updateNft,
+  deleteNft,
+} from "../services/nfts/index";
+import { getAllMp } from "../services/mps/index";
+export default function TestScreen({ route, navigation }) {
   const [image, setImage] = useState(null);
-
+  console.log(route)
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -43,7 +51,7 @@ export default function TestScreen({ styles, setScreen }) {
       setImage(result.uri);
     }
 
-    await uploadMb(result)
+    await uploadMb(result, "Solana");
   };
   var paramsCreateRun = {
     mbLvl: 0,
@@ -61,6 +69,23 @@ export default function TestScreen({ styles, setScreen }) {
     gst: "26.73",
     nftId: "2182638",
     durabilityLost: "8",
+  };
+  var paramsCreateNft = {
+    lvl: "28",
+    realm: "Solana",
+    fileName: "2020-12-18_20:23:43.png",
+    type: "runner",
+    quality: "common",
+    efficiency: "9.4",
+    luck: "7.2",
+    comfort: "6.4",
+    resilience: "4.2",
+    mint: "2",
+    nftId: "23712932",
+    socket1: "comfort1",
+    socket2: "comfort1",
+    socket3: "efficiency1",
+    socket4: "efficiency1",
   };
   var paramsRegister = {
     username: "test",
@@ -144,7 +169,7 @@ export default function TestScreen({ styles, setScreen }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await uploadRun(params);
+            await uploadRun(paramsCreateRun);
           }}
         >
           <Text>Upload</Text>
@@ -160,7 +185,7 @@ export default function TestScreen({ styles, setScreen }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await updateRun(params);
+            await updateRun(776, paramsCreateRun);
           }}
         >
           <Text>Update</Text>
@@ -168,7 +193,59 @@ export default function TestScreen({ styles, setScreen }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await deleteRun(params);
+            await deleteRun(775);
+          }}
+        >
+          <Text>Delete</Text>
+        </Pressable>
+      </View>
+      <View
+        style={{
+          justifyContent: "space-evenly",
+          alignContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "10%",
+          flexDirection: "row",
+        }}
+      >
+        <Text>NFT: </Text>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await createNft(paramsCreateNft);
+          }}
+        >
+          <Text>Create</Text>
+        </Pressable>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await uploadNft(paramsCreateNft);
+          }}
+        >
+          <Text>Upload</Text>
+        </Pressable>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await getAllMyNft(1);
+          }}
+        >
+          <Text>Get all my</Text>
+        </Pressable>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await updateNft(3, paramsCreateNft);
+          }}
+        >
+          <Text>Update</Text>
+        </Pressable>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await deleteNft(3);
           }}
         >
           <Text>Delete</Text>
@@ -204,7 +281,7 @@ export default function TestScreen({ styles, setScreen }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await getAllMyMb();
+            await getAllMyMb(1);
           }}
         >
           <Text>Get all my</Text>
@@ -220,12 +297,33 @@ export default function TestScreen({ styles, setScreen }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await deleteMb(params);
+            await deleteMb(2);
           }}
         >
           <Text>Delete</Text>
         </Pressable>
       </View>
+      <View
+        style={{
+          justifyContent: "space-evenly",
+          alignContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "10%",
+          flexDirection: "row",
+        }}
+      >
+        <Text>Marketplaces: </Text>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={async () => {
+            await getAllMp("Solana");
+          }}
+        >
+          <Text>Get all Mp</Text>
+        </Pressable>
+      </View>
+    
     </View>
   );
 }
