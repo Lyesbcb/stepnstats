@@ -9,7 +9,7 @@ module.exports = {
   create,
   update,
   delete: _delete,
-  uploadFile
+  uploadFile,
 };
 
 async function uploadFile(req, res) {
@@ -40,7 +40,6 @@ async function uploadFile(req, res) {
   }
 }
 
-
 async function getAll(req) {
   return await db.Nft.findAndCountAll({
     offset: (req.query.page - 1) * 1,
@@ -53,13 +52,14 @@ async function getAllMy(req) {
   return await db.Nft.findAndCountAll({
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
+    order: [["createdAt", "DESC"]],
     limit: 10,
     subQuery: false,
   });
 }
 
 async function getById(req) {
-  const nft = await getNft(req.params.id);
+  const nft = await getNft(req);
   const currentUser = req.user;
   const userId = nft.userId;
 
@@ -72,7 +72,7 @@ async function getById(req) {
 }
 
 async function create(params, userId) {
-  console.log("ici")
+  console.log("ici");
   if (
     await db.Nft.findOne({
       where: { userId: userId, fileName: params.fileName },
@@ -117,8 +117,10 @@ async function _delete(req) {
 
 // helper functions
 
-async function getNft(id) {
-  const nft = await db.Nft.findByPk(id);
+async function getNft(req) {
+  const nft = await db.Nft.findOne({
+    where: { nftId: req.params.nftId, userId: req.user.userId},
+  });
   if (!nft) throw "nft not found.";
   return nft;
 }

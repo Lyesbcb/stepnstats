@@ -1,10 +1,9 @@
 import { StyleSheet, View, Image } from "react-native";
 import HomeScreen from "./components/homeScreen";
-import SneakersScreen from "./components/sneakersScreen";
-import OneMisteryBoxScreen from "./components/oneMisteryBoxScreen";
+import AllSneakersScreen from "./components/allSneakersScreen";
 import AllMisteryBoxScreen from "./components/allMisteryBoxScreen";
-import RunsScreen from "./components/runsScreen";
-import RunScreen from "./components/runScreen";
+import AllRunsScreen from "./components/runsScreen";
+import OneRunScreen from "./components/runScreen";
 import React, { useState } from "react";
 import * as Sentry from "@sentry/react-native";
 import TestScreen from "./components/test";
@@ -12,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-elements/dist/icons/Icon";
+import Invenrtory from "./components/inventory"
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,79 +28,143 @@ Sentry.init({
 });
 
 function App() {
+  const isTabBarVisible = (navState) => {
+    if (!navState) {
+      return true;
+    }
+    let tabBarVisible = navState.routes[navState.index].params
+      ? navState.routes[navState.index].params.showTabBar
+      : true;
+    return tabBarVisible;
+  };
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator
-        screenOptions={({ route }) => ({ headerShown: false })}
+      <Tab.Navigator
         initialRouteName="Home"
+        activeColor="#ff0071"
+        inactiveColor="#000"
+        barStyle={{ backgroundColor: "#fff" }}
+        screenOptions={({ route, navigation }) => ({
+          tabBarVisible: isTabBarVisible(navigation.state),
+          headerShown: false,
+          tabBarStyle: {
+            position: "absolute",
+            bottom: "10%",
+            height: "8%",
+            borderRadius: 50,
+            left: "2%",
+            right: "2%",
+            shadowColor: "black",
+            shadowOffset: {
+              width: 0,
+              height: 10,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.5,
+            elevation: 5,
+          },
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === "Home") {
+              iconName = focused ? "home-variant" : "home-variant";
+            } else if (route.name === "sneakers") {
+              iconName = focused ? "cart" : "cart";
+            } else if (route.name === "runs") {
+              iconName = focused ? "shoe-sneaker" : "shoe-sneaker";
+            } else if (route.name === "misteryBox") {
+              iconName = focused ? "toolbox" : "toolbox";
+            } else if (route.name === "chart") {
+              iconName = focused ? "chart-box" : "chart-box";
+            }
+            return (
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  top: "30%",
+                }}
+              >
+                <Icon
+                  type="material-community"
+                  name={iconName}
+                  size={23}
+                  color={color}
+                />
+              </View>
+            );
+          },
+        })}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="sneakers" component={SneakersScreen} />
-        <Stack.Screen
-          name="OneMisteryBoxScreen"
-          component={OneMisteryBoxScreen}
-        />
-        <Stack.Screen name="runs" component={RunsScreen} />
-        <Stack.Screen name="run" component={RunScreen} />
-        <Stack.Screen
-          name="allMisteryBoxScreen"
-          component={AllMisteryBoxScreen}
-        />
-        <Stack.Screen name="test" component={TestScreen} />
-      </Stack.Navigator> */}
-      <Stack.Navigator
-        screenOptions={({ route }) => ({ headerShown: false })}
-        initialRouteName="Home"
-      >
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="sneakers" component={SneakersScreen} />
-        <Stack.Screen name="runs" component={RunsScreen} />
-        <Stack.Screen
-          name="allMisteryBoxScreen"
-          component={AllMisteryBoxScreen}
-        />
-      </Stack.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
+        <Tab.Screen name="runs" component={Runs} />
+        <Tab.Screen name="test" component={TestScreen} />
+
+        {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
-function Home() {
+function InvenrtoryStack() {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      activeColor="#ff0071"
-      inactiveColor="#000"
-      barStyle={{ backgroundColor: "#fff" }}
+    <Stack.Navigator
+      initialRouteName="Inventory"
       screenOptions={({ route, navigation }) => ({
         headerShown: false,
-        tabBarStyle: {position: "absolute", bottom: "8%", height: "10%", width: "80%", borderRadius: 50},
-        tabBarShowLabel: false,
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          if (route.name === "Home") {
-            iconName = focused ? "home-variant" : "home-variant";
-          } else if (route.name === "sneakers") {
-            iconName = focused ? "cart" : "cart";
-          } else if (route.name === "runs") {
-            iconName = focused ? "shoe-sneaker" : "shoe-sneaker";
-          } else if (route.name === "allMisteryBoxScreen") {
-            iconName = focused ? "toolbox" : "toolbox";
-          }
-          return <Icon type='material-community' name={iconName} size={23} color={color} />;
+        tabBarStyle: {
+          position: "absolute",
+          bottom: "10%",
+          height: "8%",
+          borderRadius: 50,
+          left: "5%",
+          right: "5%",
+          shadowColor: "black",
+          shadowOffset: {
+            width: 0,
+            height: 10,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.5,
+          elevation: 5,
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="sneakers" component={SneakersScreen} />
-      <Tab.Screen name="runs" component={RunsScreen} />
-      <Tab.Screen name="allMisteryBoxScreen" component={AllMisteryBoxScreen} />
+      <Stack.Screen name="Inventory" component={Invenrtory} />
+      <Stack.Screen name="AllSneakersScreen" component={AllSneakersScreen} />
+      <Stack.Screen name="AllMisteryBoxScreen" component={AllMisteryBoxScreen} />
+    </Stack.Navigator>
+  );
+}
 
-      {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
-    </Tab.Navigator>
+function Runs() {
+  return (
+    <Stack.Navigator
+      initialRouteName="AllRunsScreen"
+      screenOptions={({ route, navigation }) => ({
+        headerShown: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: "10%",
+          height: "8%",
+          borderRadius: 50,
+          left: "5%",
+          right: "5%",
+          shadowColor: "black",
+          shadowOffset: {
+            width: 0,
+            height: 10,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.5,
+          elevation: 5,
+        },
+      })}
+    >
+      <Stack.Screen name="AllRunsScreen" component={AllRunsScreen} />
+      <Stack.Screen name="OneRunScreen" component={OneRunScreen} />
+    </Stack.Navigator>
   );
 }
 

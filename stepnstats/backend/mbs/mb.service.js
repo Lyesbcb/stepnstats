@@ -50,7 +50,7 @@ async function uploadFile(req, res) {
         try {
           res.send(await db.Mb.create(params));
         } catch (error) {
-          console.log(error)
+          console.log(error);
           res.status(400).send(error);
         }
       });
@@ -65,7 +65,45 @@ async function uploadFile(req, res) {
     get_content_from_screen.stderr.setEncoding("utf8");
     await get_content_from_screen.stderr.on(
       "data",
-      await function (data) {
+      await async function (data) {
+        var prices;
+        if (data.realm == "Solana") {
+          prices = await db.SolanaMp.findAll({
+            where: {
+              createdAt: {
+                [db.Op.lte]: data.createdAt,
+              },
+            },
+            limit: 1,
+            order: [["createdAt", "DESC"]],
+            subQuery: false,
+          });
+        }
+        if (data.realm == "Bnb") {
+          prices = await db.BNBMp.findAll({
+            where: {
+              createdAt: {
+                [db.Op.lte]: data.createdAt,
+              },
+            },
+            limit: 1,
+            order: [["createdAt", "DESC"]],
+            subQuery: false,
+          });
+        }
+        if (data.realm == "Ethereum") {
+          prices = await db.EthereumMp.findAll({
+            where: {
+              createdAt: {
+                [db.Op.lte]: data.createdAt,
+              },
+            },
+            limit: 1,
+            order: [["createdAt", "DESC"]],
+            subQuery: false,
+          });
+        }
+        data.setDataValue("prices", prices);
         return res.send(data);
       }
     );
@@ -84,12 +122,55 @@ async function getAll(req) {
 }
 
 async function getAllMy(req) {
-  return await db.Mb.findAll({
+  const mbs = await db.Mb.findAll({
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
+    order: [["createdAt", "DESC"]],
     limit: 10,
     subQuery: false,
   });
+  for (var i = 0; i < mbs.length; i++) {
+    var prices;
+    if (mbs[i].realm == "Solana") {
+      prices = await db.SolanaMp.findAll({
+        where: {
+          createdAt: {
+            [db.Op.lte]: mbs[i].createdAt,
+          },
+        },
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+        subQuery: false,
+      });
+    }
+    if (mbs[i].realm == "Bnb") {
+      prices = await db.BNBMp.findAll({
+        where: {
+          createdAt: {
+            [db.Op.lte]: mbs[i].createdAt,
+          },
+        },
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+        subQuery: false,
+      });
+    }
+    if (mbs[i].realm == "Ethereum") {
+      console.log("ici");
+      prices = await db.EthereumMp.findAll({
+        where: {
+          createdAt: {
+            [db.Op.lte]: mbs[i].createdAt,
+          },
+        },
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+        subQuery: false,
+      });
+    }
+    mbs[i].setDataValue("prices", prices);
+  }
+  return mbs;
 }
 
 async function getById(req) {

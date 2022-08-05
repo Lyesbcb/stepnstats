@@ -3,23 +3,14 @@ import {
   Text,
   View,
   Pressable,
-  ImageBackground,
-  Image,
-  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import * as MediaLibrary from "expo-media-library";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import FormData from "form-data";
 import Icon from "react-native-elements/dist/icons/Icon";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
-import * as Clipboard from "expo-clipboard";
-import axios from "axios";
-import uuid from "react-native-uuid";
 import Footer from "./footer";
 
-export default function HomeScreen({ props, navigation }) {
+export default function ChartScreen({ props, navigation }) {
   return (
     <View style={{width: "100%", height: "100%"}}>
       <View style={styles.container}></View>

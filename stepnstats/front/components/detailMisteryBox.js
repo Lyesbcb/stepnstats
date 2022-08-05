@@ -5,67 +5,7 @@ import React, { useEffect, useState } from "react";
 export default function DetailMisteryBox({ data, nextMb, previousMb }) {
   const [price, setPrice] = useState("--.--");
   const [date, setDate] = useState("--/--/----");
-  var mbPrices = {
-    gst: "0.08",
-    solana: "42.23",
-    gmt: "1.12",
-    walkerCommon: "0.66",
-    joggerCommon: "0.699",
-    runnerCommon: "0.669",
-    trainerCommon: "1.5",
-    walkerUncommon: "3.149",
-    joggerUncommon: "3.24",
-    runnerUncommon: "2.31",
-    trainerUncommon: "7.48",
-    walkerRare: "17.5",
-    joggerRare: "13.82",
-    runnerRare: "11.99",
-    trainerRare: "35",
-    walkerEpic: "80",
-    joggerEpic: "80",
-    runnerEpic: "79.9",
-    trainerEpic: "750",
-    efficiencyLvl1: "0.0208",
-    efficiencyLvl2: "0.32",
-    efficiencyLvl3: "2.55",
-    efficiencyLvl4: "11.99999",
-    efficiencyLvl5: "69",
-    efficiencyLvl6: "485",
-    efficiencyLvl7: "485",
-    efficiencyLvl8: "485",
-    efficiencyLvl9: "485",
-    luckLvl1: "0.023499",
-    luckLvl2: "0.4",
-    luckLvl3: "2.897",
-    luckLvl4: "12.98",
-    luckLvl5: "57.8",
-    luckLvl6: "220",
-    luckLvl7: "220",
-    luckLvl8: "220",
-    luckLvl9: "220",
-    resilienceLvl1: "0.01",
-    resilienceLvl2: "0.101",
-    resilienceLvl3: "0.9399",
-    resilienceLvl4: "4.5",
-    resilienceLvl5: "27.89",
-    resilienceLvl6: "599",
-    resilienceLvl7: "599",
-    resilienceLvl8: "599",
-    resilienceLvl9: "599",
-    comfortLvl1: "0.0338",
-    comfortLvl2: "0.339999",
-    comfortLvl3: "2.398",
-    comfortLvl4: "10.91",
-    comfortLvl5: "79",
-    comfortLvl6: "0",
-    comfortLvl7: "0",
-    comfortLvl8: "0",
-    comfortLvl9: "0",
-    id: 3,
-    createdAt: "2022-07-23T19:49:55.599Z",
-    updatedAt: "2022-07-23T19:49:55.599Z",
-  };
-
+  var color;
   const mbsColor = [
     "#B2B2B2",
     "#B2B2B2",
@@ -78,6 +18,9 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     "#FA6C00",
     "#FA6C00",
   ];
+  {
+    data != undefined ? (color = mbsColor[data.lvl - 1]) : (color = "#B2B2B2");
+  }
 
   const mbsImage = [
     require("../assets/mb/lvl1.png"),
@@ -129,11 +72,11 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     "resilienceLvl7",
     "resilienceLvl8",
     "resilienceLvl9",
-    "scrollCommon",
-    "scrollUncommon",
-    "scrollRare",
-    "scrollEpic",
-    "scrollLegendary",
+    "commonScroll",
+    "uncommonScroll",
+    "rareScroll",
+    "epicScroll",
+    "legendaryScroll",
     "gst",
   ];
   const contentImage = [
@@ -182,7 +125,84 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
   ];
 
   useEffect(() => {
-    if (data != 0) {
+    if (data != undefined) {
+      data.prices[0] = {
+        id: 1409,
+        walkerCommon: 1.19,
+        joggerCommon: 1.19,
+        runnerCommon: 1.15,
+        trainerCommon: 2.7,
+        walkerUncommon: 5,
+        joggerUncommon: 4.75,
+        runnerUncommon: 4.1,
+        trainerUncommon: 12.8,
+        walkerRare: 26.98,
+        joggerRare: 24.8,
+        runnerRare: 17.9,
+        trainerRare: 54.9,
+        walkerEpic: 153,
+        joggerEpic: 149,
+        runnerEpic: 98.5,
+        trainerEpic: 777,
+        genesisCommon: 100,
+        genesisUncommon: 99.99,
+        genesisRare: 135,
+        genesisEpic: 200,
+        ogCommon: 0,
+        ogUncommon: 0,
+        ogRare: 0,
+        ogEpic: 0,
+        efficiencyLvl1: 0.029999,
+        efficiencyLvl2: 0.41,
+        efficiencyLvl3: 2.59,
+        efficiencyLvl4: 12,
+        efficiencyLvl5: 70,
+        efficiencyLvl6: 385,
+        efficiencyLvl7: 385,
+        efficiencyLvl8: 385,
+        efficiencyLvl9: 385,
+        luckLvl1: 0.0499,
+        luckLvl2: 0.556,
+        luckLvl3: 3.43,
+        luckLvl4: 15.87,
+        luckLvl5: 75,
+        luckLvl6: 425,
+        luckLvl7: 425,
+        luckLvl8: 425,
+        luckLvl9: 425,
+        resilienceLvl1: 0.01,
+        resilienceLvl2: 0.143,
+        resilienceLvl3: 1,
+        resilienceLvl4: 4.6,
+        resilienceLvl5: 27,
+        resilienceLvl6: 85,
+        resilienceLvl7: 85,
+        resilienceLvl8: 85,
+        resilienceLvl9: 85,
+        comfortLvl1: 0.0423,
+        comfortLvl2: 0.45,
+        comfortLvl3: 2.79,
+        comfortLvl4: 13.9999,
+        comfortLvl5: 72,
+        comfortLvl6: 320,
+        comfortLvl7: 320,
+        comfortLvl8: 320,
+        comfortLvl9: 320,
+        commonScroll: 0.2,
+        uncommonScroll: 0.37,
+        rareScroll: 3.45,
+        epicScroll: 57,
+        legendaryScroll: 599,
+        createdAt: "2022-08-04T22:15:04.000Z",
+        updatedAt: "2022-08-04T22:15:04.000Z",
+        gstSolana: 0.053,
+        gstBnb: 0.053,
+        gstEthereum: 0.053,
+        gmt: 0.92,
+        Solana: 39.34,
+        Bnb: 240.34,
+        Ethereum: 240.34,
+      };
       getDate();
       getPrice();
     }
@@ -197,40 +217,61 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     setDate(date);
   }
 
+  function getPriceFromContent(content, contentQuantity) {
+    var totalRealmCrypto = 0;
+    var totalGst = 0;
+    var totalGmt = 0;
+    var total = 0;
+    if (content) {
+      if (!content.includes("Scroll") & !content.includes("gst")) {
+        totalRealmCrypto += data.prices[0][content] * contentQuantity;
+      } else if (content.includes("Scroll")) {
+        totalGmt += data.prices[0][content] * contentQuantity;
+      } else if (content.includes("gst")) {
+        totalGst += data.prices[0][content] * contentQuantity;
+      }
+      total =
+        totalRealmCrypto * data.prices[0][data.realm] +
+        totalGmt * data.prices[0]["gmt"] +
+        totalGst * data.prices[0]["gst" + data.realm];
+      return total;
+    }
+    return 0;
+  }
   function getPrice() {
     // Here request to have price of marketplace at specific date
-    var total = 0;
-    const content1 = data.content1;
-    const content1Quantity = data.content1Quantity;
-    const content2 = data.content2;
-    const content2Quantity = data.content2Quantity;
-    const content3 = data.content3;
-    const content3Quantity = data.content3Quantity;
-    const content4 = data.content4;
-    const content4Quantity = data.content4Quantity;
-    const content5 = data.content5;
-    const content5Quantity = data.content5Quantity;
-    const content6 = data.content6;
-    const content6Quantity = data.content6Quantity;
-    if (mbPrices[content1]) {
-      total += mbPrices[content1] * content1Quantity;
-    }
-    if (mbPrices[content2]) {
-      total += mbPrices[content2] * content2Quantity;
-    }
-    if (mbPrices[content3]) {
-      total += mbPrices[content3] * content3Quantity;
-    }
-    if (mbPrices[content4]) {
-      total += mbPrices[content4] * content4Quantity;
-    }
-    if (mbPrices[content5]) {
-      total += mbPrices[content5] * content5Quantity;
-    }
-    if (mbPrices[content6]) {
-      total += mbPrices[content6] * content6Quantity;
-    }
-    setPrice((total * mbPrices.solana).toFixed(2));
+    const content1Price = getPriceFromContent(
+      data.content1,
+      data.content1Quantity
+    );
+    const content2Price = getPriceFromContent(
+      data.content2,
+      data.content2Quantity
+    );
+    const content3Price = getPriceFromContent(
+      data.content3,
+      data.content3Quantity
+    );
+    const content4Price = getPriceFromContent(
+      data.content4,
+      data.content4Quantity
+    );
+    const content5Price = getPriceFromContent(
+      data.content5,
+      data.content5Quantity
+    );
+    const content6Price = getPriceFromContent(
+      data.content6,
+      data.content6Quantity
+    );
+    var total =
+      content1Price +
+      content2Price +
+      content3Price +
+      content4Price +
+      content5Price +
+      content6Price;
+    setPrice(total.toFixed(2));
   }
 
   function showContent() {
@@ -240,7 +281,6 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
           width: "100%",
           height: "40%",
           justifyContent: "center",
-          top: "20%",
           flexDirection: "column",
         }}
       >
@@ -479,7 +519,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     <View style={{ height: "100%", width: "100%" }}>
       <View
         style={{
-          backgroundColor: mbsColor[data.lvl- 1],
+          backgroundColor: mbsColor[data.lvl - 1],
           width: "15%",
           height: "4%",
           borderRadius: 5,
@@ -490,110 +530,121 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
         }}
       >
         <Text style={{ color: "white", fontSize: 12 }}>
-          Lvl {data != 0 ? data.lvl : "-"}
+          Lvl {data != undefined ? data.lvl : "-"}
         </Text>
       </View>
       <View
         style={{
-          flexDirection: "row",
           width: "100%",
-          height: "22%",
+          height: "100%",
           justifyContent: "space-around",
-          top: "20%",
           alignItems: "center",
         }}
       >
-        <Icon
-          type="antdesign"
-          name="left"
-          size={60}
-          color="black"
-          onPress={() => {
-            previousMb();
-          }}
-        ></Icon>
         <View
-          style={{ width: "30%", alignContent: "center", alignItems: "center" }}
-        >
-          {data != 0 ? (
-            <Image
-              source={mbsImage[data.lvl- 1]}
-              style={{ width: "100%", resizeMode: "contain" }}
-            ></Image>
-          ) : (
-            <Icon
-              style={{ width: "100%" }}
-              size={100}
-              type="antdesign"
-              name="plus"
-              color="black"
-            ></Icon>
-          )}
-        </View>
-        <Icon
-          type="antdesign"
-          name="right"
-          size={60}
-          color="black"
-          onPress={() => {
-            nextMb();
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            height: "22%",
+            justifyContent: "space-around",
+            alignItems: "center",
           }}
-        ></Icon>
-      </View>
+        >
+          <Icon
+            type="antdesign"
+            name="left"
+            size={60}
+            color="black"
+            onPress={() => {
+              previousMb();
+            }}
+          ></Icon>
+          <View
+            style={{
+              width: "30%",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {data != undefined ? (
+              <Image
+                source={mbsImage[data.lvl - 1]}
+                style={{ width: "100%", resizeMode: "contain" }}
+              ></Image>
+            ) : (
+              <Icon
+                style={{ width: "100%" }}
+                size={100}
+                type="antdesign"
+                name="plus"
+                color="black"
+              ></Icon>
+            )}
+          </View>
+          <Icon
+            type="antdesign"
+            name="right"
+            size={60}
+            color="black"
+            onPress={() => {
+              nextMb();
+            }}
+          ></Icon>
+        </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
-          height: "4%",
-          justifyContent: "center",
-          top: "30%",
-        }}
-      >
         <View
           style={{
-            backgroundColor: mbsColor[data.lvl- 1],
-            width: "20%",
-            borderRadius: 50,
-            marginLeft: "4%",
-            alignItems: "center",
+            flexDirection: "row",
+            width: "100%",
+            height: "4%",
             justifyContent: "center",
           }}
         >
-          <Text style={{ color: "white", fontSize: 12 }}>
-            {data != 0 ? price : "--.--"} $
-          </Text>
+          <View
+            style={{
+              backgroundColor: mbsColor[data.lvl - 1],
+              width: "20%",
+              borderRadius: 50,
+              marginLeft: "4%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 12 }}>
+              {data != undefined ? price : "--.--"} $
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: mbsColor[data.lvl - 1],
+              width: "40%",
+              borderRadius: 50,
+              marginLeft: "4%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 12 }}>
+              {data != undefined ? date : "../../...."}
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: mbsColor[data.lvl - 1],
+              width: "20%",
+              borderRadius: 50,
+              marginLeft: "4%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 12 }}>
+              {data != undefined ? data.dropRate : "..-.."} %
+            </Text>
+          </View>
         </View>
-        <View
-          style={{
-            backgroundColor: mbsColor[data.lvl- 1],
-            width: "40%",
-            borderRadius: 50,
-            marginLeft: "4%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 12 }}>
-            {data != 0 ? date : "../../...."}
-          </Text>
-        </View>
-        <View
-          style={{
-            backgroundColor: mbsColor[data.lvl - 1],
-            width: "20%",
-            borderRadius: 50,
-            marginLeft: "4%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 12 }}>
-            {data != 0 ? data.dropRate : "..-.."} %
-          </Text>
-        </View>
+        {data != undefined ? showContent() : <View></View>}
       </View>
-      {data != 0 ? showContent() : <View></View>}
     </View>
   );
 }

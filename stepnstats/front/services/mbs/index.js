@@ -85,10 +85,9 @@ async function uploadMb(image, realm) {
       },
     };
     // Start waiting screen
-    await fetch(baseURL + "/upload", options)
+    return await fetch(baseURL + "/upload", options)
       .then(async (response) => {
-        console.log(await response.json());
-        // Actualize list of MB and redirect to OneMisteryBox
+        return await response.json();
       })
       .catch(async function (error) {
         console.log(await error.json());
@@ -132,7 +131,7 @@ async function getAllMyMb(page) {
 
   return await axios(config)
     .then(async function (response) {
-      return response.data
+      return response.data;
       // Set store with the data
     })
     .catch(function (error) {

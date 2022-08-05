@@ -3,22 +3,45 @@ import {
   View,
   Pressable,
   ImageBackground,
-  Image,
-  Alert,
   TouchableOpacity,
   StyleSheet
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import * as MediaLibrary from "expo-media-library";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import FormData from "form-data";
 import Icon from "react-native-elements/dist/icons/Icon";
-import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
-import * as Clipboard from "expo-clipboard";
 import Footer from "./footer";
+import DetailMisteryBox from "./detailMisteryBox";
+import {
+  createMb,
+  uploadMb,
+  getAllMyMb,
+  updateMb,
+  deleteMb,
+} from "../services/mbs/index";
+export default function OneSneakersScreen({ navigation }) {
+  const [mbs, setMbs] = useState([]);
+  useEffect(() => {
+    myFunction();
+  }, []);
 
-export default function SneakersScreen({navigation }) {
+  const myFunction = async () => {
+    setMbs(await getAllMyMb(1));
+  };
+  const [mbSelected, setMbSelected] = useState(1);
+
+  function nextMb() {
+    if (mbSelected != mbs.length) {
+      setMbSelected(mbSelected + 1);
+    } else {
+      setMbSelected(1);
+    }
+  }
+
+  function previousMb() {
+    if (mbSelected != 0) {
+      setMbSelected(mbSelected - 1);
+    } else {
+      setMbSelected(mbs.length);
+    }  }
   return (
     <ImageBackground
       style={styles.image}
@@ -27,12 +50,6 @@ export default function SneakersScreen({navigation }) {
     >
       <View style={styles.container}></View>
       <View style={styles.container2}>
-        <TouchableOpacity
-          style={styles.return}
-          onPressIn={() => navigation.navigate("Home")}
-        >
-          <Icon type="antdesign" name="left" size={20} color="black"></Icon>
-        </TouchableOpacity>
         <Text
           style={{
             ...styles.text,
@@ -41,9 +58,9 @@ export default function SneakersScreen({navigation }) {
             position: "absolute",
           }}
         >
-          Sneakers
+          Mistery Box
         </Text>
-        <Pressable onPress={() => navigation.navigate("Home")} style={styles.all}>
+        <Pressable onPress={() => navigation.goBack} style={styles.all}>
           <Text
             style={{
               ...styles.text,
@@ -57,7 +74,21 @@ export default function SneakersScreen({navigation }) {
           </Text>
         </Pressable>
         <View style={styles.shoes}>
-          <View style={styles.halo}></View>
+          {mbSelected != 0 ? (
+            <DetailMisteryBox
+              styles={styles}
+              data={mbs[mbSelected - 1]}
+              nextMb={nextMb}
+              previousMb={previousMb}
+            ></DetailMisteryBox>
+          ) : (
+            <DetailMisteryBox
+              styles={styles}
+              data={0}
+              nextMb={nextMb}
+              previousMb={previousMb}
+            ></DetailMisteryBox>
+          )}
         </View>
         <Footer styles={styles}></Footer>
       </View>

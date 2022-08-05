@@ -2,10 +2,12 @@ import {
   Text,
   View,
   Pressable,
-  ImageBackground,
+  Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
@@ -18,9 +20,16 @@ import {
   updateMb,
   deleteMb,
 } from "../services/mbs/index";
+import * as ImagePicker from "expo-image-picker";
+import BouncingPreloader from "react-native-bouncing-preloaders";
+import DetailMisteryBox from "./detailMisteryBox";
 
 export default function AllMisteryBoxScreen({ navigation }) {
+  const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalOneMisteryBox, setmodalOneMisteryBox] = useState(false);
+  const [mbSelected, setMbSelected] = useState(0);
   const [mbs, setMbs] = useState([]);
+  const [realm, setRealm] = useState("");
   useEffect(() => {
     myFunction();
   }, []);
@@ -29,11 +38,46 @@ export default function AllMisteryBoxScreen({ navigation }) {
     setMbs(await getAllMyMb(1));
   };
 
+  function nextMb() {
+    if (mbSelected != mbs.length) {
+      setMbSelected(mbSelected + 1);
+    } else {
+      setMbSelected(0);
+    }
+  }
+
+  function previousMb() {
+    if (mbSelected != 0) {
+      setMbSelected(mbSelected - 1);
+    } else {
+      setMbSelected(mbs.length);
+    }
+  }
+
+  const pickImage = async () => {
+    setmodalRealmVisible(false);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      // Start wait animation
+      await uploadMb(result, realm);
+      // Stop wait animation
+      await myFunction();
+    }
+  };
+
   function showMisteryBox() {
-    return mbs.map((mb) => {
+    return mbs.map((mb, i) => {
       return (
         <Pressable
-          onPress={() => navigation.navigate("OneMisteryBoxScreen", mb)}
+          onPress={() => {
+            setMbSelected(i);
+            setmodalOneMisteryBox(true);
+          }}
           style={{ width: "45%", height: "35%", margin: "2%" }}
           key={mb.id}
         >
@@ -43,80 +87,271 @@ export default function AllMisteryBoxScreen({ navigation }) {
     });
   }
   return (
-    <ImageBackground
-      style={styles.image}
-      resizeMode="cover"
-      source={require("../plan.png")}
+    <View
+      style={{
+        width: "90%",
+        height: "65%",
+      }}
     >
-      <View style={styles.container}></View>
-      <View style={styles.container2}>
-        <TouchableOpacity
-          style={styles.return}
-          onPressIn={() => navigation.navigate("Home")}
-        >
-          <Icon type="antdesign" name="left" size={20} color="black"></Icon>
-        </TouchableOpacity>
-        <Text
-          style={{
-            ...styles.text,
-            color: "white",
-            top: "8%",
-            position: "absolute",
-          }}
-        >
-          Mistery Box
-        </Text>
-        <Pressable
-          onPress={() => navigation.navigate("OneMisteryBoxScreen")}
-          style={styles.all}
-        >
-          <Text
-            style={{
-              ...styles.text,
-              color: "black",
-              fontSize: 15,
-              fontWeight: "900",
-              textAlign: "center",
-            }}
-          >
-            ONE
-          </Text>
-        </Pressable>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalRealmVisible}
+      >
         <View
           style={{
-            position: "absolute",
-            width: "95%",
-            height: "65%",
-            top: "25%",
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <ScrollView
-            contentContainerStyle={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              width: "100%",
-              justifyContent: "space-between",
-              flexGrow: 1,
+          <View
+            style={{
+              backgroundColor: "white",
+              height: "40%",
+              width: "80%",
+              borderRadius: 30,
+              justifyContent: "space-evenly",
+              borderWidth: 1,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
-            showsVerticalScrollIndicator={false}
           >
             <Pressable
-              onPress={() => navigation.navigate("OneMisteryBoxScreen")}
-              style={{ width: "45%", height: "35%", margin: "2%" }}
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: 32,
+                height: 32,
+                borderRadius: 20,
+                position: "absolute",
+                top: "7%",
+                right: "7%",
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setmodalRealmVisible(false)}
             >
-              <LittleMisteryBox data={0}></LittleMisteryBox>
+              <Icon
+                style={{ width: "100%" }}
+                size={20}
+                type="antdesign"
+                name="close"
+                color="black"
+              ></Icon>
             </Pressable>
-            {showMisteryBox()}
-          </ScrollView>
+            <Text style={{ fontSize: 24, fontWeight: "700" }}>
+              Select realm
+            </Text>
+            <View
+              style={{
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "40%",
+                width: "100%",
+              }}
+            >
+              <Pressable
+                style={{ width: "15%", height: "100%" }}
+                onPress={() => setRealm("Solana")}
+              >
+                <Image
+                  source={require("../assets/sol_realm.png")}
+                  style={realm == "Solana" ? styles.realmActive : styles.realm}
+                ></Image>
+              </Pressable>
+              <Pressable
+                style={{ width: "15%", height: "100%" }}
+                onPress={() => setRealm("Bnb")}
+              >
+                <Image
+                  source={require("../assets/bsc_realm.png")}
+                  style={realm == "Bnb" ? styles.realmActive : styles.realm}
+                ></Image>
+              </Pressable>
+              <Pressable
+                style={{ width: "15%", height: "100%" }}
+                onPress={() => setRealm("Ethereum")}
+              >
+                <Image
+                  source={require("../assets/eth_realm.png")}
+                  style={
+                    realm == "Ethereum" ? styles.realmActive : styles.realm
+                  }
+                ></Image>
+              </Pressable>
+            </View>
+            <Pressable
+              style={{
+                width: "45%",
+                height: "15%",
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "#9DF8B6",
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 4,
+                  height: 4,
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => {
+                realm != ""
+                  ? pickImage()
+                  : Alert.alert("You must choose a realm!");
+              }}
+            >
+              <Text style={{ fontWeight: "700", fontSize: 24 }}>NEXT</Text>
+            </Pressable>
+          </View>
         </View>
-
-        <Footer styles={styles}></Footer>
-      </View>
-    </ImageBackground>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalOneMisteryBox.visible}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              height: "40%",
+              width: "80%",
+              borderRadius: 30,
+              justifyContent: "space-evenly",
+              borderWidth: 1,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: 32,
+                height: 32,
+                borderRadius: 20,
+                position: "absolute",
+                top: "7%",
+                right: "7%",
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setmodalOneMisteryBox(false)}
+            >
+              <Icon
+                style={{ width: "100%" }}
+                size={20}
+                type="antdesign"
+                name="close"
+                color="black"
+              ></Icon>
+            </Pressable>
+            <DetailMisteryBox
+              data={mbs[mbSelected]}
+              nextMb={nextMb}
+              previousMb={previousMb}
+            ></DetailMisteryBox>
+          </View>
+        </View>
+      </Modal>
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          flexGrow: 1,
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Pressable
+          onPress={() => setmodalRealmVisible(true)}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+        >
+          <LittleMisteryBox data={0}></LittleMisteryBox>
+        </Pressable>
+        {showMisteryBox()}
+      </ScrollView>
+      {/* <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <BouncingPreloader
+          icons={[
+            require("../assets/gem/efficiency/lvl1.png"),
+            require("../assets/gem/comfort/lvl1.png"),
+            require("../assets/gem/resilience/lvl1.png"),
+            require("../assets/gem/luck/lvl7.png"),
+            require("../assets/gem/resilience/lvl9.png"),
+            require("../assets/gem/luck/lvl3.png"),
+          ]}
+          leftRotation="-680deg"
+          rightRotation="360deg"
+          leftDistance={-180}
+          rightDistance={-250}
+          speed={1200}
+        />
+      </View> */}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  realm: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 0.3,
+  },
+  realmActive: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 1,
+  },
   headerRuns: {
     top: 0,
     backgroundColor: "#E0FEF3",
@@ -317,7 +552,6 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     borderRightWidth: 2800,
@@ -327,12 +561,10 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   container2: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: "80%",
     width: "100%",
-    position: "absolute",
   },
   image: {
     flex: 1,

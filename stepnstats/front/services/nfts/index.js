@@ -123,10 +123,9 @@ async function getAllMyNft(page) {
     },
   };
 
-  await axios(config)
+  return await axios(config)
     .then(async function (response) {
-      console.log(response.data);
-      // Set store with the data
+      return response.data
     })
     .catch(function (error) {
       console.log(error.response.data.message);

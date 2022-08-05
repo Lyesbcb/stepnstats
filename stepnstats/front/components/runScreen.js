@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import { LineChart } from "react-native-chart-kit";
 import Footer from "./footer";
 import { Dimensions } from "react-native";
 
-export default function RunScreen({ navigation }) {
-
+export default function RunScreen({ navigation, route }) {
+  const [run, setRun] = useState(route.params);
   const sneakers = [
     {
       id: 3,
@@ -78,12 +78,12 @@ export default function RunScreen({ navigation }) {
       >
         <TouchableOpacity
           style={{ ...styles.return, top: "18%" }}
-          onPressIn={() => navigation.navigate("runs")}
+          onPressIn={() => navigation.navigate("AllRunsScreen")}
         >
           <Icon type="antdesign" name="left" size={20} color="black"></Icon>
         </TouchableOpacity>
-        {/* Top part */}
-        <View
+      {/* Top part */}
+      <View
           style={{
             top: "18%",
             width: "60%",
@@ -94,7 +94,7 @@ export default function RunScreen({ navigation }) {
           }}
         >
           <Text style={{ fontSize: 16, fontWeight: "600" }}>
-            {dateFormat(new Date(run[0].date))}
+            {dateFormat(new Date(run.date))}
           </Text>
           <View
             style={{
@@ -105,12 +105,12 @@ export default function RunScreen({ navigation }) {
             }}
           >
             <Text style={{ fontSize: 48, fontWeight: "700" }}>
-              {(run[0].gst / minuteConverter(run[0].duration) / 60).toFixed(1)}
+              {(run.gst / minuteConverter(run.duration) / 60).toFixed(1)}
             </Text>
             <Text style={{}}>GST/Min</Text>
           </View>
         </View>
-        <View
+      <View
           style={{
             top: "30%",
             width: "80%",
@@ -120,8 +120,8 @@ export default function RunScreen({ navigation }) {
             alignItems: "center",
           }}
         >
-          {/* Sneakers */}
-          <View
+      {/* Sneakers */}
+      <View
             style={{
               width: "53%",
               height: "100%",
@@ -143,7 +143,7 @@ export default function RunScreen({ navigation }) {
                 flexDirection: "row",
               }}
             >
-              {run[0].type == "Walker" ? (
+              {run.type == "Walker" ? (
                 <View
                   style={{ flexDirection: "row", justifyContent: "center" }}
                 >
@@ -156,7 +156,7 @@ export default function RunScreen({ navigation }) {
                     source={require("../assets/icon_feet.png")}
                   ></Image>
                 </View>
-              ) : run[0].type == "Jogger" ? (
+              ) : run.type == "Jogger" ? (
                 <View
                   style={{
                     flexDirection: "row",
@@ -179,7 +179,7 @@ export default function RunScreen({ navigation }) {
                     source={require("../assets/icon_feet.png")}
                   ></Image>
                 </View>
-              ) : run[0].type == "Runner" ? (
+              ) : run.type == "Runner" ? (
                 <View
                   style={{
                     flexDirection: "row",
@@ -225,7 +225,7 @@ export default function RunScreen({ navigation }) {
                 </View>
               )}
               <Text style={{ fontSize: 10, fontWeight: "700" }}>
-                {run[0].type}
+                {run.type}
               </Text>
             </View>
             <Image
@@ -258,7 +258,7 @@ export default function RunScreen({ navigation }) {
                 <Text style={{ color: "white", fontSize: 10 }}>#</Text>
               </View>
               <Text style={{ fontSize: 11, fontWeight: "700" }}>
-                {run[0].nftId}
+                {run.nftId}
               </Text>
             </View>
             <View
@@ -380,7 +380,7 @@ export default function RunScreen({ navigation }) {
                 style={{ width: 30, height: 30, resizeMode: "contain" }}
               ></Image>
               <Text style={{ fontSize: 24, fontWeight: "700" }}>
-                + {run[0].gst}
+                + {run.gst}
               </Text>
             </View>
             <View
@@ -408,7 +408,7 @@ export default function RunScreen({ navigation }) {
                 style={{ width: 30, height: 30, resizeMode: "contain" }}
               ></Image>
               <Text style={{ fontSize: 24, fontWeight: "700" }}>
-                - {run[0].energy}
+                - {run.energy}
               </Text>
             </View>
           </View>
@@ -432,7 +432,7 @@ export default function RunScreen({ navigation }) {
             height: "50%",
           }}
         >
-          <Text style={{ fontSize: 20, fontWeight: "700" }}>{run[0].km}</Text>
+          <Text style={{ fontSize: 20, fontWeight: "700" }}>{run.km}</Text>
           <Text style={{ fontSize: 12, fontWeight: "500" }}>Km</Text>
         </View>
         <View
@@ -444,7 +444,7 @@ export default function RunScreen({ navigation }) {
           }}
         >
           <Text style={{ fontSize: 20, fontWeight: "700" }}>
-            {run[0].duration}
+            {run.duration}
           </Text>
           <Text style={{ fontSize: 12, fontWeight: "500" }}>Time</Text>
         </View>
@@ -457,7 +457,7 @@ export default function RunScreen({ navigation }) {
           }}
         >
           <Text style={{ fontSize: 20, fontWeight: "700" }}>
-            {run[0].steps}
+            {run.steps}
           </Text>
           <Text style={{ fontSize: 12, fontWeight: "500" }}>Steps</Text>
         </View>

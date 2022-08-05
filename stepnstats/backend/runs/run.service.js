@@ -53,6 +53,7 @@ async function getAllMy(req) {
   return await db.Run.findAndCountAll({
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
+    order: [["createdAt", "DESC"]],
     limit: 10,
     subQuery: false,
   });

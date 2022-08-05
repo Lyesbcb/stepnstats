@@ -1,141 +1,74 @@
 import {
-  StyleSheet,
   Text,
   View,
   Pressable,
   ImageBackground,
   Image,
   Alert,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import * as MediaLibrary from "expo-media-library";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import FormData from "form-data";
-import Icon from "react-native-elements/dist/icons/Icon";
-import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
-import * as Clipboard from "expo-clipboard";
-import axios from "axios";
-import uuid from "react-native-uuid";
-import Footer from "./footer";
+import LittleSneakers from "./littleSneakers";
+import {
+  createNft,
+  uploadNft,
+  getAllMyNft,
+  updateNft,
+  deleteNft,
+} from "../services/nfts/index";
 
-export default function HomeScreen({ props, navigation }) {
+export default function AllSneakersScreen({ navigation }) {
+  const [sneakers, setSneakers] = useState([]);
+  useEffect(() => {
+    myFunction();
+  }, []);
+
+  const myFunction = async () => {
+    setSneakers(await getAllMyNft(1));
+  };
+  function showSneakers() {
+    if (sneakers.length) {
+      sneakers.map((sneaker, i) => {
+        return (
+          <Pressable
+            onPress={() =>
+              navigation.navigate("OneSneakersScreen", { sneaker, i })
+            }
+            style={{ width: "45%", height: "35%", margin: "2%" }}
+            key={sneaker.id}
+          >
+            <LittleSneakers data={sneaker}></LittleSneakers>
+          </Pressable>
+        );
+      });
+    }
+  }
   return (
-    <View style={{width: "100%", height: "100%"}}>
-      <View style={styles.container}></View>
-      <View style={styles.container2}>
-        <View style={styles.selector}>
-          <Icon
-            type="antdesign"
-            name="left"
-            size={50}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={styles.selectorTextPrimary}>ici</Text>
-            <Text style={styles.selectorTextSecondary}>ici</Text>
-          </View>
-          <Icon
-            type="antdesign"
-            name="right"
-            size={50}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-        </View>
-        <View style={styles.selectTemporality}>
-          <Pressable>
-            <View style={styles.weekTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>W</Text>
-            </View>
-          </Pressable>
-          <Pressable>
-            <View style={styles.monthTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>M</Text>
-            </View>
-          </Pressable>
-          <Pressable>
-            <View style={styles.yearTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>Y</Text>
-            </View>
-          </Pressable>
-        </View>
-        <View style={styles.dateSelector}>
-          <Icon
-            type="antdesign"
-            name="left"
-            size={30}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={styles.dateSelectorTextPrimary}>ici</Text>
-          </View>
-          <Icon
-            type="antdesign"
-            name="right"
-            size={30}
-            style={{ paddingHorizontal: 10 }}
-            onPress={() => nextTemporality()}
-          ></Icon>
-        </View>
-        <LineChart
-          data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
-            datasets: [
-              {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                ],
-              },
-            ],
-          }}
-          width={Dimensions.get("window").width - 50} // from react-native
-          height={Dimensions.get("window").width - 150}
-          yAxisInterval={1}
-          chartConfig={{
-            backgroundGradientFrom: "white",
-            backgroundGradientTo: "white",
-            decimalPlaces: 0,
-            color: (opacity = 1) => "#4DC6F4",
-            labelColor: (opacity = 1) => `#4DC6F4`,
-            propsForDots: {
-              r: "3",
-              strokeWidth: "1",
-              stroke: "white",
-            },
-          }}
-          style={{
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: "black",
-            shadowColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 4,
-              height: 4,
-            },
-          }}
-          bezier
-        />
-        <Footer styles={styles}></Footer>
-      </View>
+    <View
+      style={{
+        width: "95%",
+        height: "100%",
+      }}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          width: "100%",
+          justifyContent: "space-between",
+          flexGrow: 1,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Pressable
+          onPress={() => console.log("add sneaker")}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+        >
+          <LittleSneakers data={0}></LittleSneakers>
+        </Pressable>
+        {showSneakers()}
+      </ScrollView>
     </View>
   );
 }
@@ -216,8 +149,8 @@ const styles = StyleSheet.create({
     height: "5%",
     borderRadius: 100,
     position: "absolute",
-    top: "15%",
-    right: "10%",
+    top: "2%",
+    right: "2%",
     borderWidth: 1,
     borderColor: "black",
     shadowOpacity: 1,
@@ -238,9 +171,7 @@ const styles = StyleSheet.create({
       height: 6,
     },
     width: "85%",
-    height: "63%",
-    position: "absolute",
-    top: "22%",
+    height: "80%",
     alignContent: "center",
   },
   halo: {
@@ -313,9 +244,11 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
+    color: "white",
     fontSize: 36,
   },
   selectorTextSecondary: {
+    color: "white",
     fontSize: 36,
   },
   selector: {
@@ -327,6 +260,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
+    color: "white",
     fontSize: 20,
   },
   dateSelector: {
@@ -338,17 +272,20 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRightWidth: 2800,
     borderRightColor: "transparent",
-    borderTopWidth: 500,
-    borderTopColor: "#E0FEF3",
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30
+    borderTopWidth: 700,
+    borderTopColor: "#FF95FB",
+    position: "relative",
   },
   container2: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: "60%",
     width: "100%",
     position: "absolute",
   },

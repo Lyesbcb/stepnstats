@@ -23,7 +23,9 @@ import {
 export default function RunsScreen({ navigation }) {
   const [runs, setRuns] = useState([]);
   useEffect(() => {
-    myFunction();
+    const unsubscribe = navigation.addListener("focus", () => {
+      myFunction();
+    });
   }, []);
 
   const myFunction = async () => {
@@ -95,13 +97,13 @@ export default function RunsScreen({ navigation }) {
       return (
         <Pressable
           style={{
-            height: "30%",
+            height: "22%",
             width: "100%",
             borderWidth: 1,
             flexDirection: "row",
           }}
           key={run.id}
-          onPress={() => navigation.navigate("run")}
+          onPress={() => navigation.navigate("OneRunScreen", run)}
         >
           <View
             style={{
@@ -126,6 +128,7 @@ export default function RunsScreen({ navigation }) {
                 borderWidth: 1,
                 alignContent: "center",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text
@@ -141,25 +144,30 @@ export default function RunsScreen({ navigation }) {
               </Text>
               <View
                 style={{
-                  top: "8%",
-                  right: "5%",
-                  height: "20%",
-                  width: "25%",
+                  top: "1%",
+                  right: "1%",
+                  height: "15%",
+                  width: "15%",
                   flexDirection: "row-reverse",
                   position: "absolute",
                 }}
               >
                 {run.type == "Walker" ? (
-                  <View style={{ width: "100%", height: "100%" }}>
-                    <Image
-                      style={{
-                        resizeMode: "contain",
-                        width: "100%",
-                        height: "90%",
-                      }}
-                      source={require("../assets/icon_feet.png")}
-                    ></Image>
-                  </View>
+                  <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Image
+                    style={{
+                      resizeMode: "contain",
+                      width: "100%",
+                      height: "90%",
+                    }}
+                    source={require("../assets/icon_feet.png")}
+                  ></Image>
+                </View>
                 ) : run.type == "Jogger" ? (
                   <View
                     style={{
@@ -169,6 +177,7 @@ export default function RunsScreen({ navigation }) {
                   >
                     <Image
                       style={{
+                        resizeMode: "contain",
                         width: "50%",
                         height: "90%",
                       }}
@@ -217,18 +226,31 @@ export default function RunsScreen({ navigation }) {
                   </View>
                 ) : (
                   // TODO: find trainer logo
-                  <View style={{ flexDirection: "row" }}>
-                    <Image
-                      style={{
-                        resizeMode: "contain",
-                        width: "30%",
-                        height: "90%",
-                      }}
-                      source={require("../assets/icon_feet.png")}
-                    ></Image>
-                  </View>
+                  <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Image
+                    style={{
+                      resizeMode: "contain",
+                      width: "100%",
+                      height: "90%",
+                    }}
+                    source={require("../assets/icon_feet.png")}
+                  ></Image>
+                </View>
                 )}
               </View>
+              <Image
+                style={{
+                  resizeMode: "contain",
+                  width: "80%",
+                  height: "80%",
+                }}
+                source={require("../assets/shoes/Runner.png")}
+              />
             </View>
           </View>
 
@@ -281,12 +303,6 @@ export default function RunsScreen({ navigation }) {
   return (
     <View style={{ width: "100%", height: "100%", alignItems: "center" }}>
       <View style={styles.headerRuns}>
-        <TouchableOpacity
-          style={{ ...styles.return, top: "18%" }}
-          onPressIn={() => navigation.goBack()}
-        >
-          <Icon type="antdesign" name="left" size={20} color="black"></Icon>
-        </TouchableOpacity>
         <Text
           style={{
             ...styles.text,
@@ -365,7 +381,7 @@ export default function RunsScreen({ navigation }) {
       >
         <Pressable
           style={{
-            height: "30%",
+            height: "22%",
             width: "100%",
             borderWidth: 1,
             flexDirection: "row",

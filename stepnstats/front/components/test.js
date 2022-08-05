@@ -73,7 +73,7 @@ export default function TestScreen({ route, navigation }) {
   var paramsCreateNft = {
     lvl: "28",
     realm: "Solana",
-    fileName: "2020-12-18_20:23:43.png",
+    fileName: "2020-11-11_20:21:43.png",
     type: "runner",
     quality: "common",
     efficiency: "9.4",
@@ -229,7 +229,7 @@ export default function TestScreen({ route, navigation }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await getAllMyNft(1);
+            console.log(await getAllMyNft(1));
           }}
         >
           <Text>Get all my</Text>
@@ -281,7 +281,7 @@ export default function TestScreen({ route, navigation }) {
         <Pressable
           style={{ borderWidth: 1 }}
           onPress={async () => {
-            await getAllMyMb(1);
+            console.log(await getAllMyMb(1));
           }}
         >
           <Text>Get all my</Text>

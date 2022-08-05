@@ -1,104 +1,126 @@
-import {
-  Text,
-  View,
-  Pressable,
-  ImageBackground,
-  TouchableOpacity,
-  StyleSheet
-} from "react-native";
-import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import Footer from "./footer";
-import DetailMisteryBox from "./detailMisteryBox";
-import {
-  createMb,
-  uploadMb,
-  getAllMyMb,
-  updateMb,
-  deleteMb,
-} from "../services/mbs/index";
-export default function OneMisteryBoxScreen({ navigation }) {
-  const [mbs, setMbs] = useState([]);
-  useEffect(() => {
-    myFunction();
-  }, []);
+import { Text, View, Image, StyleSheet} from "react-native";
+import React, { useEffect, useState } from "react";
 
-  const myFunction = async () => {
-    setMbs(await getAllMyMb(1));
-  };
-  const [mbSelected, setMbSelected] = useState(0);
-
-  function nextMb() {
-    if (mbSelected != mbs.length) {
-      setMbSelected(mbSelected + 1);
-    } else {
-      setMbSelected(0);
-    }
-  }
-
-  function previousMb() {
-    if (mbSelected != 0) {
-      setMbSelected(mbSelected - 1);
-    } else {
-      setMbSelected(mbs.length);
-    }  }
+export default function LittleSneakers({ data }) { 
+  var color
+  const mbsColor = [
+    "#B2B2B2",
+    "#B2B2B2",
+    "#80FF1D",
+    "#80FF1D",
+    "#00A5F6",
+    "#00A5F6",
+    "#9F80FF",
+    "#9F80FF",
+    "#FA6C00",
+    "#FA6C00",
+  ];
+  {data != 0 ? color = mbsColor[data.lvl -1]: color = "#B2B2B2"}
   return (
-    <ImageBackground
-      style={styles.image}
-      resizeMode="cover"
-      source={require("../plan.png")}
+    <View
+      style={{
+        backgroundColor: "white",
+        borderWidth: 1,
+        borderRadius: 20,
+        shadowOpacity: 1,
+        shadowRadius: 1,
+        shadowOffset: {
+          width: 6,
+          height: 6,
+        },
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+      }}
     >
-      <View style={styles.container}></View>
-      <View style={styles.container2}>
-        <TouchableOpacity
-          style={styles.return}
-          onPressIn={() => navigation.navigate("Home")}
-        >
-          <Icon type="antdesign" name="left" size={20} color="black"></Icon>
-        </TouchableOpacity>
-        <Text
-          style={{
-            ...styles.text,
-            color: "white",
-            top: "8%",
-            position: "absolute",
-          }}
-        >
-          Mistery Box
-        </Text>
-        <Pressable onPress={() => navigation.navigate("allMisteryBoxScreen")} style={styles.all}>
-          <Text
-            style={{
-              ...styles.text,
-              color: "black",
-              fontSize: 15,
-              fontWeight: "900",
-              textAlign: "center",
-            }}
-          >
-            ALL
-          </Text>
-        </Pressable>
-        <View style={styles.shoes}>
-          {mbSelected != 0 ? (
-            <DetailMisteryBox
-              styles={styles}
-              data={mbs[mbSelected - 1]}
-              nextMb={nextMb}
-              previousMb={previousMb}
-            ></DetailMisteryBox>
-          ) : (
-            <DetailMisteryBox
-              styles={styles}
-              data={0}
-              nextMb={nextMb}
-              previousMb={previousMb}
-            ></DetailMisteryBox>
-          )}
-        </View>
-        <Footer styles={styles}></Footer>
+      <View
+        style={{
+          position: "absolute",
+          height: "10%",
+          width: "60%",
+          top: 0,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          backgroundColor:  color,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ fontSize: 10 }}>Lvl {data != 0 ? data.lvl: "-"}</Text>
       </View>
-    </ImageBackground>
+      <View style={{ justifyContent: "space-around", width: "100%", height: "60%", alignItems: "center", position:"absolute", top: "15%"}}>
+      <View style={{ width: "80%", alignContent: "center", alignItems: "center", justifyContent: "center", height: "50%" }}>
+      {data != 0 ? (
+            <Image
+              source={mbsImage[data.lvl - 1]}
+              style={{ width: "50%", resizeMode: "contain" }}
+            ></Image>
+          ) : (
+            <Icon
+              style={{ width: "100%" }}
+              size={70}
+              type="antdesign"
+              name="plus"
+              color="black"
+            ></Icon>
+          )}
+      </View>
+
+      <View
+        style={{
+          height: "10%",
+          width: "60%",
+          borderRadius: 20,
+          backgroundColor:  color,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ fontSize: 10 }}>{data != 0 ? date : "../../...."}</Text>
+      </View>
+      <View
+        style={{
+          height: "12%",
+          width: "60%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Text style={{ fontSize: 10 }}>{data != 0 ? price : "--.--"} $</Text>
+        <Text style={{ fontSize: 10 }}>
+          {data != 0 ? data.dropRate : "..-.."} %
+        </Text>
+      </View>
+      <View
+        style={{
+          height: "2%",
+          width: "60%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+          backgroundColor: "#9DF8B6",
+        }}
+      ></View>
+      </View>
+      
+      <View
+        style={{
+          position: "absolute",
+          height: "20%",
+          width: "100%",
+          bottom: 0,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          backgroundColor:  color,
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {data != 0 ? showContent() : <View></View>}
+      </View>
+    </View>
   );
 }
 

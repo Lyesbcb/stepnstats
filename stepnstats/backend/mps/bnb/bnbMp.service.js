@@ -28,7 +28,6 @@ async function getDate(req) {
     subQuery: false,
   });
 }
-
 async function getLastRecords(nbRecords) {
   return await db.BNBMp.findAll({
     limit: nbRecords,
