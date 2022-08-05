@@ -36,7 +36,7 @@ async function uploadFile(req, res) {
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
-      params.realm = JSON.parse(req.body.realm).realm;
+      params.realm = req.body.realm
       params.fileName = req.file.filename;
       var get_mb_lvl_from_image = await spawn("python", [
         "./python/get_mb_lvl_from_image.py",
