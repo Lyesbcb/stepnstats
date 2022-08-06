@@ -1,8 +1,14 @@
 import Icon from "react-native-elements/dist/icons/Icon";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 
-export default function DetailMisteryBox({ data, nextMb, previousMb }) {
+export default function DetailMysteryBox({
+  data,
+  nextMb,
+  previousMb,
+  setmodalOneMysteryBox,
+  deleteOneMb
+}) {
   const [price, setPrice] = useState("--.--");
   const [date, setDate] = useState("--/--/----");
   var color;
@@ -18,8 +24,9 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     "#FA6C00",
     "#FA6C00",
   ];
+
   {
-    data != undefined ? (color = mbsColor[data.lvl - 1]) : (color = "#B2B2B2");
+    data.lvl == undefined ? (data.lvl = 1) : "";
   }
 
   const mbsImage = [
@@ -79,6 +86,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
     "legendaryScroll",
     "gst",
   ];
+
   const contentImage = [
     require("../assets/gem/efficiency/lvl1.png"),
     require("../assets/gem/efficiency/lvl2.png"),
@@ -201,7 +209,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
         gmt: 0.92,
         Solana: 39.34,
         Bnb: 240.34,
-        Ethereum: 240.34,
+        Ethereum: 1400.34,
       };
       getDate();
       getPrice();
@@ -228,16 +236,17 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
       } else if (content.includes("Scroll")) {
         totalGmt += data.prices[0][content] * contentQuantity;
       } else if (content.includes("gst")) {
-        totalGst += data.prices[0][content] * contentQuantity;
+        totalGst += data.prices[0][content + data.realm] * contentQuantity;
       }
       total =
         totalRealmCrypto * data.prices[0][data.realm] +
         totalGmt * data.prices[0]["gmt"] +
         totalGst * data.prices[0]["gst" + data.realm];
-      return total;
+      return (total*0.94);
     }
     return 0;
   }
+  
   function getPrice() {
     // Here request to have price of marketplace at specific date
     const content1Price = getPriceFromContent(
@@ -537,7 +546,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
         style={{
           width: "100%",
           height: "100%",
-          justifyContent: "space-around",
+          justifyContent: "space-evenly",
           alignItems: "center",
         }}
       >
@@ -546,7 +555,7 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
             flexDirection: "row",
             width: "100%",
             height: "22%",
-            justifyContent: "space-around",
+            justifyContent: "space-evenly",
             alignItems: "center",
           }}
         >
@@ -590,6 +599,98 @@ export default function DetailMisteryBox({ data, nextMb, previousMb }) {
               nextMb();
             }}
           ></Icon>
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: "0%",
+            right: "2%",
+            justifyContent: "space-evenly",
+            flexDirection: "row",
+            width: "35%"
+          }}
+        >
+          <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => setmodalOneMysteryBox(false)}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={20}
+              type="material-community"
+              name="pencil-outline"
+              color="black"
+            ></Icon>
+          </Pressable>
+          <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => deleteOneMb(data.id)}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={20}
+              type="material-community"
+              name="trash-can-outline"
+              color="black"
+            ></Icon>
+          </Pressable>
+          <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => setmodalOneMysteryBox(false)}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={20}
+              type="material-community"
+              name="close"
+              color="black"
+            ></Icon>
+          </Pressable>
         </View>
 
         <View

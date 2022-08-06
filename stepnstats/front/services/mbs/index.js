@@ -132,7 +132,6 @@ async function getAllMyMb(page) {
   return await axios(config)
     .then(async function (response) {
       return response.data;
-      // Set store with the data
     })
     .catch(function (error) {
       console.log(error.response.data.message);

@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import AllSneakersScreen from "./components/allSneakersScreen";
-import AllMisteryBoxScreen from "./components/allMisteryBoxScreen";
+import AllMysteryBoxScreen from "./components/allMysteryBoxScreen";
 import AllRunsScreen from "./components/runsScreen";
 import OneRunScreen from "./components/runScreen";
 import React, { useState } from "react";
@@ -68,11 +68,11 @@ function App() {
             let iconName;
             if (route.name === "Home") {
               iconName = focused ? "home-variant" : "home-variant";
-            } else if (route.name === "sneakers") {
-              iconName = focused ? "cart" : "cart";
+            } else if (route.name === "InvenrtoryStack") {
+              iconName = focused ? "bag-personal-outline" : "bag-personal-outline";
             } else if (route.name === "runs") {
               iconName = focused ? "shoe-sneaker" : "shoe-sneaker";
-            } else if (route.name === "misteryBox") {
+            } else if (route.name === "mysteryBox") {
               iconName = focused ? "toolbox" : "toolbox";
             } else if (route.name === "chart") {
               iconName = focused ? "chart-box" : "chart-box";
@@ -133,7 +133,7 @@ function InvenrtoryStack() {
     >
       <Stack.Screen name="Inventory" component={Invenrtory} />
       <Stack.Screen name="AllSneakersScreen" component={AllSneakersScreen} />
-      <Stack.Screen name="AllMisteryBoxScreen" component={AllMisteryBoxScreen} />
+      <Stack.Screen name="AllMysteryBoxScreen" component={AllMysteryBoxScreen} />
     </Stack.Navigator>
   );
 }

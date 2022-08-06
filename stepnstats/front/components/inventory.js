@@ -6,19 +6,41 @@ import {
   ImageBackground,
   Image,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
 import AllSneakersScreen from "./allSneakersScreen";
-import AllMisteryBoxScreen from "./allMisteryBoxScreen";
+import AllMysteryBoxScreen from "./allMysteryBoxScreen";
 import RunsScreen from "./runsScreen";
+import {
+  createMb,
+  uploadMb,
+  getAllMyMb,
+  updateMb,
+  deleteMb,
+} from "../services/mbs/index";
 
 export default function Invenrtory({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
+  const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalOneMysteryBox, setmodalOneMysteryBox] = useState(false);
+  const [mbs, setMbs] = useState([]);
+  useEffect(() => {
+    myFunction();
+  }, []);
+
+  const myFunction = async () => {
+    try {
+      setMbs(await getAllMyMb(1));
+    } catch {
+      Alert.alert("Error");
+    }
+  };
 
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <View style={{ width: "100%", height: "100%", }}>
       <View style={styles.container2}>
         <Header
           navigation={navigation}
@@ -37,9 +59,17 @@ export default function Invenrtory({ navigation }) {
           }}
         >
           {selectedTab === 0 ? (
-            <AllSneakersScreen navigation={navigation}></AllSneakersScreen>
+            <AllSneakersScreen navigation></AllSneakersScreen>
           ) : (
-            <AllMisteryBoxScreen navigation={navigation}></AllMisteryBoxScreen>
+            <AllMysteryBoxScreen
+              navigation={navigation}
+              modalRealmVisible={modalRealmVisible}
+              setmodalRealmVisible={setmodalRealmVisible}
+              modalOneMysteryBox={modalOneMysteryBox}
+              setmodalOneMysteryBox={setmodalOneMysteryBox}
+              mbs={mbs}
+              myFunction={myFunction}
+            ></AllMysteryBoxScreen>
           )}
         </View>
 

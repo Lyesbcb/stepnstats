@@ -81,7 +81,7 @@ async function uploadNft(image, realm) {
     await fetch(baseURL + "/upload", options)
       .then(async (response) => {
         console.log(await response.json());
-        // Actualize list of MB and redirect to OneMisteryBox
+        // Actualize list of MB and redirect to OneMysteryBox
       })
       .catch(async function (error) {
         console.log(await error.json());

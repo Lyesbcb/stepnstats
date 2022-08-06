@@ -2,7 +2,7 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
-export default function LittleMisteryBox({ data }) {
+export default function LittleMysteryBox({ data }) {
   const [price, setPrice] = useState("--.--");
   const [date, setDate] = useState("--/--/----");
   var color;
@@ -79,6 +79,7 @@ export default function LittleMisteryBox({ data }) {
     "legendaryScroll",
     "gst",
   ];
+  
   const contentImage = [
     require("../assets/gem/efficiency/lvl1.png"),
     require("../assets/gem/efficiency/lvl2.png"),
@@ -201,7 +202,7 @@ export default function LittleMisteryBox({ data }) {
         gmt: 0.92,
         Solana: 39.34,
         Bnb: 240.34,
-        Ethereum: 240.34,
+        Ethereum: 1400.34,
       };
       getDate();
       getPrice();
@@ -228,13 +229,14 @@ export default function LittleMisteryBox({ data }) {
       } else if (content.includes("Scroll")) {
         totalGmt += data.prices[0][content] * contentQuantity;
       } else if (content.includes("gst")) {
-        totalGst += data.prices[0][content] * contentQuantity;
+        totalGst += data.prices[0][content + data.realm] * contentQuantity;
       }
+      console.log(totalGmt)
       total =
         totalRealmCrypto * data.prices[0][data.realm] +
         totalGmt * data.prices[0]["gmt"] +
         totalGst * data.prices[0]["gst" + data.realm];
-      return total;
+      return (total *0.94);
     }
     return 0;
   }

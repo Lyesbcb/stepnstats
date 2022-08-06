@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import Footer from "./footer";
-import DetailMisteryBox from "./detailMisteryBox";
+import DetailMysteryBox from "./detailMysteryBox";
 import {
   createMb,
   uploadMb,
@@ -58,7 +58,7 @@ export default function OneSneakersScreen({ navigation }) {
             position: "absolute",
           }}
         >
-          Mistery Box
+          Mystery Box
         </Text>
         <Pressable onPress={() => navigation.goBack} style={styles.all}>
           <Text
@@ -75,19 +75,19 @@ export default function OneSneakersScreen({ navigation }) {
         </Pressable>
         <View style={styles.shoes}>
           {mbSelected != 0 ? (
-            <DetailMisteryBox
+            <DetailMysteryBox
               styles={styles}
               data={mbs[mbSelected - 1]}
               nextMb={nextMb}
               previousMb={previousMb}
-            ></DetailMisteryBox>
+            ></DetailMysteryBox>
           ) : (
-            <DetailMisteryBox
+            <DetailMysteryBox
               styles={styles}
               data={0}
               nextMb={nextMb}
               previousMb={previousMb}
-            ></DetailMisteryBox>
+            ></DetailMysteryBox>
           )}
         </View>
         <Footer styles={styles}></Footer>

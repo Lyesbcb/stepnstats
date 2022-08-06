@@ -77,6 +77,13 @@ function model(sequelize) {
       allowNull: true,
       defaultValue: 0,
     },
+    Ethereum: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    Bnb: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    gmt: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    Solana: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    gstSolana: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    gstBnb: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
+    gstEthereum: { type: DataTypes.FLOAT, allowNull: true, defaultValue: 0 },
   };
 
   const options = {

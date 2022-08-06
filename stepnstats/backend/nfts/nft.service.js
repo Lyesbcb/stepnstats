@@ -72,7 +72,6 @@ async function getById(req) {
 }
 
 async function create(params, userId) {
-  console.log("ici");
   if (
     await db.Nft.findOne({
       where: { userId: userId, fileName: params.fileName },

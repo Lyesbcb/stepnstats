@@ -66,9 +66,9 @@ def extract_text_and_return_json(text):
     durabilityLost = re.findall("- [0-9O]+", text)
     durability = re.findall("[0-9O]+( \/|\)) [0-9O]+", text)
     print(durability)
-    misteryBox = 0
+    mysteryBox = 0
     if re.findall("X[0-9O]{1}", text):
-        misteryBox = 1
+        mysteryBox = 1
     duration = duration[0][0] + ":" + duration[0][2] + ":" + duration[0][4]
     dateTime = dateTime[0][2] + "-" + dateTime[0][1] + "-" + dateTime[0][0] + " " + dateTime[0][3] + ":" + dateTime[0][5] + ":00"
     gst = gst[0][0] + gst[0][1]
@@ -79,7 +79,7 @@ def extract_text_and_return_json(text):
     steps = steps[1][1:]
     nftId = nftId[0]
     durability = durability[0][:2]
-    misteryBox = misteryBox
+    mysteryBox = mysteryBox
     print(dateTime)
     print(duration)
     print(gst)
@@ -91,4 +91,4 @@ def extract_text_and_return_json(text):
     print(nftId)
     print(durabilityLost)
     print(durability)
-    print(misteryBox)
+    print(mysteryBox)

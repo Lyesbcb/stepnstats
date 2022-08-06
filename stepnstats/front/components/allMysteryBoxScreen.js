@@ -1,3 +1,8 @@
+// TODO: Add help button
+// TODO: Add filter (level filter, realm filter )
+// TODO: Add sort (sort by price, sort by drop rate)
+// TODO: Add update
+// TODO: Switch to other currency
 import {
   Text,
   View,
@@ -12,7 +17,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import Footer from "./footer";
-import LittleMisteryBox from "./littleMisteryBox";
+import LittleMysteryBox from "./littleMysteryBox";
 import {
   createMb,
   uploadMb,
@@ -22,24 +27,39 @@ import {
 } from "../services/mbs/index";
 import * as ImagePicker from "expo-image-picker";
 import BouncingPreloader from "react-native-bouncing-preloaders";
-import DetailMisteryBox from "./detailMisteryBox";
+import DetailMysteryBox from "./detailMysteryBox";
+import ProgressLoader from "rn-progress-loader";
 
-export default function AllMisteryBoxScreen({ navigation }) {
-  const [modalRealmVisible, setmodalRealmVisible] = useState(false);
-  const [modalOneMisteryBox, setmodalOneMisteryBox] = useState(false);
-  const [mbSelected, setMbSelected] = useState(0);
-  const [mbs, setMbs] = useState([]);
-  const [realm, setRealm] = useState("");
-  useEffect(() => {
-    myFunction();
-  }, []);
-
-  const myFunction = async () => {
-    setMbs(await getAllMyMb(1));
-  };
-
+export default function AllMysteryBoxScreen({
+  myFunction,
+  mbs,
+  navigation,
+  modalRealmVisible,
+  setmodalRealmVisible,
+  modalOneMysteryBox,
+  setmodalOneMysteryBox,
+}) {
+  const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
+  const [realm, setRealm] = useState("Solana");
+  const [loading, setLoading] = useState(false)
+  async function deleteOneMb(id) {
+    try {
+      await deleteMb(id);
+      if ((mbSelected != 0) & (mbSelected != null)) {
+        setMbSelected(mbSelected - 1);
+      } else {
+      }
+      await myFunction();
+      if ((mbSelected != 0) & (mbSelected != null)) {
+      } else {
+        setmodalOneMysteryBox(false);
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  }
   function nextMb() {
-    if (mbSelected != mbs.length) {
+    if (mbSelected != mbs.length - 1) {
       setMbSelected(mbSelected + 1);
     } else {
       setMbSelected(0);
@@ -50,7 +70,7 @@ export default function AllMisteryBoxScreen({ navigation }) {
     if (mbSelected != 0) {
       setMbSelected(mbSelected - 1);
     } else {
-      setMbSelected(mbs.length);
+      setMbSelected(mbs.length - 1);
     }
   }
 
@@ -59,29 +79,29 @@ export default function AllMisteryBoxScreen({ navigation }) {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      quality: 1,
+      quality: 0.2,
     });
 
     if (!result.cancelled) {
-      // Start wait animation
+      setLoading(true)
       await uploadMb(result, realm);
-      // Stop wait animation
+      setLoading(false)
       await myFunction();
     }
   };
 
-  function showMisteryBox() {
+  function showMysteryBox() {
     return mbs.map((mb, i) => {
       return (
         <Pressable
           onPress={() => {
             setMbSelected(i);
-            setmodalOneMisteryBox(true);
+            setmodalOneMysteryBox(true);
           }}
           style={{ width: "45%", height: "35%", margin: "2%" }}
           key={mb.id}
         >
-          <LittleMisteryBox data={mb}></LittleMisteryBox>
+          <LittleMysteryBox data={mb}></LittleMysteryBox>
         </Pressable>
       );
     });
@@ -93,17 +113,26 @@ export default function AllMisteryBoxScreen({ navigation }) {
         height: "65%",
       }}
     >
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      />
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalRealmVisible}
       >
-        <View
+        <TouchableOpacity
           style={{
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
           }}
+          activeOpacity={1}
+          onPressOut={() => setmodalRealmVisible(false)}
         >
           <View
             style={{
@@ -224,32 +253,32 @@ export default function AllMisteryBoxScreen({ navigation }) {
               <Text style={{ fontWeight: "700", fontSize: 24 }}>NEXT</Text>
             </Pressable>
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalOneMisteryBox.visible}
+        visible={modalOneMysteryBox}
       >
-        <View
+        <TouchableOpacity
           style={{
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
           }}
+          activeOpacity={1}
+          onPressOut={() => setmodalOneMysteryBox(false)}
         >
           <View
             style={{
               backgroundColor: "white",
-              height: "40%",
-              width: "80%",
+              height: "60%",
+              width: "90%",
               borderRadius: 30,
-              justifyContent: "space-evenly",
               borderWidth: 1,
-              alignItems: "center",
               shadowColor: "#000",
               shadowOffset: {
-                width: 0,
+                width: 2,
                 height: 2,
               },
               shadowOpacity: 0.25,
@@ -257,43 +286,19 @@ export default function AllMisteryBoxScreen({ navigation }) {
               elevation: 5,
             }}
           >
-            <Pressable
-              style={{
-                backgroundColor: "#9DF8B6",
-                justifyContent: "center",
-                alignContent: "center",
-                width: 32,
-                height: 32,
-                borderRadius: 20,
-                position: "absolute",
-                top: "7%",
-                right: "7%",
-                borderWidth: 1,
-                borderColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 1,
-                  height: 1,
-                },
-              }}
-              onPress={() => setmodalOneMisteryBox(false)}
-            >
-              <Icon
-                style={{ width: "100%" }}
-                size={20}
-                type="antdesign"
-                name="close"
-                color="black"
-              ></Icon>
-            </Pressable>
-            <DetailMisteryBox
-              data={mbs[mbSelected]}
-              nextMb={nextMb}
-              previousMb={previousMb}
-            ></DetailMisteryBox>
+            {mbs.length != 0 ? (
+              <DetailMysteryBox
+                data={mbs[mbSelected]}
+                nextMb={nextMb}
+                previousMb={previousMb}
+                setmodalOneMysteryBox={setmodalOneMysteryBox}
+                deleteOneMb={deleteOneMb}
+              ></DetailMysteryBox>
+            ) : (
+              <View></View>
+            )}
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
       <ScrollView
         contentContainerStyle={{
@@ -309,9 +314,9 @@ export default function AllMisteryBoxScreen({ navigation }) {
           onPress={() => setmodalRealmVisible(true)}
           style={{ width: "45%", height: "35%", margin: "2%" }}
         >
-          <LittleMisteryBox data={0}></LittleMisteryBox>
+          <LittleMysteryBox data={0}></LittleMysteryBox>
         </Pressable>
-        {showMisteryBox()}
+        {showMysteryBox()}
       </ScrollView>
       {/* <View
         style={{
@@ -552,13 +557,11 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRightWidth: 2800,
     borderRightColor: "transparent",
-    borderTopWidth: 700,
-    borderTopColor: "#FF95FB",
-    position: "relative",
+    borderTopWidth: 500,
+    borderTopColor: "#E0FEF3",
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
   },
   container2: {
     alignItems: "center",

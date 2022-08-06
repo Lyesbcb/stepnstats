@@ -24,5 +24,6 @@
       }
     }
   },
-  "slack_token": "xoxb-3870756412725-3906497913732-lFxo6kGqXqeonc66gDfl9ZV9"
+  "slack_token": "xoxb-3870756412725-3906497913732-lFxo6kGqXqeonc66gDfl9ZV9",
+  "coinMarketCap_token": "6b0e5cf6-4e32-446c-86c8-f914508d4eaa"
 }

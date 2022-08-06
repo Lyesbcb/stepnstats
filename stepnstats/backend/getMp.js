@@ -5,6 +5,26 @@ const { Builder, Browser, By, Key, until } = require("selenium-webdriver");
 const solanaMpService = require("./mps/solana/solanaMp.service");
 const bnbMpService = require("./mps/bnb/bnbMp.service");
 const ethereumMpService = require("./mps/ethereum/ethereumMp.service");
+const CoinMarketCap = require("coinmarketcap-api");
+
+const apiKey = config.coinMarketCap_token;
+const client = new CoinMarketCap(apiKey);
+var cryptoPrices = {};
+client
+  .getQuotes({ id: [1839, 1027, 18069, 5426, 16352, 20236, 21152] })
+  .then((data) => {
+    var result = data.data;
+    cryptoPrices.Ethereum = result["1027"].quote.USD.price;
+    cryptoPrices.Bnb = result["1839"].quote.USD.price;
+    cryptoPrices.gmt = result["18069"].quote.USD.price;
+    cryptoPrices.Solana = result["5426"].quote.USD.price;
+    cryptoPrices.gstSolana = result["16352"].quote.USD.price;
+    cryptoPrices.gstBnb = result["20236"].quote.USD.price;
+    cryptoPrices.gstEthereum = result["21152"].quote.USD.price;
+    console.log(cryptoPrices)
+  })
+  .catch(console.error);
+
 const screen = {
   width: 1920,
   height: 1080,
@@ -93,6 +113,10 @@ async function getMp() {
     await selectRealm(driver, "Ethereum");
     await sleep(1000);
     var ethereummMp = await getAllFloorPrice(driver);
+    // The crypto price
+    solanaMp = Object.assign(solanaMp, cryptoPrices);
+    bnbMp = Object.assign(bnbMp, cryptoPrices);
+    ethereummMp = Object.assign(ethereummMp, cryptoPrices);
     solanaMpService.create(solanaMp).then((mp) => console.log(mp));
     bnbMpService.create(bnbMp).then((mp) => console.log(mp));
     ethereumMpService.create(ethereummMp).then((mp) => console.log(mp));
@@ -197,7 +221,7 @@ async function getAllFloorPrice(driver) {
   console.log(trainerEpic);
 
   // GENESIS
-  // Unselect trainer 
+  // Unselect trainer
   await selectType(driver, "Trainer");
   await sleep(1000);
   await selectRarity(driver, "Genesis");
