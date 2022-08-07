@@ -1,5 +1,5 @@
 import Icon from "react-native-elements/dist/icons/Icon";
-import { Text, View, Image, Pressable } from "react-native";
+import { Text, View, Image, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 
 export default function DetailMysteryBox({
@@ -30,16 +30,16 @@ export default function DetailMysteryBox({
   }
 
   const mbsImage = [
-    require("../assets/mb/lvl1.png"),
-    require("../assets/mb/lvl2.png"),
-    require("../assets/mb/lvl3.png"),
-    require("../assets/mb/lvl4.png"),
-    require("../assets/mb/lvl5.png"),
-    require("../assets/mb/lvl6.png"),
-    require("../assets/mb/lvl7.png"),
-    require("../assets/mb/lvl8.png"),
-    require("../assets/mb/lvl9.png"),
-    require("../assets/mb/lvl10.png"),
+    require("../../assets/mb/lvl1.png"),
+    require("../../assets/mb/lvl2.png"),
+    require("../../assets/mb/lvl3.png"),
+    require("../../assets/mb/lvl4.png"),
+    require("../../assets/mb/lvl5.png"),
+    require("../../assets/mb/lvl6.png"),
+    require("../../assets/mb/lvl7.png"),
+    require("../../assets/mb/lvl8.png"),
+    require("../../assets/mb/lvl9.png"),
+    require("../../assets/mb/lvl10.png"),
   ];
 
   const contents = [
@@ -88,129 +88,52 @@ export default function DetailMysteryBox({
   ];
 
   const contentImage = [
-    require("../assets/gem/efficiency/lvl1.png"),
-    require("../assets/gem/efficiency/lvl2.png"),
-    require("../assets/gem/efficiency/lvl3.png"),
-    require("../assets/gem/efficiency/lvl4.png"),
-    require("../assets/gem/efficiency/lvl5.png"),
-    require("../assets/gem/efficiency/lvl6.png"),
-    require("../assets/gem/efficiency/lvl7.png"),
-    require("../assets/gem/efficiency/lvl8.png"),
-    require("../assets/gem/efficiency/lvl9.png"),
-    require("../assets/gem/luck/lvl1.png"),
-    require("../assets/gem/luck/lvl2.png"),
-    require("../assets/gem/luck/lvl3.png"),
-    require("../assets/gem/luck/lvl4.png"),
-    require("../assets/gem/luck/lvl5.png"),
-    require("../assets/gem/luck/lvl6.png"),
-    require("../assets/gem/luck/lvl7.png"),
-    require("../assets/gem/luck/lvl8.png"),
-    require("../assets/gem/luck/lvl9.png"),
-    require("../assets/gem/comfort/lvl1.png"),
-    require("../assets/gem/comfort/lvl2.png"),
-    require("../assets/gem/comfort/lvl3.png"),
-    require("../assets/gem/comfort/lvl4.png"),
-    require("../assets/gem/comfort/lvl5.png"),
-    require("../assets/gem/comfort/lvl6.png"),
-    require("../assets/gem/comfort/lvl7.png"),
-    require("../assets/gem/comfort/lvl8.png"),
-    require("../assets/gem/comfort/lvl9.png"),
-    require("../assets/gem/resilience/lvl1.png"),
-    require("../assets/gem/resilience/lvl2.png"),
-    require("../assets/gem/resilience/lvl3.png"),
-    require("../assets/gem/resilience/lvl4.png"),
-    require("../assets/gem/resilience/lvl5.png"),
-    require("../assets/gem/resilience/lvl6.png"),
-    require("../assets/gem/resilience/lvl7.png"),
-    require("../assets/gem/resilience/lvl8.png"),
-    require("../assets/gem/resilience/lvl9.png"),
-    require("../assets/scroll/common.png"),
-    require("../assets/scroll/uncommon.png"),
-    require("../assets/scroll/rare.png"),
-    require("../assets/scroll/epic.png"),
-    require("../assets/scroll/legendary.png"),
-    require("../assets/gst.png"),
+    require("../../assets/gem/efficiency/lvl1.png"),
+    require("../../assets/gem/efficiency/lvl2.png"),
+    require("../../assets/gem/efficiency/lvl3.png"),
+    require("../../assets/gem/efficiency/lvl4.png"),
+    require("../../assets/gem/efficiency/lvl5.png"),
+    require("../../assets/gem/efficiency/lvl6.png"),
+    require("../../assets/gem/efficiency/lvl7.png"),
+    require("../../assets/gem/efficiency/lvl8.png"),
+    require("../../assets/gem/efficiency/lvl9.png"),
+    require("../../assets/gem/luck/lvl1.png"),
+    require("../../assets/gem/luck/lvl2.png"),
+    require("../../assets/gem/luck/lvl3.png"),
+    require("../../assets/gem/luck/lvl4.png"),
+    require("../../assets/gem/luck/lvl5.png"),
+    require("../../assets/gem/luck/lvl6.png"),
+    require("../../assets/gem/luck/lvl7.png"),
+    require("../../assets/gem/luck/lvl8.png"),
+    require("../../assets/gem/luck/lvl9.png"),
+    require("../../assets/gem/comfort/lvl1.png"),
+    require("../../assets/gem/comfort/lvl2.png"),
+    require("../../assets/gem/comfort/lvl3.png"),
+    require("../../assets/gem/comfort/lvl4.png"),
+    require("../../assets/gem/comfort/lvl5.png"),
+    require("../../assets/gem/comfort/lvl6.png"),
+    require("../../assets/gem/comfort/lvl7.png"),
+    require("../../assets/gem/comfort/lvl8.png"),
+    require("../../assets/gem/comfort/lvl9.png"),
+    require("../../assets/gem/resilience/lvl1.png"),
+    require("../../assets/gem/resilience/lvl2.png"),
+    require("../../assets/gem/resilience/lvl3.png"),
+    require("../../assets/gem/resilience/lvl4.png"),
+    require("../../assets/gem/resilience/lvl5.png"),
+    require("../../assets/gem/resilience/lvl6.png"),
+    require("../../assets/gem/resilience/lvl7.png"),
+    require("../../assets/gem/resilience/lvl8.png"),
+    require("../../assets/gem/resilience/lvl9.png"),
+    require("../../assets/scroll/common.png"),
+    require("../../assets/scroll/uncommon.png"),
+    require("../../assets/scroll/rare.png"),
+    require("../../assets/scroll/epic.png"),
+    require("../../assets/scroll/legendary.png"),
+    require("../../assets/gst.png"),
   ];
 
   useEffect(() => {
     if (data != undefined) {
-      data.prices[0] = {
-        id: 1409,
-        walkerCommon: 1.19,
-        joggerCommon: 1.19,
-        runnerCommon: 1.15,
-        trainerCommon: 2.7,
-        walkerUncommon: 5,
-        joggerUncommon: 4.75,
-        runnerUncommon: 4.1,
-        trainerUncommon: 12.8,
-        walkerRare: 26.98,
-        joggerRare: 24.8,
-        runnerRare: 17.9,
-        trainerRare: 54.9,
-        walkerEpic: 153,
-        joggerEpic: 149,
-        runnerEpic: 98.5,
-        trainerEpic: 777,
-        genesisCommon: 100,
-        genesisUncommon: 99.99,
-        genesisRare: 135,
-        genesisEpic: 200,
-        ogCommon: 0,
-        ogUncommon: 0,
-        ogRare: 0,
-        ogEpic: 0,
-        efficiencyLvl1: 0.029999,
-        efficiencyLvl2: 0.41,
-        efficiencyLvl3: 2.59,
-        efficiencyLvl4: 12,
-        efficiencyLvl5: 70,
-        efficiencyLvl6: 385,
-        efficiencyLvl7: 385,
-        efficiencyLvl8: 385,
-        efficiencyLvl9: 385,
-        luckLvl1: 0.0499,
-        luckLvl2: 0.556,
-        luckLvl3: 3.43,
-        luckLvl4: 15.87,
-        luckLvl5: 75,
-        luckLvl6: 425,
-        luckLvl7: 425,
-        luckLvl8: 425,
-        luckLvl9: 425,
-        resilienceLvl1: 0.01,
-        resilienceLvl2: 0.143,
-        resilienceLvl3: 1,
-        resilienceLvl4: 4.6,
-        resilienceLvl5: 27,
-        resilienceLvl6: 85,
-        resilienceLvl7: 85,
-        resilienceLvl8: 85,
-        resilienceLvl9: 85,
-        comfortLvl1: 0.0423,
-        comfortLvl2: 0.45,
-        comfortLvl3: 2.79,
-        comfortLvl4: 13.9999,
-        comfortLvl5: 72,
-        comfortLvl6: 320,
-        comfortLvl7: 320,
-        comfortLvl8: 320,
-        comfortLvl9: 320,
-        commonScroll: 0.2,
-        uncommonScroll: 0.37,
-        rareScroll: 3.45,
-        epicScroll: 57,
-        legendaryScroll: 599,
-        createdAt: "2022-08-04T22:15:04.000Z",
-        updatedAt: "2022-08-04T22:15:04.000Z",
-        gstSolana: 0.053,
-        gstBnb: 0.053,
-        gstEthereum: 0.053,
-        gmt: 0.92,
-        Solana: 39.34,
-        Bnb: 240.34,
-        Ethereum: 1400.34,
-      };
       getDate();
       getPrice();
     }
@@ -542,6 +465,45 @@ export default function DetailMysteryBox({
           Lvl {data != undefined ? data.lvl : "-"}
         </Text>
       </View>
+      {data.realm == "Solana" ? (
+        <Image
+          source={require("../../assets/sol_realm.png")}
+          style={{
+            position: "absolute",
+            right: "5%",
+            top: "5%",
+            height: "20%",
+            width: "15%",
+            resizeMode: "contain",
+          }}
+        ></Image>
+      ) : data.realm == "Bnb" ? (
+        <Image
+          source={require("../../assets/bsc_realm.png")}
+          style={{
+            position: "absolute",
+            right: "5%",
+            top: "5%",
+            height: "20%",
+            width: "15%",
+            resizeMode: "contain",
+          }}
+        ></Image>
+      ) : data.realm == "Ethereum" ? (
+        <Image
+          source={require("../../assets/eth_realm.png")}
+          style={{
+            position: "absolute",
+            right: "5%",
+            top: "5%",
+            height: "20%",
+            width: "15%",
+            resizeMode: "contain",
+          }}
+        ></Image>
+      ) : (
+        <View></View>
+      )}
       <View
         style={{
           width: "100%",
@@ -627,7 +589,7 @@ export default function DetailMysteryBox({
                 height: 1,
               },
             }}
-            onPress={() => setmodalOneMysteryBox(false)}
+            onPress={() => Alert.alert("Soon available")}
           >
             <Icon
               style={{ width: "100%" }}
@@ -726,7 +688,7 @@ export default function DetailMysteryBox({
             }}
           >
             <Text style={{ color: "white", fontSize: 12 }}>
-              {data != undefined ? date : "../../...."}
+              {data != undefined ? date : "../../../../...."}
             </Text>
           </View>
           <View

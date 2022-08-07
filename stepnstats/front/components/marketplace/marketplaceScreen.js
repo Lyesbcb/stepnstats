@@ -9,31 +9,22 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Footer from "./footer";
+import Footer from "../footer";
 import Header from "./header";
-import AllSneakersScreen from "./allSneakersScreen";
-import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
-import RunsScreen from "./runsScreen";
-import {
-  createMb,
-  uploadMb,
-  getAllMyMb,
-  updateMb,
-  deleteMb,
-} from "../services/mbs/index";
+import {getAllMp} from "../../services/mps/index"
 
-export default function Invenrtory({ navigation }) {
+export default function Marketplace({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
-  const [mbs, setMbs] = useState([]);
+  const [mps, setMps] = useState([]);
   useEffect(() => {
     myFunction();
   }, []);
 
   const myFunction = async () => {
     try {
-      setMbs(await getAllMyMb(1));
-    } catch {
-      Alert.alert("Error");
+      setMps(await getAllMp("Solana", ""));
+    } catch (err){
+      console.log(err)
     }
   };
 
@@ -57,13 +48,15 @@ export default function Invenrtory({ navigation }) {
           }}
         >
           {selectedTab === 0 ? (
-            <AllSneakersScreen navigation></AllSneakersScreen>
+            <View><Text>{selectedTab}</Text></View>
+          ) :selectedTab === 1 ? (
+            <View><Text>{selectedTab}</Text></View>
+          ) :selectedTab === 2 ? (
+            <View><Text>{selectedTab}</Text></View>
+          ) :selectedTab === 3 ? (
+            <View><Text>{selectedTab}</Text></View>
           ) : (
-            <AllMysteryBoxScreen
-              navigation={navigation}
-              mbs={mbs}
-              myFunction={myFunction}
-            ></AllMysteryBoxScreen>
+            <View></View>
           )}
         </View>
 

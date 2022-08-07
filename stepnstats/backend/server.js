@@ -8,6 +8,9 @@ const getMp = require("./getMp");
 const buyAndSell = require("./buyAndSell");
 const { WebClient } = require("@slack/web-api");
 const config = require("./config.json");
+const testFolder = "./mysteryBox/";
+const fs = require("fs");
+const { uploadFiles } = require("./mbs/mb.service");
 
 const web = new WebClient(config.slack_token);
 const conversationId = "C03SNDBD7E0";
@@ -28,7 +31,6 @@ app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
 // } catch {
 //   console.log("Error to get marketplace");
 // }
-
 // setInterval(async function () {
 //   try {
 //     getMp.getMp();
@@ -42,6 +44,22 @@ app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
 //     );
 //   }
 // }, 600000);
+
+
+// function wait(milleseconds) {
+//   return new Promise((resolve) => setTimeout(resolve, milleseconds));
+// }
+
+// setTimeout(function () {
+//   fs.readdir(testFolder, async (err, files) => {
+//     for (file of files) {
+//       uploadFiles(testFolder + file);
+//       await wait(60000);
+//     }
+//   });
+// }, 10 * 1000);
+
+
 
 // global error handler
 app.use(errorHandler);

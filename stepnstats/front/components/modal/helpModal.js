@@ -1,79 +1,160 @@
 import {
-  StyleSheet,
   Text,
   View,
   Pressable,
-  ImageBackground,
   Image,
-  Alert,
   TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Modal,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Footer from "./footer";
-import Header from "./header";
-import AllSneakersScreen from "./allSneakersScreen";
-import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
-import RunsScreen from "./runsScreen";
-import {
-  createMb,
-  uploadMb,
-  getAllMyMb,
-  updateMb,
-  deleteMb,
-} from "../services/mbs/index";
+import Icon from "react-native-elements/dist/icons/Icon";
 
-export default function Invenrtory({ navigation }) {
-  const [selectedTab, SetSelectedTab] = useState(0);
-  const [mbs, setMbs] = useState([]);
-  useEffect(() => {
-    myFunction();
-  }, []);
-
-  const myFunction = async () => {
-    try {
-      setMbs(await getAllMyMb(1));
-    } catch {
-      Alert.alert("Error");
-    }
-  };
-
+export default function HelpModal({
+  setmodalHelpVisible,
+  modalHelpVisible,
+  setRealm,
+  realm,
+  onValidate,
+  textButton,
+}) {
   return (
-    <View style={{ width: "100%", height: "100%", }}>
-      <View style={styles.container2}>
-        <Header
-          navigation={navigation}
-          styles={styles}
-          selectedTab={selectedTab}
-          SetSelectedTab={SetSelectedTab}
-        />
+    <Modal animationType="slide" transparent={true} visible={modalHelpVisible}>
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        activeOpacity={1}
+        onPressOut={() => setmodalHelpVisible(false)}
+      >
         <View
           style={{
-            position: "absolute",
-            top: "20%",
-            height: "100%",
-            width: "100%",
+            backgroundColor: "white",
+            height: "40%",
+            width: "80%",
+            borderRadius: 30,
+            justifyContent: "space-evenly",
+            borderWidth: 1,
             alignItems: "center",
-            alignContent: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
           }}
         >
-          {selectedTab === 0 ? (
-            <AllSneakersScreen navigation></AllSneakersScreen>
-          ) : (
-            <AllMysteryBoxScreen
-              navigation={navigation}
-              mbs={mbs}
-              myFunction={myFunction}
-            ></AllMysteryBoxScreen>
-          )}
+          <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              position: "absolute",
+              top: "7%",
+              right: "7%",
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => setmodalHelpVisible(false)}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={20}
+              type="antdesign"
+              name="close"
+              color="black"
+            ></Icon>
+          </Pressable>
+          <Text style={{ fontSize: 24, fontWeight: "700" }}>Help</Text>
+          <View
+            style={{
+              width: "90%",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              height: "15%",
+            }}
+          >
+            <Pressable
+              style={{
+                width: "30%",
+                height: "100%",
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "#9DF8B6",
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 4,
+                  height: 4,
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => setmodalHelpVisible(false)}
+            >
+              <Text style={{ fontWeight: "700", fontSize: 24 }}>OK</Text>
+            </Pressable>
+            <Pressable
+              style={{
+                width: "50%",
+                height: "100%",
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "#9DF8B6",
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 4,
+                  height: 4,
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => setmodalHelpVisible(false)}
+            >
+              <Text style={{ fontWeight: "700", fontSize: 24 }}>
+                Report an issue
+              </Text>
+            </Pressable>
+          </View>
         </View>
-
-        <Footer styles={styles}></Footer>
-      </View>
-    </View>
+      </TouchableOpacity>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  realm: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 0.3,
+  },
+  realmActive: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 1,
+  },
   headerRuns: {
     top: 0,
     backgroundColor: "#E0FEF3",
@@ -246,9 +327,11 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
+    color: "white",
     fontSize: 36,
   },
   selectorTextSecondary: {
+    color: "white",
     fontSize: 36,
   },
   selector: {
@@ -260,6 +343,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
+    color: "white",
     fontSize: 20,
   },
   dateSelector: {
@@ -279,7 +363,8 @@ const styles = StyleSheet.create({
   },
   container2: {
     alignItems: "center",
-    height: "100%",
+    justifyContent: "center",
+    height: "80%",
     width: "100%",
   },
   image: {

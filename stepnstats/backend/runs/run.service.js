@@ -1,7 +1,7 @@
 ﻿const config = require("config.json");
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
-const multer = require("multer");
+var spawn = require("child_process").spawn;
 
 module.exports = {
   getAll,
@@ -13,28 +13,51 @@ module.exports = {
   uploadFile,
 };
 
+function NumToTime(num) { 
+  var hours = Math.floor(num / 60);  
+  var minutes = num % 60;
+  if (minutes + ''.length < 2) {
+    minutes = '0' + minutes; 
+  }
+  return hours + ":" + minutes + ":00";
+}
+
 async function uploadFile(req, res) {
   try {
     var params;
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    // TODO traitement avec python puis push en BDD
-
-    // const pythonProcess = spawn('python',["./getRunFromScreen.py", req.file.filename]);
-    // pythonProcess.stdout.on('data', (data) => {
-    //   params = data
-    // });
     if (
       await db.Run.findOne({
         where: { userId: req.user.id, fileName: req.file.filename },
       })
     ) {
-      throw "This mb is already exist.";
+      throw "This run is already exist.";
     }
-    params.userId = req.user.id;
-    // save run
-    return await db.Run.create(params);
+    var run = await spawn("python", [
+      "./python/run.py",
+      req.file.path,
+    ]);
+
+    run.stdout.setEncoding("utf8");
+    await run.stdout.on("data", async function (data) {
+      console.log(data)
+      data = data.replace(/'/g, '"');
+      params = JSON.parse(data);
+      params.duration = NumToTime(Number(params.energy)*5)
+      params.userId = req.user.id;
+      params.realm = "Solana";
+      params.fileName = req.file.filename;
+      try {
+        res.send(await db.Run.create(params));
+      } catch (error) {
+        console.log(error);
+        res.status(400).send(error);
+      }
+    });
+    run.stderr.setEncoding("utf8");
+    await run.stderr.on("data", async function (data) {console.log(data)})
   } catch (error) {
     console.log(error);
     return res.send(`Error when trying upload images: ${error}`);

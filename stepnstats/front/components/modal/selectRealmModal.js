@@ -1,8 +1,3 @@
-// TODO: Add help button
-// TODO: Add filter (level filter, realm filter )
-// TODO: Add sort (sort by price, sort by drop rate)
-// TODO: Add update
-// TODO: Switch to other currency
 import {
   Text,
   View,
@@ -16,114 +11,20 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import Footer from "./footer";
-import LittleMysteryBox from "./littleMysteryBox";
-import {
-  createMb,
-  uploadMb,
-  getAllMyMb,
-  updateMb,
-  deleteMb,
-} from "../services/mbs/index";
-import * as ImagePicker from "expo-image-picker";
-import BouncingPreloader from "react-native-bouncing-preloaders";
-import DetailMysteryBox from "./detailMysteryBox";
-import ProgressLoader from "rn-progress-loader";
 
-export default function AllMysteryBoxScreen({
-  myFunction,
-  mbs,
-  navigation,
-  modalRealmVisible,
-  setmodalRealmVisible,
-  modalOneMysteryBox,
-  setmodalOneMysteryBox,
-}) {
-  const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
-  const [realm, setRealm] = useState("Solana");
-  const [loading, setLoading] = useState(false)
-  async function deleteOneMb(id) {
-    try {
-      await deleteMb(id);
-      if ((mbSelected != 0) & (mbSelected != null)) {
-        setMbSelected(mbSelected - 1);
-      } else {
-      }
-      await myFunction();
-      if ((mbSelected != 0) & (mbSelected != null)) {
-      } else {
-        setmodalOneMysteryBox(false);
-      }
-    } catch (error) {
-      Alert.alert(error);
-    }
-  }
-  function nextMb() {
-    if (mbSelected != mbs.length - 1) {
-      setMbSelected(mbSelected + 1);
-    } else {
-      setMbSelected(0);
-    }
-  }
-
-  function previousMb() {
-    if (mbSelected != 0) {
-      setMbSelected(mbSelected - 1);
-    } else {
-      setMbSelected(mbs.length - 1);
-    }
-  }
-
-  const pickImage = async () => {
-    setmodalRealmVisible(false);
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      quality: 0.2,
-    });
-
-    if (!result.cancelled) {
-      setLoading(true)
-      await uploadMb(result, realm);
-      setLoading(false)
-      await myFunction();
-    }
-  };
-
-  function showMysteryBox() {
-    return mbs.map((mb, i) => {
-      return (
-        <Pressable
-          onPress={() => {
-            setMbSelected(i);
-            setmodalOneMysteryBox(true);
-          }}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-          key={mb.id}
-        >
-          <LittleMysteryBox data={mb}></LittleMysteryBox>
-        </Pressable>
-      );
-    });
-  }
-  return (
-    <View
-      style={{
-        width: "90%",
-        height: "65%",
-      }}
-    >
-      <ProgressLoader
-        visible={loading}
-        isModal={true}
-        isHUD={true}
-        hudColor={"#000000"}
-        color={"#FFFFFF"}
-      />
-      <Modal
+export default function SelectRealmModal({
+  setmodalVisible,
+  modalVisible,
+  setValue,
+  value,
+  onValidate,
+  textButton
+}){
+  return(
+    <Modal
         animationType="slide"
         transparent={true}
-        visible={modalRealmVisible}
+        visible={modalVisible}
       >
         <TouchableOpacity
           style={{
@@ -132,7 +33,7 @@ export default function AllMysteryBoxScreen({
             alignItems: "center",
           }}
           activeOpacity={1}
-          onPressOut={() => setmodalRealmVisible(false)}
+          onPressOut={() => setmodalVisible(false)}
         >
           <View
             style={{
@@ -173,7 +74,7 @@ export default function AllMysteryBoxScreen({
                   height: 1,
                 },
               }}
-              onPress={() => setmodalRealmVisible(false)}
+              onPress={() => setmodalVisible(false)}
             >
               <Icon
                 style={{ width: "100%" }}
@@ -198,30 +99,30 @@ export default function AllMysteryBoxScreen({
             >
               <Pressable
                 style={{ width: "15%", height: "100%" }}
-                onPress={() => setRealm("Solana")}
+                onPress={() => setValue("Solana")}
               >
                 <Image
-                  source={require("../assets/sol_realm.png")}
-                  style={realm == "Solana" ? styles.realmActive : styles.realm}
+                  source={require("../../assets/sol_realm.png")}
+                  style={value == "Solana" ? styles.realmActive : styles.realm}
                 ></Image>
               </Pressable>
               <Pressable
                 style={{ width: "15%", height: "100%" }}
-                onPress={() => setRealm("Bnb")}
+                onPress={() => setValue("Bnb")}
               >
                 <Image
-                  source={require("../assets/bsc_realm.png")}
-                  style={realm == "Bnb" ? styles.realmActive : styles.realm}
+                  source={require("../../assets/bsc_realm.png")}
+                  style={value == "Bnb" ? styles.realmActive : styles.realm}
                 ></Image>
               </Pressable>
               <Pressable
                 style={{ width: "15%", height: "100%" }}
-                onPress={() => setRealm("Ethereum")}
+                onPress={() => setValue("Ethereum")}
               >
                 <Image
-                  source={require("../assets/eth_realm.png")}
+                  source={require("../../assets/eth_realm.png")}
                   style={
-                    realm == "Ethereum" ? styles.realmActive : styles.realm
+                    value == "Ethereum" ? styles.realmActive : styles.realm
                   }
                 ></Image>
               </Pressable>
@@ -245,103 +146,17 @@ export default function AllMysteryBoxScreen({
                 justifyContent: "center",
               }}
               onPress={() => {
-                realm != ""
-                  ? pickImage()
+                value != ""
+                  ? onValidate()
                   : Alert.alert("You must choose a realm!");
               }}
             >
-              <Text style={{ fontWeight: "700", fontSize: 24 }}>NEXT</Text>
+              <Text style={{ fontWeight: "700", fontSize: 24 }}>{textButton}</Text>
             </Pressable>
           </View>
         </TouchableOpacity>
       </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalOneMysteryBox}
-      >
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          activeOpacity={1}
-          onPressOut={() => setmodalOneMysteryBox(false)}
-        >
-          <View
-            style={{
-              backgroundColor: "white",
-              height: "60%",
-              width: "90%",
-              borderRadius: 30,
-              borderWidth: 1,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 2,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
-            }}
-          >
-            {mbs.length != 0 ? (
-              <DetailMysteryBox
-                data={mbs[mbSelected]}
-                nextMb={nextMb}
-                previousMb={previousMb}
-                setmodalOneMysteryBox={setmodalOneMysteryBox}
-                deleteOneMb={deleteOneMb}
-              ></DetailMysteryBox>
-            ) : (
-              <View></View>
-            )}
-          </View>
-        </TouchableOpacity>
-      </Modal>
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          flexGrow: 1,
-          width: "100%",
-          justifyContent: "space-between",
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Pressable
-          onPress={() => setmodalRealmVisible(true)}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-        >
-          <LittleMysteryBox data={0}></LittleMysteryBox>
-        </Pressable>
-        {showMysteryBox()}
-      </ScrollView>
-      {/* <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <BouncingPreloader
-          icons={[
-            require("../assets/gem/efficiency/lvl1.png"),
-            require("../assets/gem/comfort/lvl1.png"),
-            require("../assets/gem/resilience/lvl1.png"),
-            require("../assets/gem/luck/lvl7.png"),
-            require("../assets/gem/resilience/lvl9.png"),
-            require("../assets/gem/luck/lvl3.png"),
-          ]}
-          leftRotation="-680deg"
-          rightRotation="360deg"
-          leftDistance={-180}
-          rightDistance={-250}
-          speed={1200}
-        />
-      </View> */}
-    </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

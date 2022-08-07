@@ -2,8 +2,6 @@ import axios from "axios";
 import config from "../../config.json";
 import {
   getSecuretValueFor,
-  secureSave,
-  deleteSecuretValueFor,
 } from "../secureStorage/index";
 import FormData from "form-data";
 
@@ -13,7 +11,7 @@ module.exports = {
 const baseURL = config.baseUrl + "/mps";
 
 async function getAllMp(realm, date) {
-  if (!date) {
+  if (date == "") {
     date = new Date();
   }
   var token = await getSecuretValueFor("token");
@@ -27,12 +25,12 @@ async function getAllMp(realm, date) {
     },
   };
 
-  await axios(config)
+  return await axios(config)
     .then(async function (response) {
-      console.log(response.data);
-      // Actualize store Mps (realm variable)
+      return response.data
     })
     .catch(function (error) {
       console.log(error.response);
     });
 }
+

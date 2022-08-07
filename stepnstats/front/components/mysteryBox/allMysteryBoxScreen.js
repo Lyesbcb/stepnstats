@@ -1,79 +1,231 @@
+// TODO: Add help button
+// TODO: Add filter (level filter, realm filter )
+// TODO: Add sort (sort by price, sort by drop rate)
+// TODO: Add update
+// TODO: Switch to other currency
 import {
-  StyleSheet,
   Text,
   View,
   Pressable,
-  ImageBackground,
   Image,
-  Alert,
   TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Modal,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Footer from "./footer";
-import Header from "./header";
-import AllSneakersScreen from "./allSneakersScreen";
-import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
-import RunsScreen from "./runsScreen";
+import Icon from "react-native-elements/dist/icons/Icon";
+import Footer from "../footer";
+import LittleMysteryBox from "./littleMysteryBox";
 import {
   createMb,
   uploadMb,
   getAllMyMb,
   updateMb,
   deleteMb,
-} from "../services/mbs/index";
+} from "../../services/mbs/index";
+import * as ImagePicker from "expo-image-picker";
+import BouncingPreloader from "react-native-bouncing-preloaders";
+import DetailMysteryBox from "./detailMysteryBox";
+import ProgressLoader from "rn-progress-loader";
+import SelectRealmModal from "../modal/selectRealmModal";
 
-export default function Invenrtory({ navigation }) {
-  const [selectedTab, SetSelectedTab] = useState(0);
-  const [mbs, setMbs] = useState([]);
-  useEffect(() => {
-    myFunction();
-  }, []);
-
-  const myFunction = async () => {
+export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
+  const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
+  const [realm, setRealm] = useState("Solana");
+  const [loading, setLoading] = useState(false);
+  const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalOneMysteryBox, setmodalOneMysteryBox] = useState(false);
+  async function deleteOneMb(id) {
     try {
-      setMbs(await getAllMyMb(1));
-    } catch {
-      Alert.alert("Error");
+      await deleteMb(id);
+      if ((mbSelected != 0) & (mbSelected != null)) {
+        setMbSelected(mbSelected - 1);
+      } else {
+      }
+      await myFunction();
+      if ((mbSelected != 0) & (mbSelected != null)) {
+      } else {
+        setmodalOneMysteryBox(false);
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  }
+  function nextMb() {
+    if (mbSelected != mbs.length - 1) {
+      setMbSelected(mbSelected + 1);
+    } else {
+      setMbSelected(0);
+    }
+  }
+
+  function previousMb() {
+    if (mbSelected != 0) {
+      setMbSelected(mbSelected - 1);
+    } else {
+      setMbSelected(mbs.length - 1);
+    }
+  }
+
+  const pickImage = async () => {
+    setmodalRealmVisible(false);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 0.2,
+      exif: true
+    });
+    console.log(result)
+    if (!result.cancelled) {
+      setLoading(true);
+      await uploadMb(result, realm);
+      setLoading(false);
+      await myFunction();
     }
   };
 
-  return (
-    <View style={{ width: "100%", height: "100%", }}>
-      <View style={styles.container2}>
-        <Header
-          navigation={navigation}
-          styles={styles}
-          selectedTab={selectedTab}
-          SetSelectedTab={SetSelectedTab}
-        />
-        <View
-          style={{
-            position: "absolute",
-            top: "20%",
-            height: "100%",
-            width: "100%",
-            alignItems: "center",
-            alignContent: "center",
+  function showMysteryBox() {
+    return mbs.map((mb, i) => {
+      return (
+        <Pressable
+          onPress={() => {
+            setMbSelected(i);
+            setmodalOneMysteryBox(true);
           }}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+          key={mb.id}
         >
-          {selectedTab === 0 ? (
-            <AllSneakersScreen navigation></AllSneakersScreen>
-          ) : (
-            <AllMysteryBoxScreen
-              navigation={navigation}
-              mbs={mbs}
-              myFunction={myFunction}
-            ></AllMysteryBoxScreen>
-          )}
-        </View>
-
-        <Footer styles={styles}></Footer>
-      </View>
+          <LittleMysteryBox data={mb}></LittleMysteryBox>
+        </Pressable>
+      );
+    });
+  }
+  return (
+    <View
+      style={{
+        width: "90%",
+        height: "65%",
+      }}
+    >
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      />
+      <SelectRealmModal
+        modalVisible={modalRealmVisible}
+        setmodalVisible={setmodalRealmVisible}
+        onValidate={pickImage}
+        setValue={setRealm}
+        value={realm}
+        textButton={"NEXT"}
+      ></SelectRealmModal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalOneMysteryBox}
+      >
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          activeOpacity={1}
+          onPressOut={() => setmodalOneMysteryBox(false)}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              height: "60%",
+              width: "90%",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 2,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            {mbs.length != 0 ? (
+              <DetailMysteryBox
+                data={mbs[mbSelected]}
+                nextMb={nextMb}
+                previousMb={previousMb}
+                setmodalOneMysteryBox={setmodalOneMysteryBox}
+                deleteOneMb={deleteOneMb}
+              ></DetailMysteryBox>
+            ) : (
+              <View></View>
+            )}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+      <ScrollView
+        contentContainerStyle={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          flexGrow: 1,
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Pressable
+          onPress={() => setmodalRealmVisible(true)}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+        >
+          <LittleMysteryBox data={0}></LittleMysteryBox>
+        </Pressable>
+        {showMysteryBox()}
+      </ScrollView>
+      {/* <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <BouncingPreloader
+          icons={[
+            require("../assets/gem/efficiency/lvl1.png"),
+            require("../assets/gem/comfort/lvl1.png"),
+            require("../assets/gem/resilience/lvl1.png"),
+            require("../assets/gem/luck/lvl7.png"),
+            require("../assets/gem/resilience/lvl9.png"),
+            require("../assets/gem/luck/lvl3.png"),
+          ]}
+          leftRotation="-680deg"
+          rightRotation="360deg"
+          leftDistance={-180}
+          rightDistance={-250}
+          speed={1200}
+        />
+      </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  realm: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 0.3,
+  },
+  realmActive: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    opacity: 1,
+  },
   headerRuns: {
     top: 0,
     backgroundColor: "#E0FEF3",
@@ -246,9 +398,11 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
+    color: "white",
     fontSize: 36,
   },
   selectorTextSecondary: {
+    color: "white",
     fontSize: 36,
   },
   selector: {
@@ -260,6 +414,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
+    color: "white",
     fontSize: 20,
   },
   dateSelector: {
@@ -279,7 +434,8 @@ const styles = StyleSheet.create({
   },
   container2: {
     alignItems: "center",
-    height: "100%",
+    justifyContent: "center",
+    height: "80%",
     width: "100%",
   },
   image: {

@@ -21,7 +21,6 @@ client
     cryptoPrices.gstSolana = result["16352"].quote.USD.price;
     cryptoPrices.gstBnb = result["20236"].quote.USD.price;
     cryptoPrices.gstEthereum = result["21152"].quote.USD.price;
-    console.log(cryptoPrices)
   })
   .catch(console.error);
 
@@ -39,9 +38,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
+        // .addArguments("--no-sandbox")
+        // .addArguments("--disable-dev-shm-usage")
+        // .headless()
         .windowSize(screen)
     )
     .build();

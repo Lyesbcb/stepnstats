@@ -1,7 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import AllSneakersScreen from "./components/allSneakersScreen";
-import AllMysteryBoxScreen from "./components/allMysteryBoxScreen";
+import AllMysteryBoxScreen from "./components/mysteryBox/allMysteryBoxScreen";
 import AllRunsScreen from "./components/runsScreen";
 import OneRunScreen from "./components/runScreen";
 import React, { useState } from "react";
@@ -12,6 +12,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-elements/dist/icons/Icon";
 import Invenrtory from "./components/inventory"
+import Marketplace from './components/marketplace/marketplaceScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -74,7 +75,7 @@ function App() {
               iconName = focused ? "shoe-sneaker" : "shoe-sneaker";
             } else if (route.name === "mysteryBox") {
               iconName = focused ? "toolbox" : "toolbox";
-            } else if (route.name === "chart") {
+            } else if (route.name === "MarketplaceStack") {
               iconName = focused ? "chart-box" : "chart-box";
             }
             return (
@@ -99,6 +100,7 @@ function App() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
         <Tab.Screen name="runs" component={Runs} />
+        <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
         <Tab.Screen name="test" component={TestScreen} />
 
         {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
@@ -134,6 +136,35 @@ function InvenrtoryStack() {
       <Stack.Screen name="Inventory" component={Invenrtory} />
       <Stack.Screen name="AllSneakersScreen" component={AllSneakersScreen} />
       <Stack.Screen name="AllMysteryBoxScreen" component={AllMysteryBoxScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function MarketplaceStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="Marketplace"
+      screenOptions={({ route, navigation }) => ({
+        headerShown: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: "10%",
+          height: "8%",
+          borderRadius: 50,
+          left: "5%",
+          right: "5%",
+          shadowColor: "black",
+          shadowOffset: {
+            width: 0,
+            height: 10,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.5,
+          elevation: 5,
+        },
+      })}
+    >
+      <Stack.Screen name="Marketplace" component={Marketplace} />
     </Stack.Navigator>
   );
 }

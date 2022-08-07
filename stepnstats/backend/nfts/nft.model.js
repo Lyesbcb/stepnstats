@@ -25,7 +25,8 @@ function model(sequelize) {
     socket1: { type: DataTypes.CHAR, allowNull: true },
     socket2: { type: DataTypes.CHAR, allowNull: true },
     socket3: { type: DataTypes.CHAR, allowNull: true },
-    socket4: { type: DataTypes.CHAR, allowNull: true },		    
+    socket4: { type: DataTypes.CHAR, allowNull: true },		 
+    base: { type: DataTypes.BOOLEAN, allowNull: false },		
   };
 
   const options = {

@@ -37,7 +37,10 @@ import {
   deleteNft,
 } from "../services/nfts/index";
 import { getAllMp } from "../services/mps/index";
+import ChooseMysteryBoxLevelModal from "./modal/chooseMysteryBoxLevelModal";
 export default function TestScreen({ route, navigation }) {
+  const [modalChooseMysteryBoxLevelVisible, setChooseMysteryBoxLevelVisible] = useState(false);
+  const [mbLvl, setMbLvl] = useState(0);
   const [image, setImage] = useState(null);
   console.log(route)
   const pickImage = async () => {
@@ -99,7 +102,7 @@ export default function TestScreen({ route, navigation }) {
         alignContent: "center",
         alignItems: "center",
         width: "100%",
-        height: "100%",
+        height: "80%",
         flexDirection: "column",
       }}
     >
@@ -323,7 +326,27 @@ export default function TestScreen({ route, navigation }) {
           <Text>Get all Mp</Text>
         </Pressable>
       </View>
-    
+      <View
+        style={{
+          justifyContent: "space-evenly",
+          alignContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "10%",
+          flexDirection: "row",
+        }}
+      >
+        <Text>Modal: </Text>
+        <Pressable
+          style={{ borderWidth: 1 }}
+          onPress={() => {
+            setChooseMysteryBoxLevelVisible(true)
+          }}
+        >
+          <Text>Show ChooseMysteryBoxLevelModal</Text>
+        </Pressable>
+      </View>
+      <ChooseMysteryBoxLevelModal textButton={"NEXT"} modalVisible={modalChooseMysteryBoxLevelVisible} setmodalVisible={setChooseMysteryBoxLevelVisible} value={mbLvl} setValue={setMbLvl}></ChooseMysteryBoxLevelModal>
     </View>
   );
 }

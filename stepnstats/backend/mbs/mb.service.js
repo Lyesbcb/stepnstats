@@ -11,6 +11,7 @@ module.exports = {
   update,
   delete: _delete,
   uploadFile,
+  uploadFiles,
 };
 
 async function uploadFile(req, res) {
@@ -33,83 +34,77 @@ async function uploadFile(req, res) {
 
     get_content_from_screen.stdout.setEncoding("utf8");
     await get_content_from_screen.stdout.on("data", async function (data) {
+      console.log("data")
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
-      var get_mb_lvl_from_image = await spawn("python", [
-        "./python/get_mb_lvl_from_image.py",
-        req.file.path,
-        "open_mb",
-      ]);
-      get_mb_lvl_from_image.stdout.setEncoding("utf8");
-      await get_mb_lvl_from_image.stdout.on("data", async function (data) {
-        params.lvl = Number(data);
-        // save rmbun
-        try {
-          res.send(await db.Mb.create(params));
-        } catch (error) {
-          console.log(error);
-          res.status(400).send(error);
-        }
-      });
-      get_mb_lvl_from_image.stderr.setEncoding("utf8");
-      await get_mb_lvl_from_image.stderr.on(
-        "data",
-        await function (data) {
-          return res.send("here");
-        }
-      );
+      try {
+        res.send(await db.Mb.create(params));
+      } catch (error) {
+        console.log(error);
+        res.status(400).send(error);
+      }
     });
     get_content_from_screen.stderr.setEncoding("utf8");
-    await get_content_from_screen.stderr.on(
-      "data",
-      await async function (data) {
-        var prices;
-        if (data.realm == "Solana") {
-          prices = await db.SolanaMp.findAll({
-            where: {
-              createdAt: {
-                [db.Op.lte]: data.createdAt,
-              },
-            },
-            limit: 1,
-            order: [["createdAt", "DESC"]],
-            subQuery: false,
-          });
-        }
-        if (data.realm == "Bnb") {
-          prices = await db.BNBMp.findAll({
-            where: {
-              createdAt: {
-                [db.Op.lte]: data.createdAt,
-              },
-            },
-            limit: 1,
-            order: [["createdAt", "DESC"]],
-            subQuery: false,
-          });
-        }
-        if (data.realm == "Ethereum") {
-          prices = await db.EthereumMp.findAll({
-            where: {
-              createdAt: {
-                [db.Op.lte]: data.createdAt,
-              },
-            },
-            limit: 1,
-            order: [["createdAt", "DESC"]],
-            subQuery: false,
-          });
-        }
-        data.setDataValue("prices", prices);
-        return res.send(data);
-      }
-    );
+    await get_content_from_screen.stderr.on("data", async function (data) {console.log(data)})
   } catch (error) {
     console.log(error);
     return res.send(`Error when trying upload images: ${error}`);
+  }
+}
+
+async function uploadFiles(path) {
+  try {
+    var params;
+    var get_content_from_screen = await spawn("python", [
+      "./python/get_content_from_screen.py",
+      path,
+    ]);
+
+    get_content_from_screen.stdout.setEncoding("utf8");
+    await get_content_from_screen.stdout.on("data", async function (data) {
+      console.log(data);
+      data = data.replace(/'/g, '"');
+      params = JSON.parse(data);
+      params.userId = "1";
+      params.realm = "Solana";
+      params.fileName = path;
+      try {
+        console.log(await db.Mb.create(params));
+        await async function (data) {
+          var prices;
+          if (data.realm == "Solana") {
+            prices = await db.SolanaMp.findAll({
+              limit: 1,
+              order: [["createdAt", "DESC"]],
+              subQuery: false,
+            });
+          }
+          if (data.realm == "Bnb") {
+            prices = await db.BNBMp.findAll({
+              limit: 1,
+              order: [["createdAt", "DESC"]],
+              subQuery: false,
+            });
+          }
+          if (data.realm == "Ethereum") {
+            prices = await db.EthereumMp.findAll({
+              limit: 1,
+              order: [["createdAt", "DESC"]],
+              subQuery: false,
+            });
+          }
+          data.prices = prices;
+          console.log(data);
+        };
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -133,11 +128,6 @@ async function getAllMy(req) {
     var prices;
     if (mbs[i].realm == "Solana") {
       prices = await db.SolanaMp.findAll({
-        where: {
-          createdAt: {
-            [db.Op.lte]: mbs[i].createdAt,
-          },
-        },
         limit: 1,
         order: [["createdAt", "DESC"]],
         subQuery: false,
@@ -145,24 +135,13 @@ async function getAllMy(req) {
     }
     if (mbs[i].realm == "Bnb") {
       prices = await db.BNBMp.findAll({
-        where: {
-          createdAt: {
-            [db.Op.lte]: mbs[i].createdAt,
-          },
-        },
         limit: 1,
         order: [["createdAt", "DESC"]],
         subQuery: false,
       });
     }
     if (mbs[i].realm == "Ethereum") {
-      console.log("ici");
       prices = await db.EthereumMp.findAll({
-        where: {
-          createdAt: {
-            [db.Op.lte]: mbs[i].createdAt,
-          },
-        },
         limit: 1,
         order: [["createdAt", "DESC"]],
         subQuery: false,

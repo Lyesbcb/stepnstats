@@ -1,6 +1,7 @@
 ﻿const config = require("config.json");
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
+var spawn = require("child_process").spawn;
 
 module.exports = {
   getAll,
@@ -18,12 +19,6 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    // TODO traitement avec python puis push en BDD
-
-    // const pythonProcess = spawn('python',["./getNftFromScreen.py", req.file.filename]);
-    // pythonProcess.stdout.on('data', (data) => {
-    //   params = data
-    // });
     if (
       await db.Nft.findOne({
         where: { userId: req.user.id, fileName: req.file.filename },
@@ -31,9 +26,28 @@ async function uploadFile(req, res) {
     ) {
       throw "This nft is already exist.";
     }
-    params.userId = req.user.id;
-    // save rmbun
-    return await db.Nft.create(params);
+    var sneaker = await spawn("python", [
+      "./python/sneaker.py",
+      req.file.path,
+    ]);
+
+    sneaker.stdout.setEncoding("utf8");
+    await sneaker.stdout.on("data", async function (data) {
+      console.log(data)
+      data = data.replace(/'/g, '"');
+      params = JSON.parse(data);
+      params.userId = req.user.id;
+      params.realm = "Solana";
+      params.fileName = req.file.filename;
+      try {
+        res.send(await db.Nft.create(params));
+      } catch (error) {
+        console.log(error);
+        res.status(400).send(error);
+      }
+    });
+    sneaker.stderr.setEncoding("utf8");
+    await sneaker.stderr.on("data", async function (data) {console.log(data)})
   } catch (error) {
     console.log(error);
     return res.send(`Error when trying upload images: ${error}`);

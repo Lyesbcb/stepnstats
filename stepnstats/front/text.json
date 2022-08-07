@@ -1,0 +1,15 @@
+{
+  "AllMysteryBoxScreen": {
+    "helpModal": [
+      {
+        "title": "Displayed price",
+        "text": "The prices displayed are the floorprices retrieved every 10 minutes. We have already deducted the 6% fees."
+      },
+      {
+        "title": "Drop rate",
+        "text": "The drop rate displayed is calculated according to the quantity of each content obtained in relation to the level of the mystery box."
+      }
+    ]
+  },
+  "AllSneakersScreen": {}
+}

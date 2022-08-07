@@ -1,4 +1,3 @@
-import cv2 as cv
 import numpy as np
 
 
@@ -10,3 +9,5 @@ def mse(imga, imgb):
 
     return err
 
+def cmse(imga, imgb):
+    return mse(imga[:,:,0], imgb[:,:,0]) + mse(imga[:,:,1], imgb[:,:,1]) + mse(imga[:,:,2], imgb[:,:,2]) 
