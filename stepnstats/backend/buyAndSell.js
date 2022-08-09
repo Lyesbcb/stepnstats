@@ -192,7 +192,7 @@ async function selectRealm(driver, type) {
 }
 
 async function selectType(driver, type) {
-  console.log("Select sneakers type: " + type);
+  console.log("Select nfts type: " + type);
   switch (type) {
     case "Walker":
       await driver
@@ -253,7 +253,7 @@ async function getGemFloorPrice(driver) {
   }
 }
 async function selectQuality(driver, quality) {
-  console.log("Select sneakers quaity: " + quality);
+  console.log("Select nfts quaity: " + quality);
   switch (quality) {
     case "Common":
       await driver

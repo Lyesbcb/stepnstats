@@ -26,18 +26,18 @@ async function uploadFile(req, res) {
     ) {
       throw "This nft is already exist.";
     }
-    var sneaker = await spawn("python", [
-      "./python/sneaker.py",
+    var nft = await spawn("python", [
+      "./python/nft.py",
       req.file.path,
     ]);
 
-    sneaker.stdout.setEncoding("utf8");
-    await sneaker.stdout.on("data", async function (data) {
+    nft.stdout.setEncoding("utf8");
+    await nft.stdout.on("data", async function (data) {
       console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
-      params.realm = "Solana";
+      params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
         res.send(await db.Nft.create(params));
@@ -46,8 +46,8 @@ async function uploadFile(req, res) {
         res.status(400).send(error);
       }
     });
-    sneaker.stderr.setEncoding("utf8");
-    await sneaker.stderr.on("data", async function (data) {console.log(data)})
+    nft.stderr.setEncoding("utf8");
+    await nft.stderr.on("data", async function (data) {console.log(data)})
   } catch (error) {
     console.log(error);
     return res.send(`Error when trying upload images: ${error}`);
@@ -125,14 +125,13 @@ async function _delete(req) {
   if (userId !== currentUser.id && currentUser.role !== Role.Admin) {
     throw "Unauthorized";
   }
-  await nft.destroy();
+  return await nft.destroy();
 }
 
 // helper functions
-
-async function getNft(req) {
+async function getNft(id) {
   const nft = await db.Nft.findOne({
-    where: { nftId: req.params.nftId, userId: req.user.userId},
+    where: { id: id},
   });
   if (!nft) throw "nft not found.";
   return nft;

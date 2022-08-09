@@ -17,7 +17,7 @@ import { Dimensions } from "react-native";
 
 export default function RunScreen({ navigation, route }) {
   const [run, setRun] = useState(route.params);
-  const sneakers = [
+  const nfts = [
     {
       id: 3,
       userId: 2,
@@ -120,7 +120,7 @@ export default function RunScreen({ navigation, route }) {
             alignItems: "center",
           }}
         >
-      {/* Sneakers */}
+      {/* Nfts */}
       <View
             style={{
               width: "53%",
@@ -270,10 +270,10 @@ export default function RunScreen({ navigation, route }) {
               }}
             >
               <Text style={{ fontSize: 11, fontWeight: "700" }}>
-                Mint: {sneakers[0].mint}
+                Mint: {nfts[0].mint}
               </Text>
               <Text style={{ fontSize: 11, fontWeight: "700" }}>
-                Lv: {sneakers[0].lvl}
+                Lv: {nfts[0].lvl}
               </Text>
             </View>
             <View
@@ -310,7 +310,7 @@ export default function RunScreen({ navigation, route }) {
                   source={require("../assets/stats/Efficiency.png")}
                 ></Image>
                 <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                  {sneakers[0].efficiency}
+                  {nfts[0].efficiency}
                 </Text>
               </View>
               <View
@@ -325,7 +325,7 @@ export default function RunScreen({ navigation, route }) {
                   source={require("../assets/stats/Luck.png")}
                 ></Image>
                 <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                  {sneakers[0].luck}
+                  {nfts[0].luck}
                 </Text>
               </View>
               <View
@@ -340,7 +340,7 @@ export default function RunScreen({ navigation, route }) {
                   source={require("../assets/stats/Comfort.png")}
                 ></Image>
                 <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                  {sneakers[0].comfort}
+                  {nfts[0].comfort}
                 </Text>
               </View>
               <View
@@ -355,7 +355,7 @@ export default function RunScreen({ navigation, route }) {
                   source={require("../assets/stats/Resilience.png")}
                 ></Image>
                 <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                  {sneakers[0].resilience}
+                  {nfts[0].resilience}
                 </Text>
               </View>
             </View>
@@ -479,7 +479,7 @@ export default function RunScreen({ navigation, route }) {
           ],
         }}
         width={Dimensions.get("window").width - 50}
-        height={Dimensions.get("window").height * 0.3}
+        height={Dimensions.get("window").height * 0.25}
         yAxisInterval={1}
         chartConfig={{
           backgroundGradientFrom: "white",

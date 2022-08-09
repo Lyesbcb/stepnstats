@@ -11,26 +11,23 @@ import {
 import React, { useEffect, useState } from "react";
 import Footer from "./footer";
 import Header from "./header";
-import AllSneakersScreen from "./allSneakersScreen";
+import AllNftsScreen from "./nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
 import RunsScreen from "./runsScreen";
-import {
-  createMb,
-  uploadMb,
-  getAllMyMb,
-  updateMb,
-  deleteMb,
-} from "../services/mbs/index";
+import { getAllMyMb } from "../services/mbs/index";
+import { getAllMyNft } from "../services/nfts/index";
 
 export default function Invenrtory({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
   const [mbs, setMbs] = useState([]);
+  const [nfts, setNfts] = useState([]);
   useEffect(() => {
     myFunction();
   }, []);
 
   const myFunction = async () => {
     try {
+      setNfts(await getAllMyNft(1));
       setMbs(await getAllMyMb(1));
     } catch {
       Alert.alert("Error");
@@ -38,7 +35,7 @@ export default function Invenrtory({ navigation }) {
   };
 
   return (
-    <View style={{ width: "100%", height: "100%", }}>
+    <View style={{ width: "100%", height: "100%" }}>
       <View style={styles.container2}>
         <Header
           navigation={navigation}
@@ -57,7 +54,11 @@ export default function Invenrtory({ navigation }) {
           }}
         >
           {selectedTab === 0 ? (
-            <AllSneakersScreen navigation></AllSneakersScreen>
+            <AllNftsScreen
+              navigation={navigation}
+              nfts={nfts}
+              myFunction={myFunction}
+            ></AllNftsScreen>
           ) : (
             <AllMysteryBoxScreen
               navigation={navigation}

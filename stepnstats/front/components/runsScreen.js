@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
     top: 0,
     backgroundColor: "#E0FEF3",
     width: "100%",
-    height: "37%",
+    height: "30%",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",

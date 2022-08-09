@@ -34,9 +34,9 @@ def get_idtpqualvl(oimg, info):
 
         return lvl
 
-    info['nftid'] = get_id()
+    info['nftId'] = get_id()
     info['quality'], info['type'] = get_qualtp()
-    info['level'] = get_level()
+    info['lvl'] = get_level()
 
 def get_stats(oimg, info):
     h, w, _ = oimg.shape
@@ -62,7 +62,7 @@ def get_stats(oimg, info):
         info["resilience"] = nmbs
 
 
-    info["base"] = get_base()
+    info["base"] = str(get_base()).lower()
     get_nmbrs()
 
 

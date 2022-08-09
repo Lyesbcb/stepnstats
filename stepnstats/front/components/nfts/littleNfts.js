@@ -2,214 +2,17 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
-export default function LittleMysteryBox({ data }) {
-  const [date, setDate] = useState("--/--/----");
+export default function LittleNfts({ data }) {
   var color;
-  const mbsColor = [
-    "#B2B2B2",
-    "#B2B2B2",
-    "#80FF1D",
-    "#80FF1D",
-    "#00A5F6",
-    "#00A5F6",
-    "#9F80FF",
-    "#9F80FF",
-    "#FA6C00",
-    "#FA6C00",
-  ];
+  const qualityColor = {
+    Common: "#BABCBE",
+    Uncommon: "#AED144",
+    Rare: "#47ACED",
+    Epic: "#A398EB",
+    Legendary: "#F5A836",
+  };
   {
-    data != 0 ? (color = mbsColor[data.lvl - 1]) : (color = "#B2B2B2");
-  }
-
-  const mbsImage = [
-    require("../../assets/mb/lvl1.png"),
-    require("../../assets/mb/lvl2.png"),
-    require("../../assets/mb/lvl3.png"),
-    require("../../assets/mb/lvl4.png"),
-    require("../../assets/mb/lvl5.png"),
-    require("../../assets/mb/lvl6.png"),
-    require("../../assets/mb/lvl7.png"),
-    require("../../assets/mb/lvl8.png"),
-    require("../../assets/mb/lvl9.png"),
-    require("../../assets/mb/lvl10.png"),
-  ];
-
-  const contents = [
-    "efficiencyLvl1",
-    "efficiencyLvl2",
-    "efficiencyLvl3",
-    "efficiencyLvl4",
-    "efficiencyLvl5",
-    "efficiencyLvl6",
-    "efficiencyLvl7",
-    "efficiencyLvl8",
-    "efficiencyLvl9",
-    "luckLvl1",
-    "luckLvl2",
-    "luckLvl3",
-    "luckLvl4",
-    "luckLvl5",
-    "luckLvl6",
-    "luckLvl7",
-    "luckLvl8",
-    "luckLvl9",
-    "comfortLvl1",
-    "comfortLvl2",
-    "comfortLvl3",
-    "comfortLvl4",
-    "comfortLvl5",
-    "comfortLvl6",
-    "comfortLvl7",
-    "comfortLvl8",
-    "comfortLvl9",
-    "resilienceLvl1",
-    "resilienceLvl2",
-    "resilienceLvl3",
-    "resilienceLvl4",
-    "resilienceLvl5",
-    "resilienceLvl6",
-    "resilienceLvl7",
-    "resilienceLvl8",
-    "resilienceLvl9",
-    "commonScroll",
-    "uncommonScroll",
-    "rareScroll",
-    "epicScroll",
-    "legendaryScroll",
-    "gst",
-  ];
-  
-  const contentImage = [
-    require("../../assets/gem/efficiency/lvl1.png"),
-    require("../../assets/gem/efficiency/lvl2.png"),
-    require("../../assets/gem/efficiency/lvl3.png"),
-    require("../../assets/gem/efficiency/lvl4.png"),
-    require("../../assets/gem/efficiency/lvl5.png"),
-    require("../../assets/gem/efficiency/lvl6.png"),
-    require("../../assets/gem/efficiency/lvl7.png"),
-    require("../../assets/gem/efficiency/lvl8.png"),
-    require("../../assets/gem/efficiency/lvl9.png"),
-    require("../../assets/gem/luck/lvl1.png"),
-    require("../../assets/gem/luck/lvl2.png"),
-    require("../../assets/gem/luck/lvl3.png"),
-    require("../../assets/gem/luck/lvl4.png"),
-    require("../../assets/gem/luck/lvl5.png"),
-    require("../../assets/gem/luck/lvl6.png"),
-    require("../../assets/gem/luck/lvl7.png"),
-    require("../../assets/gem/luck/lvl8.png"),
-    require("../../assets/gem/luck/lvl9.png"),
-    require("../../assets/gem/comfort/lvl1.png"),
-    require("../../assets/gem/comfort/lvl2.png"),
-    require("../../assets/gem/comfort/lvl3.png"),
-    require("../../assets/gem/comfort/lvl4.png"),
-    require("../../assets/gem/comfort/lvl5.png"),
-    require("../../assets/gem/comfort/lvl6.png"),
-    require("../../assets/gem/comfort/lvl7.png"),
-    require("../../assets/gem/comfort/lvl8.png"),
-    require("../../assets/gem/comfort/lvl9.png"),
-    require("../../assets/gem/resilience/lvl1.png"),
-    require("../../assets/gem/resilience/lvl2.png"),
-    require("../../assets/gem/resilience/lvl3.png"),
-    require("../../assets/gem/resilience/lvl4.png"),
-    require("../../assets/gem/resilience/lvl5.png"),
-    require("../../assets/gem/resilience/lvl6.png"),
-    require("../../assets/gem/resilience/lvl7.png"),
-    require("../../assets/gem/resilience/lvl8.png"),
-    require("../../assets/gem/resilience/lvl9.png"),
-    require("../../assets/scroll/common.png"),
-    require("../../assets/scroll/uncommon.png"),
-    require("../../assets/scroll/rare.png"),
-    require("../../assets/scroll/epic.png"),
-    require("../../assets/scroll/legendary.png"),
-    require("../../assets/gst.png"),
-  ];
-
-  useEffect(() => {
-    if (data != 0) {
-      getDate();
-    }
-  });
-
-  function getDate() {
-    var date = new Date(data.createdAt);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDate();
-    date = `${day}/${month}/${year}`;
-    setDate(date);
-  }
-
-  function showContent() {
-    return (
-      <View
-        style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        {data.content1 != "" ? (
-          <Image
-            source={contentImage[contents.indexOf(data.content1)]}
-            style={{ width: "20%", height: "60%", resizeMode: "contain" }}
-          ></Image>
-        ) : (
-          <View
-            style={{
-              width: "20%",
-              height: "80%",
-              borderRadius: 10,
-            }}
-          ></View>
-        )}
-        {data.content2 != "" ? (
-          <Image
-            source={contentImage[contents.indexOf(data.content2)]}
-            style={{ width: "20%", height: "60%", resizeMode: "contain" }}
-          ></Image>
-        ) : (
-          <View
-            style={{
-              width: "20%",
-              height: "80%",
-              borderRadius: 10,
-            }}
-          ></View>
-        )}
-
-        {data.content3 != "" ? (
-          <Image
-            source={contentImage[contents.indexOf(data.content3)]}
-            style={{ width: "20%", height: "60%", resizeMode: "contain" }}
-          ></Image>
-        ) : (
-          <View
-            style={{
-              width: "20%",
-              height: "80%",
-              borderRadius: 10,
-            }}
-          ></View>
-        )}
-
-        {data.content4 != "" ? (
-          <Image
-            source={contentImage[contents.indexOf(data.content4)]}
-            style={{ width: "20%", height: "60%", resizeMode: "contain" }}
-          ></Image>
-        ) : (
-          <View
-            style={{
-              width: "20%",
-              height: "80%",
-              borderRadius: 10,
-            }}
-          ></View>
-        )}
-      </View>
-    );
+    data != 0 ? (color = qualityColor[data.quality]) : (color = "#E2E2E2");
   }
   return (
     <View
@@ -267,7 +70,6 @@ export default function LittleMysteryBox({ data }) {
       ) : (
         <View></View>
       )}
-
       <View
         style={{
           position: "absolute",
@@ -281,7 +83,9 @@ export default function LittleMysteryBox({ data }) {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 10 }}>Lvl {data != 0 ? data.lvl : "-"}</Text>
+        <Text style={{ fontSize: 10 }}>
+          {data != 0 ? data.type : "-"}
+        </Text>
       </View>
       <View
         style={{
@@ -304,8 +108,8 @@ export default function LittleMysteryBox({ data }) {
         >
           {data != 0 ? (
             <Image
-              source={mbsImage[data.lvl - 1]}
-              style={{ width: "50%", height: "100%", resizeMode: "contain" }}
+              source={require("../../assets/shoes/Runner.png")}
+              style={{ width: "70%", resizeMode: "contain" }}
             ></Image>
           ) : (
             <Icon
@@ -320,16 +124,34 @@ export default function LittleMysteryBox({ data }) {
 
         <View
           style={{
-            height: "10%",
+            height: "15%",
             width: "60%",
             borderRadius: 20,
-            backgroundColor: color,
+            borderWidth: 2,
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "row",
+            alignContent: "center",
+            justifyContent: "space-between",
+            paddingHorizontal: 5,
           }}
         >
-          <Text style={{ fontSize: 10 }}>
-            {data != 0 ? date : "../../../...."}
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "700",
+              width: "10%",
+              height: "80%",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 50,
+            }}
+          >
+            #
+          </Text>
+          <Text style={{ fontSize: 10, fontWeight: "700" }}>
+            {data ? data.nftId : ""}
           </Text>
         </View>
         <View
@@ -341,9 +163,8 @@ export default function LittleMysteryBox({ data }) {
             flexDirection: "row",
           }}
         >
-          <Text style={{ fontSize: 10 }}>{data != 0 ? data.mbPrice : "--.--"} $</Text>
-          <Text style={{ fontSize: 10 }}>
-          </Text>
+          <Text style={{ fontSize: 10 }}>{data != 0 ? "?" : "-"}</Text>
+          <Text style={{ fontSize: 10 }}>Lv {data != 0 ? data.lvl : "-"}</Text>
         </View>
         <View
           style={{
@@ -367,10 +188,37 @@ export default function LittleMysteryBox({ data }) {
           borderBottomRightRadius: 20,
           backgroundColor: color,
           flexDirection: "row",
-          justifyContent: "space-evenly",
+          justifyContent: "space-evenly"
         }}
       >
-        {data != 0 ? showContent() : <View></View>}
+        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+          <Image
+            source={require("../../assets/stats/Efficiency.png")}
+            style={{ resizeMode: "contain", height: "30%", width: "50%" }}
+          ></Image>
+          <Text style={{fontSize: 10,}}>{data != 0 ? (data.efficiency).toFixed(0) : "-"}</Text>
+        </View>
+        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+          <Image
+            source={require("../../assets/stats/Luck.png")}
+            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+          ></Image>
+          <Text style={{fontSize: 10,}}>{data != 0 ? (data.luck).toFixed(0) : "-"}</Text>
+        </View>
+        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+          <Image
+            source={require("../../assets/stats/Comfort.png")}
+            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+          ></Image>
+          <Text style={{fontSize: 10}}>{data != 0 ? (data.comfort).toFixed(0) : "-"}</Text>
+        </View>
+        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+          <Image
+            source={require("../../assets/stats/Resilience.png")}
+            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+          ></Image>
+          <Text style={{fontSize: 10}}>{data != 0 ? (data.resilience).toFixed(0) : "-"}</Text>
+        </View>
       </View>
     </View>
   );

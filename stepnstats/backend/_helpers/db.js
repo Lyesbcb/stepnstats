@@ -27,7 +27,6 @@ async function initialize() {
   db.SolanaMp = require("../mps/solana/solanaMp.model")(sequelize);
   db.BNBMp = require("../mps/bnb/bnbMp.model")(sequelize);
   db.EthereumMp = require("../mps/ethereum/ethereumMp.model")(sequelize);
-
   // sync all models with database
   await sequelize.sync();
 }

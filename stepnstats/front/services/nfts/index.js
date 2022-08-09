@@ -78,10 +78,9 @@ async function uploadNft(image, realm) {
       },
     };
     // Start waiting screen
-    await fetch(baseURL + "/upload", options)
+    return await fetch(baseURL + "/upload", options)
       .then(async (response) => {
-        console.log(await response.json());
-        // Actualize list of MB and redirect to OneMysteryBox
+        return await response.json();
       })
       .catch(async function (error) {
         console.log(await error.json());
@@ -116,7 +115,7 @@ async function getAllMyNft(page) {
   var config = {
     method: "get",
     url: baseURL + "/my",
-    params: { page: page },
+    params: { page: 1 },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -125,7 +124,7 @@ async function getAllMyNft(page) {
 
   return await axios(config)
     .then(async function (response) {
-      return response.data
+      return response.data.rows;
     })
     .catch(function (error) {
       console.log(error.response.data.message);

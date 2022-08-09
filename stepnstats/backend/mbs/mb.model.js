@@ -26,6 +26,7 @@ function model(sequelize) {
     content5Quantity: { type: DataTypes.FLOAT, allowNull: true },
     content6: { type: DataTypes.CHAR, allowNull: true },
     content6Quantity: { type: DataTypes.FLOAT, allowNull: true },
+    mbPrice: { type: DataTypes.FLOAT, allowNull: false },
   };
 
   const options = {

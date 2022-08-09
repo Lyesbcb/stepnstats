@@ -9,7 +9,6 @@ export default function DetailMysteryBox({
   setmodalOneMysteryBox,
   deleteOneMb
 }) {
-  const [price, setPrice] = useState("--.--");
   const [date, setDate] = useState("--/--/----");
   var color;
   const mbsColor = [
@@ -135,7 +134,6 @@ export default function DetailMysteryBox({
   useEffect(() => {
     if (data != undefined) {
       getDate();
-      getPrice();
     }
   });
 
@@ -146,64 +144,6 @@ export default function DetailMysteryBox({
     let day = date.getDate();
     date = `${day}/${month}/${year}`;
     setDate(date);
-  }
-
-  function getPriceFromContent(content, contentQuantity) {
-    var totalRealmCrypto = 0;
-    var totalGst = 0;
-    var totalGmt = 0;
-    var total = 0;
-    if (content) {
-      if (!content.includes("Scroll") & !content.includes("gst")) {
-        totalRealmCrypto += data.prices[0][content] * contentQuantity;
-      } else if (content.includes("Scroll")) {
-        totalGmt += data.prices[0][content] * contentQuantity;
-      } else if (content.includes("gst")) {
-        totalGst += data.prices[0][content + data.realm] * contentQuantity;
-      }
-      total =
-        totalRealmCrypto * data.prices[0][data.realm] +
-        totalGmt * data.prices[0]["gmt"] +
-        totalGst * data.prices[0]["gst" + data.realm];
-      return (total*0.94);
-    }
-    return 0;
-  }
-  
-  function getPrice() {
-    // Here request to have price of marketplace at specific date
-    const content1Price = getPriceFromContent(
-      data.content1,
-      data.content1Quantity
-    );
-    const content2Price = getPriceFromContent(
-      data.content2,
-      data.content2Quantity
-    );
-    const content3Price = getPriceFromContent(
-      data.content3,
-      data.content3Quantity
-    );
-    const content4Price = getPriceFromContent(
-      data.content4,
-      data.content4Quantity
-    );
-    const content5Price = getPriceFromContent(
-      data.content5,
-      data.content5Quantity
-    );
-    const content6Price = getPriceFromContent(
-      data.content6,
-      data.content6Quantity
-    );
-    var total =
-      content1Price +
-      content2Price +
-      content3Price +
-      content4Price +
-      content5Price +
-      content6Price;
-    setPrice(total.toFixed(2));
   }
 
   function showContent() {
@@ -465,7 +405,8 @@ export default function DetailMysteryBox({
           Lvl {data != undefined ? data.lvl : "-"}
         </Text>
       </View>
-      {data.realm == "Solana" ? (
+      {/* // TODO: Show Realm */}
+      {/* {data.realm == "Solana" ? (
         <Image
           source={require("../../assets/sol_realm.png")}
           style={{
@@ -503,7 +444,7 @@ export default function DetailMysteryBox({
         ></Image>
       ) : (
         <View></View>
-      )}
+      )} */}
       <View
         style={{
           width: "100%",
@@ -674,7 +615,7 @@ export default function DetailMysteryBox({
             }}
           >
             <Text style={{ color: "white", fontSize: 12 }}>
-              {data != undefined ? price : "--.--"} $
+              {data != undefined ? data.mbPrice : "--.--"} $
             </Text>
           </View>
           <View
@@ -688,7 +629,7 @@ export default function DetailMysteryBox({
             }}
           >
             <Text style={{ color: "white", fontSize: 12 }}>
-              {data != undefined ? date : "../../../../...."}
+              {data != undefined ? date : "../../../...."}
             </Text>
           </View>
           <View
@@ -702,7 +643,7 @@ export default function DetailMysteryBox({
             }}
           >
             <Text style={{ color: "white", fontSize: 12 }}>
-              {data != undefined ? data.dropRate : "..-.."} %
+              {/* Ajouter un truc ici */}
             </Text>
           </View>
         </View>

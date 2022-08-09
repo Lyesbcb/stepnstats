@@ -98,5 +98,5 @@ function _delete(req, res, next) {
   nftService
     .delete(req)
     .then(() => res.json({ message: "nft deleted successfully" }))
-    .catch(next);
+    .catch((next) => console.log(next));
 }

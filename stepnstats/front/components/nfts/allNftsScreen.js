@@ -1,125 +1,201 @@
-import Icon from "react-native-elements/dist/icons/Icon";
-import { Text, View, Image, StyleSheet} from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  Pressable,
+  ImageBackground,
+  Image,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
+  Modal,
+  TouchableOpacity
+} from "react-native";
+import React, { useEffect, useState, componentDidMount } from "react";
+import LittleNfts from "./littleNfts";
+import {
+  createNft,
+  uploadNft,
+  getAllMyNft,
+  updateNft,
+  deleteNft,
+} from "../../services/nfts/index";
+import * as ImagePicker from "expo-image-picker";
+import DetailNfts from "./detailNfts";
+import ProgressLoader from "rn-progress-loader";
+import SelectRealmModal from "../modal/selectRealmModal";
 
-export default function LittleSneakers({ data }) { 
-  var color
-  const mbsColor = [
-    "#B2B2B2",
-    "#B2B2B2",
-    "#80FF1D",
-    "#80FF1D",
-    "#00A5F6",
-    "#00A5F6",
-    "#9F80FF",
-    "#9F80FF",
-    "#FA6C00",
-    "#FA6C00",
-  ];
-  {data != 0 ? color = mbsColor[data.lvl -1]: color = "#B2B2B2"}
+export default function AllNftsScreen({ navigation, myFunction, nfts }) {
+  const [realm, setRealm] = useState("Solana");
+  const [loading, setLoading] = useState(false);
+  const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalOneNfts, setmodalOneNfts] = useState(false);
+  const [nftsSelected, setNftsSelected] = useState(1);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  async function onRefresh() {
+    await setRefreshing(true);
+    await myFunction();
+    await setRefreshing(false);
+  }
+  const pickImage = async () => {
+    setmodalRealmVisible(false);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 0.2,
+      exif: true,
+    });
+
+    if (!result.cancelled) {
+      setLoading(true);
+      await uploadNft(result, realm);
+      setLoading(false);
+      await myFunction();
+    }
+  };
+
+  async function deleteOneNft(id) {
+    try {
+      await deleteNft(id);
+      if ((nftsSelected != 0) & (nftsSelected != null)) {
+        setNftsSelected(nftsSelected - 1);
+      } else {
+      }
+      await myFunction();
+      if ((nftsSelected != 0) & (nftsSelected != null)) {
+      } else {
+        setmodalOneNfts(false);
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  }
+
+  function nextNft() {
+    if (nftsSelected != nfts.length - 1) {
+      setNftsSelected(nftsSelected + 1);
+    } else {
+      setNftsSelected(0);
+    }
+  }
+
+  function previousNft() {
+    if (nftsSelected != 0) {
+      setNftsSelected(nftsSelected - 1);
+    } else {
+      setNftsSelected(nfts.length - 1);
+    }
+  }
+
+  function showNfts() {
+    return nfts.map((nft, i) => {
+      return (
+        <Pressable
+          onPress={() => {
+            setNftsSelected(i);
+            setmodalOneNfts(true);
+          }}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+          key={nft.id}
+        >
+          <LittleNfts data={nft}></LittleNfts>
+        </Pressable>
+      );
+    });
+  }
   return (
     <View
       style={{
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 20,
-        shadowOpacity: 1,
-        shadowRadius: 1,
-        shadowOffset: {
-          width: 6,
-          height: 6,
-        },
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
+        width: "90%",
+        height: "65%",
       }}
     >
-      <View
-        style={{
-          position: "absolute",
-          height: "10%",
-          width: "60%",
-          top: 0,
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
-          backgroundColor:  color,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      />
+      <SelectRealmModal
+        modalVisible={modalRealmVisible}
+        setmodalVisible={setmodalRealmVisible}
+        onValidate={pickImage}
+        setValue={setRealm}
+        value={realm}
+        textButton={"NEXT"}
+      ></SelectRealmModal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalOneNfts}
       >
-        <Text style={{ fontSize: 10 }}>Lvl {data != 0 ? data.lvl: "-"}</Text>
-      </View>
-      <View style={{ justifyContent: "space-around", width: "100%", height: "60%", alignItems: "center", position:"absolute", top: "15%"}}>
-      <View style={{ width: "80%", alignContent: "center", alignItems: "center", justifyContent: "center", height: "50%" }}>
-      {data != 0 ? (
-            <Image
-              source={mbsImage[data.lvl - 1]}
-              style={{ width: "50%", resizeMode: "contain" }}
-            ></Image>
-          ) : (
-            <Icon
-              style={{ width: "100%" }}
-              size={70}
-              type="antdesign"
-              name="plus"
-              color="black"
-            ></Icon>
-          )}
-      </View>
-
-      <View
-        style={{
-          height: "10%",
-          width: "60%",
-          borderRadius: 20,
-          backgroundColor:  color,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ fontSize: 10 }}>{data != 0 ? date : "../../...."}</Text>
-      </View>
-      <View
-        style={{
-          height: "12%",
-          width: "60%",
-          justifyContent: "space-between",
-          alignItems: "center",
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          activeOpacity={1}
+          onPressOut={() => setmodalOneNfts(false)}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              height: "60%",
+              width: "90%",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 2,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            {nfts.length != 0 ? (
+              <DetailNfts
+                data={nfts[nftsSelected]}
+                nextNft={nextNft}
+                previousNft={previousNft}
+                setmodalOneNfts={setmodalOneNfts}
+                deleteOneNft={deleteOneNft}
+              ></DetailNfts>
+            ) : (
+              <View></View>
+            )}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+      <ScrollView
+        contentContainerStyle={{
           flexDirection: "row",
-        }}
-      >
-        <Text style={{ fontSize: 10 }}>{data != 0 ? price : "--.--"} $</Text>
-        <Text style={{ fontSize: 10 }}>
-          {data != 0 ? data.dropRate : "..-.."} %
-        </Text>
-      </View>
-      <View
-        style={{
-          height: "2%",
-          width: "60%",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexDirection: "row",
-          backgroundColor: "#9DF8B6",
-        }}
-      ></View>
-      </View>
-      
-      <View
-        style={{
-          position: "absolute",
-          height: "20%",
+          flexWrap: "wrap",
+          flexGrow: 1,
           width: "100%",
-          bottom: 0,
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
-          backgroundColor:  color,
-          flexDirection: "row",
-          justifyContent: "space-evenly",
+          justifyContent: "space-between",
         }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            tintColor={"black"}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
-        {data != 0 ? showContent() : <View></View>}
-      </View>
+        <Pressable
+          onPress={() => setmodalRealmVisible(true)}
+          style={{ width: "45%", height: "35%", margin: "2%" }}
+        >
+          <LittleNfts data={0}></LittleNfts>
+        </Pressable>
+        {nfts.length ? showNfts() : <View></View>}
+      </ScrollView>
     </View>
   );
 }
@@ -200,8 +276,8 @@ const styles = StyleSheet.create({
     height: "5%",
     borderRadius: 100,
     position: "absolute",
-    top: "15%",
-    right: "10%",
+    top: "2%",
+    right: "2%",
     borderWidth: 1,
     borderColor: "black",
     shadowOpacity: 1,
@@ -222,9 +298,7 @@ const styles = StyleSheet.create({
       height: 6,
     },
     width: "85%",
-    height: "63%",
-    position: "absolute",
-    top: "22%",
+    height: "80%",
     alignContent: "center",
   },
   halo: {
@@ -338,7 +412,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: "60%",
     width: "100%",
     position: "absolute",
   },

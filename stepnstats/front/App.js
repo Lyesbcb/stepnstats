@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image } from "react-native";
 import HomeScreen from "./components/homeScreen";
-import AllSneakersScreen from "./components/allSneakersScreen";
+import AllNftsScreen from "./components/nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./components/mysteryBox/allMysteryBoxScreen";
 import AllRunsScreen from "./components/runsScreen";
 import OneRunScreen from "./components/runScreen";
@@ -101,7 +101,7 @@ function App() {
         <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
         <Tab.Screen name="runs" component={Runs} />
         <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
-        <Tab.Screen name="test" component={TestScreen} />
+        {/* <Tab.Screen name="test" component={TestScreen} /> */}
 
         {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
       </Tab.Navigator>
@@ -134,7 +134,7 @@ function InvenrtoryStack() {
       })}
     >
       <Stack.Screen name="Inventory" component={Invenrtory} />
-      <Stack.Screen name="AllSneakersScreen" component={AllSneakersScreen} />
+      <Stack.Screen name="AllNftsScreen" component={AllNftsScreen} />
       <Stack.Screen name="AllMysteryBoxScreen" component={AllMysteryBoxScreen} />
     </Stack.Navigator>
   );

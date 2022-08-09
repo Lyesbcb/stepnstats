@@ -45,9 +45,8 @@ async function uploadFile(req, res) {
       console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
-      params.duration = NumToTime(Number(params.energy)*5)
       params.userId = req.user.id;
-      params.realm = "Solana";
+      params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
         res.send(await db.Run.create(params));

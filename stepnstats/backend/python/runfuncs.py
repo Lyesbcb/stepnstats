@@ -1,3 +1,4 @@
+from tkinter import image_names
 from text_reader import parse_text
 from colortools import dominant
 import numpy as np
@@ -18,7 +19,7 @@ def crop_bot(img):
 
         if (220 > b > 180 and
             255 >= g > 230 and
-            150 > r > 80):
+            157 > r > 80):
 
             return img[:y,:]
 
@@ -26,7 +27,7 @@ def first_wtline(img):
     end = img.shape[0] // 2
 
     for y in range(end):
-        mask = img[y,:] > 240 
+        mask = img[y, :] > 240 
         if np.sum(mask) < 1200: 
             #print(np.sum(mask))
             pass
@@ -69,7 +70,6 @@ def get_kmdt(img, tlbr, info):
         if "," in km:
             km = km.replace(",", ".")
 
-
         return km
 
     def get_date():
@@ -77,7 +77,7 @@ def get_kmdt(img, tlbr, info):
         dtimg = cv.cvtColor(dtimg, cv.COLOR_BGR2GRAY)
 
         rngd = cv.inRange(dtimg, 0, 240)
-        date = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789/:", process=False) 
+        date = "".join(reader.readtext(rngd, detail=0, allowlist="0123456789/:")).replace(" ", "")
 
         date = date[:10] + " " + date[10:]
         dt, tm = date.split(" ")
@@ -130,7 +130,7 @@ def get_kmdt_nd(img, tlbr, info):
 
         return date
 
-    info["km"] = get_km() 
+    info["gst"] = get_km() 
     info["date"] = get_date()
 
 
@@ -184,7 +184,7 @@ def get_quality(color):
           70  < r < 105):
         return "Uncommon"
     elif (200 < b < 215 and
-          165 < g < 175 and
+          165 < g < 180 and
           60  < r < 100):
           return "Rare"
     elif (190 < b < 210 and
@@ -200,15 +200,14 @@ def get_tplvlgst(img, info, nondurab=None):
 
     def get_typelevelqual():
         tpimg = gimg[:int(h/5), int(w/10):int(w/2.8)] if nondurab is None else gimg[:int(h/14), int(w/10):int(w/2)]
-        tplevel = parse_text(tpimg, config="--psm 7", process=False)
+        tplevel = "".join(reader.readtext(tpimg, detail=0, allowlist="jogerwalkuntiv0123456789")).lower()
 
-
-        if not ("Lv" in tplevel):
+        if not ("lv" in tplevel):
             return "", "", ""
 
-        i = tplevel.index("Lv")
+        i = tplevel.index("lv")
         level = tplevel[i+2:i+4]
-
+        
         if "gger" in tplevel:
             tp = "Jogger"
         elif "lker" in tplevel:
@@ -278,18 +277,15 @@ def get_eniddlst(img, info):
         for rng in rngs:
             durab = parse_text(rng, config="--psm 7 -c tessedit_char_whitelist=-0123456789", process=False)
 
-            if "-" in durab:
-                durab = durab.replace("-", "")
-
             if durab == "":
                 continue
             else:
                 break
 
         if durab == "":
-            durab = reader.readtext(drimg, detail=0)[0]
+            durab = "".join(reader.readtext(cv.cvtColor(drimg, cv.COLOR_BGR2GRAY), detail=0))
 
-        return durab
+        return durab.replace("-", "").replace(" ", "")
 
     def get_energy():
         enimg = img[int(h/8):int(h/2.7), int(w/1.5):]
@@ -304,9 +300,26 @@ def get_eniddlst(img, info):
 
         return energy 
 
-    info["nftid"] = get_id()
+    info["nftId"] = get_id()
     info["energy"] = get_energy()
     info["durabilityLost"] = get_durab()
+
+def get_kmdrstps(img, info):
+    h, w, _ = img.shape
+    img = img[int(h/2.1):int(h/1.9), :]
+    gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+    text = reader.readtext(gimg, detail=0)
+
+    if len(text) != 3:
+        km = dur = stp = ""
+    else:
+        km, dur, stp = text
+        dur = dur.replace('.', ':')
+
+    info['km'] = km
+    info['duration'] = dur
+    info['steps'] = stp
 
 def get_ideng(oimg, info):
     h, w, _ = oimg.shape
@@ -334,5 +347,4 @@ def get_ideng(oimg, info):
         return id
 
     info["energy"] = get_energy()
-    info["nftid"]  = get_id()
- 
+    info["nftId"]  = get_id()

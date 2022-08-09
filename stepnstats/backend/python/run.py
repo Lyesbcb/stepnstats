@@ -5,7 +5,6 @@ import os
 from get_mb_lvl_from_image import get_mblvl
 from sys import argv
 
-
 def get_run_durab(oimg):
     img = crop_bot(oimg)
     img = crop_top(img)
@@ -15,6 +14,7 @@ def get_run_durab(oimg):
     info = {}
 
     get_kmdt(img, rects[0], info)
+
     get_drst(img, rects[2], info)
 
     botimg = bot_part(img)
@@ -32,11 +32,11 @@ def get_run_durab(oimg):
     #    img = cv.rectangle(img, rect[0], rect[1], (0, 255, 0), 5)
     #
     # print(info)
-    #cv.imshow("test.png", cv.resize(img, (250, 400)))
+    # cv.imshow("test.png", cv.resize(img, (250, 400)))
     # cv.waitKey(0)
     # ---------------------------------------------------------------
 
-    print(info)
+    return info
 
 
 def get_run_nondurab(oimg):
@@ -54,46 +54,48 @@ def get_run_nondurab(oimg):
 
     info["mbLvl"] = get_mblvl(oimg)
 
+    get_kmdrstps(img, info)
+
     # --------------TEST CODE---------------------------------------
     # for rect in rects:
     #    img = cv.rectangle(img, rect[0], rect[1], (0, 255, 0), 5)
     #
     # print(info)
-    #cv.imshow('nonduarb', cv.resize(img, (250, 400)))
+    # cv.imshow('nonduarb', img)  # cv.resize(img))#, (250, 400)))
     # cv.waitKey(0)
     # --------------------------------------------------------------
 
-    print(info)
+    return info
 
 
 img = cv.imread("./"+argv[1])
 b, g, r = img[0, 0]
 
-if ((b > 240 and
-        g > 240 and
-        r > 240) or
-        (5 > b > 0 and
-         8 > g > 4 and
-         r == 0)):
-    get_run_nondurab(img)
+if ((b > 240 and g > 240 and r > 240) or (5 > b > 0 and 8 > g > 1 and 3 > r >= 0)):
+    print(get_run_nondurab(img))
 else:
-    get_run_durab(img)
+    print(get_run_durab(img))
 
 # if __name__ == "__main__":
-#     TEST_FLDR = "Run/test 2/"
-#     TEST_IMGS = [file for file in os.listdir(TEST_FLDR)]
+#     TEST_FLDR = "Run/without durability/test ("
+#     #TEST_IMGS = [file for file in os.listdir(TEST_FLDR)]
+#     formats = (".png", ".jpg", ".jpeg")
 
 #     for i in range(1, 50):
-#         if (TEST_IMGS[i].endswith("JPEG") or
-#             TEST_IMGS[i].endswith("lauric thomas.jpg") or
-#             TEST_IMGS[i].endswith("Andre Kro.jpg")):
-#             continue
+#         for frmt in formats:
+#             path = TEST_FLDR + str(i) + ")" + frmt
+#             if os.path.isfile(path):
+#                 if ((i == 1 and frmt == ".png") or
+#                     (i == 2 and frmt == ".jpg") or
+#                     (i == 3 and frmt == ".jpg") or
+#                     (i == 11 and frmt == ".png")):
+#                     pass
+#                 else:
+#                     oimg = cv.imread(path)
+#                     print("INDEX ->", i, frmt)
 
-#         oimg = cv.imread(TEST_FLDR + TEST_IMGS[i])
-#         print(TEST_IMGS[i], "INDEX ->", i)
-
-#         print(get_run(oimg))
-#         cv.imshow('test', oimg)
-#         cv.waitKey(0)
-#         #info = get_run_durab(oimg)
-#         #info = get_run_nondurab(oimg)
+#                     get_run(oimg)
+    #cv.imshow('test', oimg)
+    # cv.waitKey(0)
+    #info = get_run_durab(oimg)
+    #info = get_run_nondurab(oimg)

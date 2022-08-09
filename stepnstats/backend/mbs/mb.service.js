@@ -11,8 +11,17 @@ module.exports = {
   update,
   delete: _delete,
   uploadFile,
-  uploadFiles,
+  getAllByLvl,
 };
+
+async function getAllByLvl(lvl) {
+  return await db.Mb.findAll({
+    where: {
+      lvl: lvl,
+    },
+    subQuery: false,
+  });
+}
 
 async function uploadFile(req, res) {
   try {
@@ -34,12 +43,37 @@ async function uploadFile(req, res) {
 
     get_content_from_screen.stdout.setEncoding("utf8");
     await get_content_from_screen.stdout.on("data", async function (data) {
-      console.log("data")
+      console.log("data");
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
+      var prices;
+      if (params.realm == "Solana") {
+        prices = await db.SolanaMp.findAll({
+          limit: 1,
+          order: [["createdAt", "DESC"]],
+          subQuery: false,
+        });
+      }
+      if (params.realm == "Bnb") {
+        prices = await db.BNBMp.findAll({
+          limit: 1,
+          order: [["createdAt", "DESC"]],
+          subQuery: false,
+        });
+      }
+      if (params.realm == "Ethereum") {
+        prices = await db.EthereumMp.findAll({
+          limit: 1,
+          order: [["createdAt", "DESC"]],
+          subQuery: false,
+        });
+      }
+      params.prices = prices[0];
+      params.mbPrice = await getMbPrice(params)
+      console.log(params);
       try {
         res.send(await db.Mb.create(params));
       } catch (error) {
@@ -48,63 +82,12 @@ async function uploadFile(req, res) {
       }
     });
     get_content_from_screen.stderr.setEncoding("utf8");
-    await get_content_from_screen.stderr.on("data", async function (data) {console.log(data)})
-  } catch (error) {
-    console.log(error);
-    return res.send(`Error when trying upload images: ${error}`);
-  }
-}
-
-async function uploadFiles(path) {
-  try {
-    var params;
-    var get_content_from_screen = await spawn("python", [
-      "./python/get_content_from_screen.py",
-      path,
-    ]);
-
-    get_content_from_screen.stdout.setEncoding("utf8");
-    await get_content_from_screen.stdout.on("data", async function (data) {
+    await get_content_from_screen.stderr.on("data", async function (data) {
       console.log(data);
-      data = data.replace(/'/g, '"');
-      params = JSON.parse(data);
-      params.userId = "1";
-      params.realm = "Solana";
-      params.fileName = path;
-      try {
-        console.log(await db.Mb.create(params));
-        await async function (data) {
-          var prices;
-          if (data.realm == "Solana") {
-            prices = await db.SolanaMp.findAll({
-              limit: 1,
-              order: [["createdAt", "DESC"]],
-              subQuery: false,
-            });
-          }
-          if (data.realm == "Bnb") {
-            prices = await db.BNBMp.findAll({
-              limit: 1,
-              order: [["createdAt", "DESC"]],
-              subQuery: false,
-            });
-          }
-          if (data.realm == "Ethereum") {
-            prices = await db.EthereumMp.findAll({
-              limit: 1,
-              order: [["createdAt", "DESC"]],
-              subQuery: false,
-            });
-          }
-          data.prices = prices;
-          console.log(data);
-        };
-      } catch (error) {
-        console.log(error);
-      }
     });
   } catch (error) {
     console.log(error);
+    return res.send(`Error when trying upload images: ${error}`);
   }
 }
 
@@ -214,4 +197,74 @@ async function getMb(id) {
   const mb = await db.Mb.findByPk(id);
   if (!mb) throw "Mb not found.";
   return mb;
+}
+
+function getPriceFromContent(content, contentQuantity, prices, realm) {
+  var totalRealmCrypto = 0;
+  var totalGst = 0;
+  var totalGmt = 0;
+  var total = 0;
+  if (content) {
+    if (!content.includes("Scroll") & !content.includes("gst")) {
+      totalRealmCrypto += prices[content] * contentQuantity;
+    } else if (content.includes("Scroll")) {
+      totalGmt += prices[content] * contentQuantity;
+    } else if (content.includes("gst")) {
+      totalGst += prices[content + realm] * contentQuantity;
+    }
+    total =
+      totalRealmCrypto * prices[realm] +
+      totalGmt * prices["gmt"] +
+      totalGst * prices["gst" + realm];
+    //Remove the marketplace fees
+    return total * 0.94;
+  }
+  return 0;
+}
+
+function getMbPrice(data) {
+  const content1Price = getPriceFromContent(
+    data.content1,
+    data.content1Quantity,
+    data.prices,
+    data.realm
+  );
+  const content2Price = getPriceFromContent(
+    data.content2,
+    data.content2Quantity,
+    data.prices,
+    data.realm
+  );
+  const content3Price = getPriceFromContent(
+    data.content3,
+    data.content3Quantity,
+    data.prices,
+    data.realm
+  );
+  const content4Price = getPriceFromContent(
+    data.content4,
+    data.content4Quantity,
+    data.prices,
+    data.realm
+  );
+  const content5Price = getPriceFromContent(
+    data.content5,
+    data.content5Quantity,
+    data.prices,
+    data.realm
+  );
+  const content6Price = getPriceFromContent(
+    data.content6,
+    data.content6Quantity,
+    data.prices,
+    data.realm
+  );
+  var total =
+    content1Price +
+    content2Price +
+    content3Price +
+    content4Price +
+    content5Price +
+    content6Price;
+  return total.toFixed(2);
 }

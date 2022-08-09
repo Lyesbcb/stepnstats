@@ -10,7 +10,18 @@ const CoinMarketCap = require("coinmarketcap-api");
 const apiKey = config.coinMarketCap_token;
 const client = new CoinMarketCap(apiKey);
 var cryptoPrices = {};
-client
+
+const screen = {
+  width: 1920,
+  height: 1080,
+};
+
+module.exports = {
+  getMp,
+};
+
+async function getMp() {
+  client
   .getQuotes({ id: [1839, 1027, 18069, 5426, 16352, 20236, 21152] })
   .then((data) => {
     var result = data.data;
@@ -23,17 +34,6 @@ client
     cryptoPrices.gstEthereum = result["21152"].quote.USD.price;
   })
   .catch(console.error);
-
-const screen = {
-  width: 1920,
-  height: 1080,
-};
-
-module.exports = {
-  getMp,
-};
-
-async function getMp() {
   const driver = new Builder()
     .forBrowser("chrome")
     .setChromeOptions(
@@ -79,7 +79,7 @@ async function getMp() {
 
     await sleep(1000);
     await selectRealm(driver, "Solana");
-    // Click on sneakers
+    // Click on nfts
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
@@ -90,7 +90,7 @@ async function getMp() {
     var solanaMp = await getAllFloorPrice(driver);
     console.log(solanaMp);
     await sleep(1000);
-    // Click on Sneakers tab
+    // Click on Nfts tab
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
@@ -102,7 +102,7 @@ async function getMp() {
     await sleep(1000);
     var bnbMp = await getAllFloorPrice(driver);
     await sleep(1000);
-    // Click on Sneakers tab
+    // Click on Nfts tab
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
@@ -128,7 +128,7 @@ async function getMp() {
 }
 
 async function getAllFloorPrice(driver) {
-  // SNEAKERS
+  // NFTS
   await sleep(1000);
   // COMMON
   await selectQuality(driver, "Common");
@@ -586,7 +586,7 @@ async function selectRealm(driver, type) {
 }
 
 async function selectType(driver, type) {
-  console.log("Select sneakers type: " + type);
+  console.log("Select nfts type: " + type);
   switch (type) {
     case "Walker":
       await driver
@@ -665,7 +665,7 @@ async function getGemScrollPrice(driver) {
 }
 
 async function selectQuality(driver, quality) {
-  console.log("Select sneakers quaity: " + quality);
+  console.log("Select nfts quaity: " + quality);
   switch (quality) {
     case "Common":
       await driver
@@ -706,7 +706,7 @@ async function selectQuality(driver, quality) {
 }
 
 async function selectRarity(driver, rarity) {
-  console.log("Select sneakers rarity: " + rarity);
+  console.log("Select nfts rarity: " + rarity);
   switch (rarity) {
     case "Genesis":
       await driver

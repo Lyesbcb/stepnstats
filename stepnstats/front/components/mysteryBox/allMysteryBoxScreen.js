@@ -13,10 +13,9 @@ import {
   StyleSheet,
   Modal,
   Alert,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Icon from "react-native-elements/dist/icons/Icon";
-import Footer from "../footer";
 import LittleMysteryBox from "./littleMysteryBox";
 import {
   createMb,
@@ -37,6 +36,14 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [loading, setLoading] = useState(false);
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
   const [modalOneMysteryBox, setmodalOneMysteryBox] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  async function onRefresh() {
+    await setRefreshing(true);
+    await myFunction();
+    await setRefreshing(false);
+  }
+
   async function deleteOneMb(id) {
     try {
       await deleteMb(id);
@@ -53,6 +60,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
       Alert.alert(error);
     }
   }
+  
   function nextMb() {
     if (mbSelected != mbs.length - 1) {
       setMbSelected(mbSelected + 1);
@@ -178,6 +186,13 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
           justifyContent: "space-between",
         }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            tintColor={"black"}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <Pressable
           onPress={() => setmodalRealmVisible(true)}
