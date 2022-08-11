@@ -38,9 +38,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
+        // .addArguments("--no-sandbox")
+        // .addArguments("--disable-dev-shm-usage")
+        // .headless()
         .windowSize(screen)
     )
     .build();
@@ -96,6 +96,8 @@ async function getMp() {
       )
       .click();
     await sleep(1000);
+    await selectRarity(driver, "OG")
+    await sleep(1000);
     await selectRealm(driver, "BNB");
     await sleep(1000);
     var bnbMp = await getAllFloorPrice(driver);
@@ -106,6 +108,8 @@ async function getMp() {
         By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
       )
       .click();
+    await sleep(1000);
+    await selectRarity(driver, "OG")
     await sleep(1000);
     await selectRealm(driver, "Ethereum");
     await sleep(1000);
