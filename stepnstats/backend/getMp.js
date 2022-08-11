@@ -38,9 +38,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        // .addArguments("--no-sandbox")
-        // .addArguments("--disable-dev-shm-usage")
-        // .headless()
+        .addArguments("--no-sandbox")
+        .addArguments("--disable-dev-shm-usage")
+        .headless()
         .windowSize(screen)
     )
     .build();
@@ -79,7 +79,7 @@ async function getMp() {
 
     await sleep(1000);
     await selectRealm(driver, "Solana");
-    // Click on nfts
+    // Click on sneakers
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
@@ -88,21 +88,19 @@ async function getMp() {
     await sleep(1000);
     await sleep(1000);
     var solanaMp = await getAllFloorPrice(driver);
-    console.log(solanaMp);
     await sleep(1000);
-    // Click on Nfts tab
+    // Click on sneakers tab
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
       )
       .click();
     await sleep(1000);
-    await sleep(1000);
     await selectRealm(driver, "BNB");
     await sleep(1000);
     var bnbMp = await getAllFloorPrice(driver);
     await sleep(1000);
-    // Click on Nfts tab
+    // Click on sneakers tab
     await driver
       .findElement(
         By.xpath("/html/body/div/main/div/div[2]/div[1]/div[1]/button[1]")
