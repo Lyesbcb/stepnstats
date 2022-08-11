@@ -18,7 +18,24 @@ export default function DetailNfts({
   setmodalOneNfts,
   deleteOneNft,
 }) {
+  const [maxStat, setMaxStat] = useState(
+    Math.max(data.efficiency, data.luck, data.comfort, data.resilience)
+  );
+  const [widthEfficiency, setWidthEfficiency] = useState("0%");
+  const [widthLuck, setWidthLuck] = useState("0%");
+  const [widthComfort, setWidthComfort] = useState("0%");
+  const [widthResilience, setwidthResilience] = useState("0%");
+  const [baseStats, setBaseStats] = useState(data.base);
+  useEffect(() => {
+    defineMaxStat();
+  }, []);
+
+  function baseStatsButton() {
+    console.log(baseStats);
+  }
   var color;
+  var widthStats = {};
+
   const qualityColor = {
     Common: "#BABCBE",
     Uncommon: "#AED144",
@@ -29,6 +46,33 @@ export default function DetailNfts({
   {
     data != 0 ? (color = qualityColor[data.quality]) : (color = "#E2E2E2");
   }
+  function defineMaxStat() {
+    setMaxStat(Math.max(data.efficiency, data.luck, data.comfort, data.resilience))
+    setWidthEfficiency(
+      maxStat == data.efficiency
+        ? String(((data.efficiency / maxStat) * 100).toFixed(0) - 24) + "%"
+        : String(((data.efficiency / maxStat) * 100).toFixed(0)) + "%"
+    );
+    setWidthLuck(
+      maxStat == data.luck
+        ? String(((data.luck / maxStat) * 100).toFixed(0) - 24) + "%"
+        : String(((data.luck / maxStat) * 100).toFixed(0)) + "%"
+    );
+    console.log(maxStat)
+      console.log(data.luck / maxStat)
+    setWidthComfort(
+      maxStat == data.comfort
+        ? String(((data.comfort / maxStat) * 100).toFixed(0) - 24) + "%"
+        : String(((data.comfort / maxStat) * 100).toFixed(0)) + "%"
+    );
+    setwidthResilience(
+      maxStat == data.resilience
+        ? String(((data.resilience / maxStat) * 100).toFixed(0) - 24) + "%"
+        : String(((data.resilience / maxStat) * 100).toFixed(0)) + "%"
+    );
+
+  }
+
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <View
@@ -197,11 +241,11 @@ export default function DetailNfts({
           }}
         >
           <Image
-            style={{ width: "15%", resizeMode: "contain" }}
+            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
             source={require("../../assets/socket/locked.png")}
           ></Image>
           <Image
-            style={{ width: "15%", resizeMode: "contain" }}
+            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
             source={require("../../assets/socket/locked.png")}
           ></Image>
         </View>
@@ -214,15 +258,15 @@ export default function DetailNfts({
             alignItems: "center",
           }}
         >
-          <Icon
-            type="antdesign"
-            name="left"
-            size={60}
-            color="black"
+          <Pressable
             onPress={() => {
               previousNft();
+              defineMaxStat()
             }}
-          ></Icon>
+          >
+            <Icon type="antdesign" name="left" size={60} color="black"></Icon>
+          </Pressable>
+
           <View
             style={{
               width: "30%",
@@ -245,15 +289,14 @@ export default function DetailNfts({
               ></Icon>
             )}
           </View>
-          <Icon
-            type="antdesign"
-            name="right"
-            size={60}
-            color="black"
+          <Pressable
             onPress={() => {
               nextNft();
+              defineMaxStat()
             }}
-          ></Icon>
+          >
+            <Icon type="antdesign" name="right" size={60} color="black"></Icon>
+          </Pressable>
         </View>
         <View
           style={{
@@ -265,11 +308,11 @@ export default function DetailNfts({
           }}
         >
           <Image
-            style={{ width: "15%", resizeMode: "contain" }}
+            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
             source={require("../../assets/socket/locked.png")}
           ></Image>
           <Image
-            style={{ width: "15%", resizeMode: "contain" }}
+            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
             source={require("../../assets/socket/locked.png")}
           ></Image>
         </View>
@@ -385,17 +428,11 @@ export default function DetailNfts({
             Attributes
           </Text>
           <Pressable
-            style={{
-              borderWidth: "2",
-              borderRadius: 20,
-              width: "20%",
-              height: "80%",
-              alignItems: "center",
-              justifyContent: "center",
-              marginHorizontal: "1%",
-            }}
+            style={
+              data.base ? styles.baseStatsInactive : styles.baseStatsActive
+            }
             // TODO: request the user to add the base stats shoes to optimize
-            onPress={() => console.log("base stats")}
+            onPress={() => baseStatsButton()}
           >
             <Text style={{ fontSize: 12, fontWeight: "700" }}>Base</Text>
           </Pressable>
@@ -434,7 +471,7 @@ export default function DetailNfts({
           >
             <View
               style={{
-                width: "50%",
+                width: "30%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -458,22 +495,22 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "50%",
+                width: "70%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
               }}
             >
               <View
                 style={{
-                  width: "100%",
-                  backgroundColor: "green",
+                  width: widthEfficiency,
+                  backgroundColor: "#9DF8B6",
                   height: "30%",
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{width:"20%"}}>{data ? data.efficiency : 0}</Text>
+              <Text style={{ width: "20%" }}>{data ? data.efficiency : 0}</Text>
             </View>
           </View>
           <View
@@ -487,7 +524,7 @@ export default function DetailNfts({
           >
             <View
               style={{
-                width: "50%",
+                width: "30%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -511,22 +548,22 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "50%",
+                width: "70%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
               }}
             >
               <View
                 style={{
-                  width: "100%",
-                  backgroundColor: "green",
+                  width: widthLuck,
+                  backgroundColor: "#9DF8B6",
                   height: "30%",
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{width:"20%"}}>{data ? data.luck : 0}</Text>
+              <Text style={{ width: "20%" }}>{data ? data.luck : 0}</Text>
             </View>
           </View>
           <View
@@ -540,7 +577,7 @@ export default function DetailNfts({
           >
             <View
               style={{
-                width: "50%",
+                width: "30%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -564,22 +601,22 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "50%",
+                width: "70%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
               }}
             >
               <View
                 style={{
-                  width: "100%",
-                  backgroundColor: "green",
+                  width: widthComfort,
+                  backgroundColor: "#9DF8B6",
                   height: "30%",
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{width:"20%"}}>{data ? data.comfort : 0}</Text>
+              <Text style={{ width: "20%" }}>{data ? data.comfort : 0}</Text>
             </View>
           </View>
 
@@ -594,7 +631,7 @@ export default function DetailNfts({
           >
             <View
               style={{
-                width: "50%",
+                width: "30%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -618,22 +655,22 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "50%",
+                width: "70%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
               }}
             >
               <View
                 style={{
-                  width: "100%",
-                  backgroundColor: "green",
+                  width: widthResilience,
+                  backgroundColor: "#9DF8B6",
                   height: "30%",
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{width:"20%"}}>{data ? data.resilience : 0}</Text>
+              <Text style={{ width: "20%" }}>{data ? data.resilience : 0}</Text>
             </View>
           </View>
         </View>
@@ -643,6 +680,25 @@ export default function DetailNfts({
 }
 
 const styles = StyleSheet.create({
+  baseStatsActive: {
+    borderWidth: "2",
+    borderRadius: 20,
+    width: "20%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "1%",
+  },
+  baseStatsInactive: {
+    borderWidth: "2",
+    borderRadius: 20,
+    width: "20%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "1%",
+    backgroundColor: "grey",
+  },
   headerRuns: {
     top: 0,
     backgroundColor: "#E0FEF3",
@@ -746,7 +802,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   halo: {
-    // box-shadow: 0px 0px 0px 10px red, 0px 0px 0px 20px green, 0px 0px 0px 30px yellow, 0px 0px 0px 40px pink;
+    // box-shadow: 0px 0px 0px 10px red, 0px 0px 0px 20px #9DF8B6, 0px 0px 0px 30px yellow, 0px 0px 0px 40px pink;
     borderRadius: 50,
     width: 100,
     height: 100,

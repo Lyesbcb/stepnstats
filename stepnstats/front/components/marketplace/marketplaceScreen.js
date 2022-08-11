@@ -11,25 +11,43 @@ import {
 import React, { useEffect, useState } from "react";
 import Footer from "../footer";
 import Header from "./header";
-import {getAllMp} from "../../services/mps/index"
+import { getAllTemporality } from "../../services/mps/index";
+import Marketplace from "./marketplace";
+import ProgressLoader from "rn-progress-loader";
 
-export default function Marketplace({ navigation }) {
+export default function MarketplaceScreen({ navigation }) {
+  const [selectedRealm, setSelectedRealm] = useState("Ethereum");
+  const [mpsDay, setMpsDay] = useState([]);
+  const [mpsWeek, setMpsWeek] = useState([]);
+  const [mpsMonth, setMpsMonth] = useState([]);
   const [selectedTab, SetSelectedTab] = useState(0);
-  const [mps, setMps] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     myFunction();
   }, []);
 
   const myFunction = async () => {
     try {
-      setMps(await getAllMp("Solana", ""));
-    } catch (err){
-      console.log(err)
+      setLoading(true);
+      setMpsDay(await getAllTemporality(selectedRealm, "Day"));
+      setMpsWeek(await getAllTemporality(selectedRealm, "Week"));
+      setMpsMonth(await getAllTemporality(selectedRealm, "Month"));
+      setLoading(false);
+      console.log("chargement fini")
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Error");
     }
   };
-
   return (
-    <View style={{ width: "100%", height: "100%", }}>
+    <View style={{ width: "100%", height: "100%" }}>
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      />
       <View style={styles.container2}>
         <Header
           navigation={navigation}
@@ -40,7 +58,7 @@ export default function Marketplace({ navigation }) {
         <View
           style={{
             position: "absolute",
-            top: "20%",
+            top: "15%",
             height: "100%",
             width: "100%",
             alignItems: "center",
@@ -48,13 +66,19 @@ export default function Marketplace({ navigation }) {
           }}
         >
           {selectedTab === 0 ? (
-            <View><Text>{selectedTab}</Text></View>
-          ) :selectedTab === 1 ? (
-            <View><Text>{selectedTab}</Text></View>
-          ) :selectedTab === 2 ? (
-            <View><Text>{selectedTab}</Text></View>
-          ) :selectedTab === 3 ? (
-            <View><Text>{selectedTab}</Text></View>
+            <Marketplace
+              selectedRealm={selectedRealm}
+              navigation={navigation}
+              mpsDay={mpsDay}
+              mpsWeek={mpsWeek}
+              mpsMonth={mpsMonth}
+              myFunction={myFunction}
+              setSelectedRealm={setSelectedRealm}
+            ></Marketplace>
+          ) : selectedTab === 1 ? (
+            <View>
+              <Text>{selectedTab}</Text>
+            </View>
           ) : (
             <View></View>
           )}

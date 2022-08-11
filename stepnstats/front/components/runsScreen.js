@@ -23,9 +23,7 @@ import {
 export default function RunsScreen({ navigation }) {
   const [runs, setRuns] = useState([]);
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      myFunction();
-    });
+    myFunction();
   }, []);
 
   const myFunction = async () => {
@@ -39,6 +37,7 @@ export default function RunsScreen({ navigation }) {
     const value = +h + +m / 60 + s / 3600;
     return value.toFixed(6);
   }
+  
   function totalKm() {
     var total = 0;
     for (let run = 0; run < runs.length; run++) {
@@ -154,20 +153,20 @@ export default function RunsScreen({ navigation }) {
               >
                 {run.type == "Walker" ? (
                   <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Image
                     style={{
-                      resizeMode: "contain",
-                      width: "100%",
-                      height: "90%",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
-                    source={require("../assets/icon_feet.png")}
-                  ></Image>
-                </View>
+                  >
+                    <Image
+                      style={{
+                        resizeMode: "contain",
+                        width: "100%",
+                        height: "90%",
+                      }}
+                      source={require("../assets/icon_feet.png")}
+                    ></Image>
+                  </View>
                 ) : run.type == "Jogger" ? (
                   <View
                     style={{
@@ -227,20 +226,20 @@ export default function RunsScreen({ navigation }) {
                 ) : (
                   // TODO: find trainer logo
                   <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Image
                     style={{
-                      resizeMode: "contain",
-                      width: "100%",
-                      height: "90%",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
-                    source={require("../assets/icon_feet.png")}
-                  ></Image>
-                </View>
+                  >
+                    <Image
+                      style={{
+                        resizeMode: "contain",
+                        width: "100%",
+                        height: "90%",
+                      }}
+                      source={require("../assets/icon_feet.png")}
+                    ></Image>
+                  </View>
                 )}
               </View>
               <Image

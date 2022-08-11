@@ -102,6 +102,20 @@ export default function HomeScreen({ props, navigation }) {
                   Math.random() * 100,
                   Math.random() * 100,
                 ],
+                color: () => "#F5A836",
+                colors: () => ["green"]
+                
+              },
+              {
+                data: [
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                  Math.random() * 100,
+                ],
+                color: () => "#BABCBE"
               },
             ],
           }}

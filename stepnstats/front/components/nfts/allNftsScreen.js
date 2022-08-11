@@ -9,7 +9,7 @@ import {
   StyleSheet,
   RefreshControl,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState, componentDidMount } from "react";
 import LittleNfts from "./littleNfts";
@@ -24,6 +24,7 @@ import * as ImagePicker from "expo-image-picker";
 import DetailNfts from "./detailNfts";
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
+import { TouchableWithoutFeedback } from "react-native";
 
 export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   const [realm, setRealm] = useState("Solana");
@@ -73,6 +74,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   }
 
   function nextNft() {
+    console.log("next")
     if (nftsSelected != nfts.length - 1) {
       setNftsSelected(nftsSelected + 1);
     } else {
@@ -81,6 +83,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   }
 
   function previousNft() {
+    console.log("previous")
     if (nftsSelected != 0) {
       setNftsSelected(nftsSelected - 1);
     } else {
@@ -130,6 +133,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
         animationType="slide"
         transparent={true}
         visible={modalOneNfts}
+        onRequestClose={() => setmodalOneNfts(false)}
       >
         <TouchableOpacity
           style={{
@@ -140,35 +144,37 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
           activeOpacity={1}
           onPressOut={() => setmodalOneNfts(false)}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              height: "60%",
-              width: "90%",
-              borderRadius: 30,
-              borderWidth: 1,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 2,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
-            }}
-          >
-            {nfts.length != 0 ? (
-              <DetailNfts
-                data={nfts[nftsSelected]}
-                nextNft={nextNft}
-                previousNft={previousNft}
-                setmodalOneNfts={setmodalOneNfts}
-                deleteOneNft={deleteOneNft}
-              ></DetailNfts>
-            ) : (
-              <View></View>
-            )}
-          </View>
+          <TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: "white",
+                height: "60%",
+                width: "90%",
+                borderRadius: 30,
+                borderWidth: 1,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 2,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                elevation: 5,
+              }}
+            >
+              {nfts.length != 0 ? (
+                <DetailNfts
+                  data={nfts[nftsSelected]}
+                  nextNft={nextNft}
+                  previousNft={previousNft}
+                  setmodalOneNfts={setmodalOneNfts}
+                  deleteOneNft={deleteOneNft}
+                ></DetailNfts>
+              ) : (
+                <View></View>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
         </TouchableOpacity>
       </Modal>
       <ScrollView

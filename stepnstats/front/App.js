@@ -101,7 +101,7 @@ function App() {
         <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
         <Tab.Screen name="runs" component={Runs} />
         <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
-        {/* <Tab.Screen name="test" component={TestScreen} /> */}
+        <Tab.Screen name="test" component={TestScreen} />
 
         {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
       </Tab.Navigator>

@@ -9,6 +9,7 @@ const Role = require("_helpers/role");
 // routes
 router.get("/", authorize(), getAll);
 router.get("/date", authorize(), getDate);
+router.get("/temporality", authorize(), getTemporality);
 
 module.exports = router;
 
@@ -22,6 +23,13 @@ function getAll(req, res, next) {
 function getDate(req, res, next) {
   bnbMpService
     .getDate(req)
+    .then((mps) => res.json(mps))
+    .catch(next);
+}
+
+function getTemporality(req, res, next) {
+  bnbMpService
+    .getTemporality(req)
     .then((mps) => res.json(mps))
     .catch(next);
 }

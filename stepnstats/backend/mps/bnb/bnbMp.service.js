@@ -5,7 +5,8 @@ module.exports = {
   getAll,
   getDate,
   create,
-  getLastRecords
+  getLastRecords,
+  getTemporality
 };
 
 async function getAll(req) {
@@ -38,4 +39,53 @@ async function getLastRecords(nbRecords) {
 
 async function create(params) {
   return await db.BNBMp.create(params);
+}
+
+
+async function getTemporality(req) {
+  if (req.query.temporality === "Day") {
+    var d = new Date();
+    d.setDate(d.getDate()-1);
+    return await db.BNBMp.findAll({
+      where: {
+        createdAt: {
+          [db.Op.between]: [d, new Date()],
+        },
+        id: {
+          [db.Op.like]: '%5',
+        }
+      },
+      limit: 144,
+      order: [["createdAt", "ASC"]],
+      subQuery: false,
+    });
+  }
+  if (req.query.temporality === "Week") {
+    var d = new Date();
+    d.setDate(d.getDate()-7);
+    return await db.BNBMp.findAll({
+      where: {
+        createdAt: {
+          [db.Op.between]: [d, new Date()],
+        },
+      },
+      limit: 1008,
+      order: [["createdAt", "ASC"]],
+      subQuery: false,
+    });
+  }
+  if (req.query.temporality === "Month") {
+    var d = new Date();
+    d.setDate(d.getDate()-30);
+    return await db.BNBMp.findAll({
+      where: {
+        createdAt: {
+          [db.Op.between]: [d, new Date()],
+        },
+      },
+      limit: 4320,
+      order: [["createdAt", "ASC"]],
+      subQuery: false,
+    });
+  }
 }

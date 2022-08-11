@@ -12,7 +12,7 @@ def get_quantity(img):
     # Resize image to quickly do the code
     img = cv2.cvtColor(img, cv2.THRESH_BINARY)
     reader = easyocr.Reader(['en'], gpu=False, verbose=False)
-    result = reader.readtext(img, paragraph="False")
+    result = reader.readtext(img, paragraph="False", allowlist="0123456789")
     for text in result:
         if text[-1][1:] != "": 
             return text[-1][1:]
