@@ -1,8 +1,63 @@
 import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function LittleNfts({ data }) {
+  const imagePath = {
+    walker: [
+      require("../../assets/shoes/walker/shoe1.png"),
+      require("../../assets/shoes/walker/shoe2.png"),
+      require("../../assets/shoes/walker/shoe3.png"),
+      require("../../assets/shoes/walker/shoe4.png"),
+      require("../../assets/shoes/walker/shoe5.png"),
+      require("../../assets/shoes/walker/shoe6.png"),
+      require("../../assets/shoes/walker/shoe7.png"),
+      require("../../assets/shoes/walker/shoe8.png"),
+      require("../../assets/shoes/walker/shoe9.png"),
+      require("../../assets/shoes/walker/shoe1.png"),
+      require("../../assets/shoes/walker/shoe10.png"),
+    ],
+    jogger: [
+      require("../../assets/shoes/jogger/shoe1.png"),
+      require("../../assets/shoes/jogger/shoe2.png"),
+      require("../../assets/shoes/jogger/shoe3.png"),
+      require("../../assets/shoes/jogger/shoe4.png"),
+      require("../../assets/shoes/jogger/shoe5.png"),
+      require("../../assets/shoes/jogger/shoe6.png"),
+      require("../../assets/shoes/jogger/shoe7.png"),
+      require("../../assets/shoes/jogger/shoe8.png"),
+      require("../../assets/shoes/jogger/shoe9.png"),
+      require("../../assets/shoes/jogger/shoe1.png"),
+      require("../../assets/shoes/jogger/shoe10.png"),
+    ],
+    runner: [
+      require("../../assets/shoes/runner/shoe1.png"),
+      require("../../assets/shoes/runner/shoe2.png"),
+      require("../../assets/shoes/runner/shoe3.png"),
+      require("../../assets/shoes/runner/shoe4.png"),
+      require("../../assets/shoes/runner/shoe5.png"),
+      require("../../assets/shoes/runner/shoe6.png"),
+      require("../../assets/shoes/runner/shoe7.png"),
+      require("../../assets/shoes/runner/shoe8.png"),
+      require("../../assets/shoes/runner/shoe9.png"),
+      require("../../assets/shoes/runner/shoe1.png"),
+      require("../../assets/shoes/runner/shoe10.png"),
+    ],
+    trainer: [
+      require("../../assets/shoes/trainer/shoe1.png"),
+      require("../../assets/shoes/trainer/shoe2.png"),
+      require("../../assets/shoes/trainer/shoe3.png"),
+      require("../../assets/shoes/trainer/shoe4.png"),
+      require("../../assets/shoes/trainer/shoe5.png"),
+      require("../../assets/shoes/trainer/shoe6.png"),
+      require("../../assets/shoes/trainer/shoe7.png"),
+      require("../../assets/shoes/trainer/shoe8.png"),
+      require("../../assets/shoes/trainer/shoe9.png"),
+      require("../../assets/shoes/trainer/shoe1.png"),
+      require("../../assets/shoes/trainer/shoe10.png"),
+    ],
+  };
   var color;
   const qualityColor = {
     Common: "#BABCBE",
@@ -12,7 +67,7 @@ export default function LittleNfts({ data }) {
     Legendary: "#F5A836",
   };
   {
-    data != 0 ? (color = qualityColor[data.quality]) : (color = "#E2E2E2");
+    data !== 0 ? (color = qualityColor[data.quality]) : (color = "#BABCBE");
   }
   return (
     <View
@@ -83,9 +138,7 @@ export default function LittleNfts({ data }) {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 10 }}>
-          {data != 0 ? data.type : "-"}
-        </Text>
+        <Text style={{ fontSize: RFValue(10, 800) }}>{data != 0 ? data.type : "-"}</Text>
       </View>
       <View
         style={{
@@ -108,7 +161,11 @@ export default function LittleNfts({ data }) {
         >
           {data != 0 ? (
             <Image
-              source={require("../../assets/shoes/Runner.png")}
+              source={
+                imagePath[data.type.toLowerCase()][
+                  Number(String(data.nftId).slice(-1))
+                ]
+              }
               style={{ width: "70%", resizeMode: "contain" }}
             ></Image>
           ) : (
@@ -138,7 +195,7 @@ export default function LittleNfts({ data }) {
         >
           <Text
             style={{
-              fontSize: 10,
+              fontSize: RFValue(10, 800),
               fontWeight: "700",
               width: "10%",
               height: "80%",
@@ -150,7 +207,7 @@ export default function LittleNfts({ data }) {
           >
             #
           </Text>
-          <Text style={{ fontSize: 10, fontWeight: "700" }}>
+          <Text style={{ fontSize: RFValue(10, 800), fontWeight: "700" }}>
             {data ? data.nftId : ""}
           </Text>
         </View>
@@ -163,8 +220,9 @@ export default function LittleNfts({ data }) {
             flexDirection: "row",
           }}
         >
-          <Text style={{ fontSize: 10 }}>{data != 0 ? "?" : "-"}</Text>
-          <Text style={{ fontSize: 10 }}>Lv {data != 0 ? data.lvl : "-"}</Text>
+          {/* TODO: Price of the sneakers */}
+          {/* <Text style={{ fontSize: RFValue(10, 800) }}>{data != 0 ? "?" : "-"}</Text> */}
+          <Text style={{ fontSize: RFValue(10, 800) }}>Lv {data != 0 ? data.lvl : "-"}</Text>
         </View>
         <View
           style={{
@@ -188,36 +246,72 @@ export default function LittleNfts({ data }) {
           borderBottomRightRadius: 20,
           backgroundColor: color,
           flexDirection: "row",
-          justifyContent: "space-evenly"
+          justifyContent: "space-evenly",
         }}
       >
-        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+            width: "20%",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Image
             source={require("../../assets/stats/Efficiency.png")}
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
-          <Text style={{fontSize: 10,}}>{data != 0 ? (data.efficiency).toFixed(0) : "-"}</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
+            {data != 0 ? data.efficiency.toFixed(0) : "-"}
+          </Text>
         </View>
-        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+            width: "20%",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Image
             source={require("../../assets/stats/Luck.png")}
-            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+            style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
-          <Text style={{fontSize: 10,}}>{data != 0 ? (data.luck).toFixed(0) : "-"}</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
+            {data != 0 ? data.luck.toFixed(0) : "-"}
+          </Text>
         </View>
-        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+            width: "20%",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Image
             source={require("../../assets/stats/Comfort.png")}
-            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+            style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
-          <Text style={{fontSize: 10}}>{data != 0 ? (data.comfort).toFixed(0) : "-"}</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
+            {data != 0 ? data.comfort.toFixed(0) : "-"}
+          </Text>
         </View>
-        <View style={{ alignItems: "center", flexDirection: "row", width: "20%", justifyContent: "space-evenly"}}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+            width: "20%",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Image
             source={require("../../assets/stats/Resilience.png")}
-            style={{ resizeMode: "contain", height: "30%", width: "50%"}}
+            style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
-          <Text style={{fontSize: 10}}>{data != 0 ? (data.resilience).toFixed(0) : "-"}</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
+            {data != 0 ? data.resilience.toFixed(0) : "-"}
+          </Text>
         </View>
       </View>
     </View>
@@ -237,11 +331,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -398,11 +492,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -414,7 +508,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -506,7 +600,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

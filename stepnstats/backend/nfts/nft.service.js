@@ -6,7 +6,7 @@ var spawn = require("child_process").spawn;
 module.exports = {
   getAll,
   getAllMy,
-  getById,
+  getByNftId,
   create,
   update,
   delete: _delete,
@@ -26,31 +26,42 @@ async function uploadFile(req, res) {
     ) {
       throw "This nft is already exist.";
     }
-    var nft = await spawn("python", [
-      "./python/nft.py",
-      req.file.path,
-    ]);
+    var nft = await spawn("python", ["./python/nft.py", req.file.path]);
 
     nft.stdout.setEncoding("utf8");
     await nft.stdout.on("data", async function (data) {
-      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
-        res.send(await db.Nft.create(params));
+        var tempBool = Boolean(params.base === "true");
+        if (!tempBool) {
+          throw "Upload only base stats sneaker!";
+        } else {
+          try {
+            res.send(await create(params));
+          } catch (error) {
+            res.status(400).json({ message: error });
+          }
+        }
       } catch (error) {
-        console.log(error);
-        res.status(400).send(error);
+        res.status(400).json({ message: error });
       }
     });
     nft.stderr.setEncoding("utf8");
-    await nft.stderr.on("data", async function (data) {console.log(data)})
+    await nft.stderr.on("data", async function (data) {
+      stderr = "Error on recognizing image";
+    });
+    const exitCode = await new Promise((resolve, reject) => {
+      nft.on("close", resolve);
+    });
+    if (exitCode) {
+      throw stderr;
+    }
   } catch (error) {
-    console.log(error);
-    return res.send(`Error when trying upload images: ${error}`);
+    return res.status(400).json({ message: error });
   }
 }
 
@@ -72,8 +83,12 @@ async function getAllMy(req) {
   });
 }
 
-async function getById(req) {
-  const nft = await getNft(req);
+async function getByNftId(req) {
+  const nft = await db.Nft.findOne({
+    where: { nftId: req.query.nftId },
+    limit: 1,
+  });
+  if (!nft) throw "nft not found.";
   const currentUser = req.user;
   const userId = nft.userId;
 
@@ -85,15 +100,15 @@ async function getById(req) {
   return nft;
 }
 
-async function create(params, userId) {
+async function create(params) {
+  console.log(params);
   if (
     await db.Nft.findOne({
-      where: { userId: userId, fileName: params.fileName },
+      where: { userId: params.userId, nftId: params.nftId },
     })
   ) {
     throw "This nft is already exist.";
   }
-  params.userId = userId;
   // save rnftun
   return await db.Nft.create(params);
 }
@@ -131,7 +146,7 @@ async function _delete(req) {
 // helper functions
 async function getNft(id) {
   const nft = await db.Nft.findOne({
-    where: { id: id},
+    where: { id: id },
   });
   if (!nft) throw "nft not found.";
   return nft;

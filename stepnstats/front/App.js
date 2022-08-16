@@ -2,17 +2,17 @@ import { StyleSheet, View, Image } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import AllNftsScreen from "./components/nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./components/mysteryBox/allMysteryBoxScreen";
-import AllRunsScreen from "./components/runsScreen";
-import OneRunScreen from "./components/runScreen";
-import React, { useState } from "react";
+import AllRunsScreen from "./components/run/runsScreen";
+import OneRunScreen from "./components/run/runScreen";
+import React, { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react-native";
 import TestScreen from "./components/test";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-elements/dist/icons/Icon";
-import Invenrtory from "./components/inventory"
-import Marketplace from './components/marketplace/marketplaceScreen'
+import Invenrtory from "./components/inventory";
+import Marketplace from "./components/marketplace/marketplaceScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -50,7 +50,7 @@ function App() {
           headerShown: false,
           tabBarStyle: {
             position: "absolute",
-            bottom: "10%",
+            bottom: "5%",
             height: "8%",
             borderRadius: 50,
             left: "2%",
@@ -70,7 +70,9 @@ function App() {
             if (route.name === "Home") {
               iconName = focused ? "home-variant" : "home-variant";
             } else if (route.name === "InvenrtoryStack") {
-              iconName = focused ? "bag-personal-outline" : "bag-personal-outline";
+              iconName = focused
+                ? "bag-personal-outline"
+                : "bag-personal-outline";
             } else if (route.name === "runs") {
               iconName = focused ? "shoe-sneaker" : "shoe-sneaker";
             } else if (route.name === "mysteryBox") {
@@ -101,7 +103,7 @@ function App() {
         <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
         <Tab.Screen name="runs" component={Runs} />
         <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
-        <Tab.Screen name="test" component={TestScreen} />
+        {/* <Tab.Screen name="test" component={TestScreen} /> */}
 
         {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
       </Tab.Navigator>
@@ -135,7 +137,10 @@ function InvenrtoryStack() {
     >
       <Stack.Screen name="Inventory" component={Invenrtory} />
       <Stack.Screen name="AllNftsScreen" component={AllNftsScreen} />
-      <Stack.Screen name="AllMysteryBoxScreen" component={AllMysteryBoxScreen} />
+      <Stack.Screen
+        name="AllMysteryBoxScreen"
+        component={AllMysteryBoxScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -198,6 +203,5 @@ function Runs() {
     </Stack.Navigator>
   );
 }
-
 
 export default Sentry.wrap(App);

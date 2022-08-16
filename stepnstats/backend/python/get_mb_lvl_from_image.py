@@ -25,6 +25,6 @@ def get_mblvl(oimg):
     mx = max(results)
 
     if mx == 0:
-        return ""
+        return "0"
     else:
         return str(results.index(mx) + 1)

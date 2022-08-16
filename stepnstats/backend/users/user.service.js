@@ -41,7 +41,7 @@ async function getById(id) {
 }
 
 async function create(params) {
-  params.role = "User"
+  params.role = "User";
   // If its an anonymous register generate username and check if username exist in database (if it exist repeat)
   if (params.anonymous) {
     do {

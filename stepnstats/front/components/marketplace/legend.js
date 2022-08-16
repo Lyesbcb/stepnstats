@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { Text, View, Pressable, Image, Alert } from "react-native";
 import { Icon } from "react-native-elements";
+import { RFValue } from "react-native-responsive-fontsize";
 
-export default function Legend({ name, id, myColor, setSelectedContents, selectedContent }) {
+export default function Legend({
+  name,
+  id,
+  myColor,
+  deleteContent,
+  selectedContent,
+  setSelectedContents,
+}) {
   const contents = {
     efficiencyLvl1: "Efficiency Lvl 1",
     efficiencyLvl2: "Efficiency Lvl 2",
@@ -61,20 +69,16 @@ export default function Legend({ name, id, myColor, setSelectedContents, selecte
     rareScroll: "Rare Scroll",
     epicScroll: "Epic Scroll",
     legendaryScroll: "Legendary Scroll",
+    genesisCommon: "Genesis Common",
+    genesisUncommon: "Genesis Uncommon",
+    genesisRare: "Genesis Rare",
+    genesisEpic: "Genesis Epic",
+    ogCommon: "OG Common",
+    ogUncommon: "OG Uncommon",
+    ogRare: "OG Rare",
+    ogEpic: "OG Epic",
   };
-  function deleteContent(id) {
-    var tempArray = selectedContent;
-    tempArray.splice(id, 1);
-    setSelectedContents(tempArray);
-  }
 
-  function setSelectedContent(array) {
-    if (array.length > 4) {
-      Alert.alert("Max size for chart");
-    } else {
-      setSelectedContents(array);
-    }
-  }
   return (
     <View
       style={{
@@ -83,7 +87,7 @@ export default function Legend({ name, id, myColor, setSelectedContents, selecte
         alignItems: "center",
         width: "100%",
         marginBottom: "2%",
-        height: "22%"
+        height: "20%",
       }}
     >
       <View
@@ -94,7 +98,9 @@ export default function Legend({ name, id, myColor, setSelectedContents, selecte
           width: "100%",
         }}
       >
-        <Text style={{ color: myColor, fontSize: 16, fontWeight: "700" }}>{contents[name]}</Text>
+        <Text style={{ color: myColor, fontSize: RFValue(16, 800), fontWeight: "700" }}>
+          {contents[name]}
+        </Text>
         <View
           style={{
             flexDirection: "row",
@@ -102,10 +108,18 @@ export default function Legend({ name, id, myColor, setSelectedContents, selecte
             width: "20%",
           }}
         >
-          <Pressable onPress={() => console.log("Comming soon")}>
+          <Pressable onPress={() => Alert.alert("Comming soon")}>
             <Icon type="material-community" name="bell" size={25}></Icon>
           </Pressable>
-          <Pressable onPress={() => deleteContent(id)}>
+          <Pressable
+            onPress={() => {
+              console.log(selectedContent)
+              var tempArray = selectedContent.slice();
+              tempArray.splice(id, 1);
+              setSelectedContents(tempArray);
+              console.log(selectedContent)
+            }}
+          >
             <Icon type="material-community" name="close" size={25}></Icon>
           </Pressable>
         </View>

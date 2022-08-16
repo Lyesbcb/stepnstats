@@ -1,9 +1,9 @@
-from tkinter import W
 import cv2 as cv
 from runfuncs import *
 import os
 from get_mb_lvl_from_image import get_mblvl
 from sys import argv
+
 
 def get_run_durab(oimg):
     img = crop_bot(oimg)
@@ -20,24 +20,23 @@ def get_run_durab(oimg):
     botimg = bot_part(img)
 
     get_tplvlgst(botimg, info)
-
+    
     info["mbLvl"] = get_mblvl(oimg)
 
     get_eniddlst(botimg, info)
 
-    # ---------------TEST CODE--------------------------------------
-    # print(info)
+    #---------------TEST CODE--------------------------------------
+    #print(info)
     #
-    # for rect in rects:
+    #for rect in rects:
     #    img = cv.rectangle(img, rect[0], rect[1], (0, 255, 0), 5)
     #
     # print(info)
     # cv.imshow("test.png", cv.resize(img, (250, 400)))
     # cv.waitKey(0)
-    # ---------------------------------------------------------------
+    #---------------------------------------------------------------
 
     return info
-
 
 def get_run_nondurab(oimg):
     img = oimg
@@ -61,7 +60,7 @@ def get_run_nondurab(oimg):
     #    img = cv.rectangle(img, rect[0], rect[1], (0, 255, 0), 5)
     #
     # print(info)
-    # cv.imshow('nonduarb', img)  # cv.resize(img))#, (250, 400)))
+    # cv.imshow('nonduarb', img) #cv.resize(img))#, (250, 400)))
     # cv.waitKey(0)
     # --------------------------------------------------------------
 
@@ -77,25 +76,25 @@ else:
     print(get_run_durab(img))
 
 # if __name__ == "__main__":
-#     TEST_FLDR = "Run/without durability/test ("
-#     #TEST_IMGS = [file for file in os.listdir(TEST_FLDR)]
-#     formats = (".png", ".jpg", ".jpeg")
+    # TEST_FLDR = "Run/with durability/test ("
+    # #TEST_IMGS = [file for file in os.listdir(TEST_FLDR)]
+    # formats = (".png", ".jpg", ".jpeg")
 
-#     for i in range(1, 50):
-#         for frmt in formats:
-#             path = TEST_FLDR + str(i) + ")" + frmt
-#             if os.path.isfile(path):
-#                 if ((i == 1 and frmt == ".png") or
-#                     (i == 2 and frmt == ".jpg") or
-#                     (i == 3 and frmt == ".jpg") or
-#                     (i == 11 and frmt == ".png")):
-#                     pass
-#                 else:
-#                     oimg = cv.imread(path)
-#                     print("INDEX ->", i, frmt)
+    # for i in range(1, 276):
+    #     for frmt in formats:
+    #         path = TEST_FLDR + str(i) + ")" + frmt
+    #         if os.path.isfile(path):
+    #             if ((i == 1 and frmt == ".png") or
+    #                 (i == 2 and frmt == ".jpg") or
+    #                 (i == 3 and frmt == ".jpg") or
+    #                 (i == 11 and frmt == ".png")):
+    #                 pass
+    #             else:
+    #                 oimg = cv.imread(path)
+    #                 print("INDEX ->", i, frmt)
 
-#                     get_run(oimg)
-    #cv.imshow('test', oimg)
-    # cv.waitKey(0)
-    #info = get_run_durab(oimg)
-    #info = get_run_nondurab(oimg)
+    #                 get_run(oimg)
+        #cv.imshow('test', oimg)
+        # cv.waitKey(0)
+        #info = get_run_durab(oimg)
+        #info = get_run_nondurab(oimg)

@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Image,
   Alert,
+  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
@@ -18,138 +19,98 @@ import * as Clipboard from "expo-clipboard";
 import axios from "axios";
 import uuid from "react-native-uuid";
 import Footer from "./footer";
+import { firstLaunch } from "../services/users/index";
+import { getSecuretValueFor } from "../services/secureStorage/index";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function HomeScreen({ props, navigation }) {
+  useEffect(() => {
+    firstLaunch();
+  }, []);
   return (
-    <View style={{width: "100%", height: "100%"}}>
+    <View style={{ width: "100%", height: "100%" }}>
       <View style={styles.container}></View>
       <View style={styles.container2}>
-        <View style={styles.selector}>
-          <Icon
-            type="antdesign"
-            name="left"
-            size={50}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={styles.selectorTextPrimary}>ici</Text>
-            <Text style={styles.selectorTextSecondary}>ici</Text>
-          </View>
-          <Icon
-            type="antdesign"
-            name="right"
-            size={50}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-        </View>
-        <View style={styles.selectTemporality}>
-          <Pressable>
-            <View style={styles.weekTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>W</Text>
-            </View>
-          </Pressable>
-          <Pressable>
-            <View style={styles.monthTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>M</Text>
-            </View>
-          </Pressable>
-          <Pressable>
-            <View style={styles.yearTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>Y</Text>
-            </View>
-          </Pressable>
-        </View>
-        <View style={styles.dateSelector}>
-          <Icon
-            type="antdesign"
-            name="left"
-            size={30}
-            style={{ paddingHorizontal: 10 }}
-          ></Icon>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={styles.dateSelectorTextPrimary}>ici</Text>
-          </View>
-          <Icon
-            type="antdesign"
-            name="right"
-            size={30}
-            style={{ paddingHorizontal: 10 }}
-            onPress={() => nextTemporality()}
-          ></Icon>
-        </View>
-        <LineChart
-          data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
-            datasets: [
-              {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                ],
-                color: () => "#F5A836",
-                colors: () => ["green"]
-                
-              },
-              {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                ],
-                color: () => "#BABCBE"
-              },
-            ],
-          }}
-          width={Dimensions.get("window").width - 50} // from react-native
-          height={Dimensions.get("window").width - 150}
-          yAxisInterval={1}
-          chartConfig={{
-            backgroundGradientFrom: "white",
-            backgroundGradientTo: "white",
-            decimalPlaces: 0,
-            color: (opacity = 1) => "#4DC6F4",
-            labelColor: (opacity = 1) => `#4DC6F4`,
-            propsForDots: {
-              r: "3",
-              strokeWidth: "1",
-              stroke: "white",
-            },
-          }}
+        <Text
           style={{
-            borderRadius: 12,
+            fontSize: RFValue(30, 800),
+            fontWeight: "700",
+            textAlign: "center",
+            width: "80%",
+          }}
+        >
+          Welcome to Step'n Stats app Alpha
+        </Text>
+        <Text
+          style={{
+            fontSize: RFValue(20, 800),
+            fontWeight: "600",
+            textAlign: "center",
+            width: "80%",
+          }}
+        >
+          If you have an issue, bug, freeze, or recommendation, you can submit
+          it with this button.
+        </Text>
+        <Text
+          style={{
+            fontSize: RFValue(18, 800),
+            fontWeight: "500",
+            textAlign: "center",
+            width: "80%",
+          }}
+        >
+          Take a screenshot, video, or just give us a summary of the issue.
+        </Text>
+        <Text
+          style={{
+            fontSize: RFValue(18, 800),
+            fontWeight: "500",
+            textAlign: "center",
+            width: "80%",
+          }}
+        >
+          Thank you so much to help Step'n Community!
+        </Text>
+        <Pressable
+          style={{
+            backgroundColor: "#9DF8B6",
+            justifyContent: "center",
+            alignContent: "center",
+            width: "80%",
+            height: "10%",
+            borderRadius: 20,
             borderWidth: 1,
             borderColor: "black",
-            shadowColor: "black",
             shadowOpacity: 1,
             shadowRadius: 1,
             shadowOffset: {
-              width: 4,
-              height: 4,
+              width: 1,
+              height: 1,
             },
+            width: "80%",
           }}
-          bezier
-        />
-        <Footer styles={styles}></Footer>
+          onPress={async () => {
+            Linking.openURL(
+              `mailto:support@stepnstats.org?subject=Feedback&body=%0D%0A%0D%0AUsername=${await getSecuretValueFor(
+                "username"
+              )}`
+            );
+          }}
+        >
+          <Text
+            style={{
+              fontSize: RFValue(30, 800),
+              fontWeight: "800",
+              textAlign: "center",
+            }}
+          >
+            Send Feedback
+          </Text>
+        </Pressable>
       </View>
+
+      {/* <Footer styles={styles}></Footer> */}
     </View>
   );
 }
@@ -167,11 +128,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -327,10 +288,10 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -341,7 +302,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -356,15 +317,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 500,
     borderTopColor: "#E0FEF3",
     borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30
+    borderBottomRightRadius: 30,
   },
   container2: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
+    height: "65%",
     width: "100%",
     position: "absolute",
+    top: "15%",
+    justifyContent: "space-between",
   },
   image: {
     flex: 1,
@@ -430,7 +392,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

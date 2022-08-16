@@ -25,6 +25,7 @@ async function getAllByLvl(lvl) {
 
 async function uploadFile(req, res) {
   try {
+    var stderr = "";
     var params;
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
@@ -43,7 +44,6 @@ async function uploadFile(req, res) {
 
     get_content_from_screen.stdout.setEncoding("utf8");
     await get_content_from_screen.stdout.on("data", async function (data) {
-      console.log("data");
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
@@ -72,22 +72,28 @@ async function uploadFile(req, res) {
         });
       }
       params.prices = prices[0];
-      params.mbPrice = await getMbPrice(params)
-      console.log(params);
+      params.mbPrice = await getMbPrice(params);
       try {
         res.send(await db.Mb.create(params));
       } catch (error) {
-        console.log(error);
-        res.status(400).send(error);
+        res.status(400).send({ message: "Error on recognizing image" });
       }
     });
     get_content_from_screen.stderr.setEncoding("utf8");
     await get_content_from_screen.stderr.on("data", async function (data) {
-      console.log(data);
+      stderr = "Error on recognizing image";
     });
+    const exitCode = await new Promise((resolve, reject) => {
+      get_content_from_screen.on("close", resolve);
+    });
+    if (exitCode) {
+      throw stderr;
+    }
   } catch (error) {
-    console.log(error);
-    return res.send(`Error when trying upload images: ${error}`);
+    if (error == "") {
+      return res.status(400).json({ message: "Error on recognizing image" });
+    }
+    return res.status(400).json({ message: error });
   }
 }
 
@@ -205,17 +211,12 @@ function getPriceFromContent(content, contentQuantity, prices, realm) {
   var totalGmt = 0;
   var total = 0;
   if (content) {
-    if (!content.includes("Scroll") & !content.includes("gst")) {
+    if (!content.includes("gst")) {
       totalRealmCrypto += prices[content] * contentQuantity;
-    } else if (content.includes("Scroll")) {
-      totalGmt += prices[content] * contentQuantity;
     } else if (content.includes("gst")) {
       totalGst += prices[content + realm] * contentQuantity;
     }
-    total =
-      totalRealmCrypto * prices[realm] +
-      totalGmt * prices["gmt"] +
-      totalGst * prices["gst" + realm];
+    total = totalRealmCrypto * prices[realm] + totalGst * prices["gst" + realm];
     //Remove the marketplace fees
     return total * 0.94;
   }

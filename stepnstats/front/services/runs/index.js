@@ -16,7 +16,6 @@ module.exports = {
 const baseURL = config.baseUrl + "/runs";
 
 async function createRun(params) {
-  console.log(params);
   var token = await getSecuretValueFor("token");
   var config = {
     method: "post",
@@ -84,13 +83,17 @@ async function uploadRun(image, realm) {
     // Start waiting screen
     await fetch(baseURL + "/upload", options)
       .then(async (response) => {
-        console.log(await response.json());
-        // Actualize list of MB and redirect to OneMysteryBox
+        if (response.ok) {
+          return await response.json();
+        }
+        throw await response.json();
+      })
+      .then(async (response) => {
+        return await response;
       })
       .catch(async function (error) {
-        console.log(await error.json());
+        throw await error.message;
       });
-    // Stop wainting screen
   }
 }
 
@@ -129,7 +132,7 @@ async function getAllMyRun(page) {
 
   return await axios(config)
     .then(async function (response) {
-      return response.data.rows
+      return response.data.rows;
       // Set store with the data
     })
     .catch(function (error) {

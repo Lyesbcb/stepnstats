@@ -8,12 +8,17 @@ const Role = require("_helpers/role");
 const upload = require("_middleware/uploadNft");
 // routes
 router.post("/create", authorize(), createSchema, create);
-router.post("/upload", authorize(), upload.single("file"), nftService.uploadFile);
+router.post(
+  "/upload",
+  authorize(),
+  upload.single("file"),
+  nftService.uploadFile
+);
 router.get("/", authorize(Role.Admin), getAll);
 router.get("/my", authorize(), getAllMy);
-router.get("/:id", authorize(), getById);
 router.put("/:id", authorize(), updateSchema, update);
 router.delete("/:id", authorize(), _delete);
+router.get("/nftId", authorize(), getByNftId);
 
 module.exports = router;
 
@@ -33,7 +38,7 @@ function createSchema(req, res, next) {
     socket1: Joi.string().required(),
     socket2: Joi.string().required(),
     socket3: Joi.string().required(),
-    socket4: Joi.string().required(),	
+    socket4: Joi.string().required(),
   });
   validateRequest(req, next, schema);
 }
@@ -59,9 +64,9 @@ function getAllMy(req, res, next) {
     .catch(next);
 }
 
-function getById(req, res, next) {
+function getByNftId(req, res, next) {
   nftService
-    .getById(req)
+    .getByNftId(req)
     .then((nft) => (nft ? res.json(nft) : res.sendStatus(404)))
     .catch((err) => next(err));
 }
@@ -82,7 +87,7 @@ function updateSchema(req, res, next) {
     socket1: Joi.string().empty(""),
     socket2: Joi.string().empty(""),
     socket3: Joi.string().empty(""),
-    socket4: Joi.string().empty("")
+    socket4: Joi.string().empty(""),
   });
   validateRequest(req, next, schema);
 }

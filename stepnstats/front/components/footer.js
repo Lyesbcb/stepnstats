@@ -2,6 +2,7 @@
 
 import { Text, View, Pressable, Image, Alert } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function Footer({ styles }) {
     function support() {

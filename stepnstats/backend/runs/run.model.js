@@ -23,7 +23,7 @@ function model(sequelize) {
     fileName: { type: DataTypes.CHAR, allowNull: true },
     gst: { type: DataTypes.FLOAT, allowNull: false },
     nftId: { type: DataTypes.INTEGER, allowNull: true },
-    durabilityLost: { type: DataTypes.INTEGER, allowNull: true },
+    durabilityLost: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
     mbLvl: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
   };
 

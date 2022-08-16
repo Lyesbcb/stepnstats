@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Text, View, Pressable, Image, Alert, StyleSheet } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
+
 export default function Header({selectedTab, SetSelectedTab}) {
   return (
     <View

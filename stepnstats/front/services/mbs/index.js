@@ -87,10 +87,16 @@ async function uploadMb(image, realm) {
     // Start waiting screen
     return await fetch(baseURL + "/upload", options)
       .then(async (response) => {
-        return await response.json();
+        if (response.ok) {
+          return await response.json();
+        }
+        throw await response.json();
+      })
+      .then(async (response) => {
+        return await response;
       })
       .catch(async function (error) {
-        console.log(await error.json());
+        throw await error.message;
       });
     // Stop wainting screen
   }

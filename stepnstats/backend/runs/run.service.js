@@ -13,11 +13,11 @@ module.exports = {
   uploadFile,
 };
 
-function NumToTime(num) { 
-  var hours = Math.floor(num / 60);  
+function NumToTime(num) {
+  var hours = Math.floor(num / 60);
   var minutes = num % 60;
-  if (minutes + ''.length < 2) {
-    minutes = '0' + minutes; 
+  if (minutes + "".length < 2) {
+    minutes = "0" + minutes;
   }
   return hours + ":" + minutes + ":00";
 }
@@ -35,31 +35,33 @@ async function uploadFile(req, res) {
     ) {
       throw "This run is already exist.";
     }
-    var run = await spawn("python", [
-      "./python/run.py",
-      req.file.path,
-    ]);
+    var run = await spawn("python", ["./python/run.py", req.file.path]);
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {
-      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
-        res.send(await db.Run.create(params));
+        res.send(await create(params));
       } catch (error) {
-        console.log(error);
-        res.status(400).send(error);
+        res.status(400).json({ message: error });
       }
     });
     run.stderr.setEncoding("utf8");
-    await run.stderr.on("data", async function (data) {console.log(data)})
+    await run.stderr.on("data", async function (data) {
+      stderr = "Error on recognizing image";
+    });
+    const exitCode = await new Promise((resolve, reject) => {
+      run.on("close", resolve);
+    });
+    if (exitCode) {
+      throw stderr;
+    }
   } catch (error) {
-    console.log(error);
-    return res.send(`Error when trying upload images: ${error}`);
+    return res.status(400).json({ message: error });
   }
 }
 
@@ -94,15 +96,14 @@ async function getById(req) {
   return run;
 }
 
-async function create(params, userId) {
+async function create(params) {
   if (
     await db.Run.findOne({
-      where: { userId: userId, date: params.date, nftId: params.nftId },
+      where: { userId: params.userId, date: params.date, nftId: params.nftId },
     })
   ) {
     throw "This run is already exist.";
   }
-  params.userId = userId;
   // save run
   return await db.Run.create(params);
 }

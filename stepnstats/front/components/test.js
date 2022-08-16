@@ -37,7 +37,8 @@ import {
   deleteNft,
 } from "../services/nfts/index";
 import { getAllMp } from "../services/mps/index";
-import ChooseMysteryBoxLevelModal from "./modal/chooseMysteryBoxLevelModal";
+import { RFValue } from "react-native-responsive-fontsize";
+
 export default function TestScreen({ route, navigation }) {
   const [modalChooseMysteryBoxLevelVisible, setChooseMysteryBoxLevelVisible] = useState(false);
   const [mbLvl, setMbLvl] = useState(0);
@@ -346,7 +347,6 @@ export default function TestScreen({ route, navigation }) {
           <Text>Show ChooseMysteryBoxLevelModal</Text>
         </Pressable>
       </View>
-      <ChooseMysteryBoxLevelModal textButton={"NEXT"} modalVisible={modalChooseMysteryBoxLevelVisible} setmodalVisible={setChooseMysteryBoxLevelVisible} value={mbLvl} setValue={setMbLvl}></ChooseMysteryBoxLevelModal>
     </View>
   );
 }

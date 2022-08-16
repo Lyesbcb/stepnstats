@@ -14,9 +14,11 @@ import Header from "./header";
 import { getAllTemporality } from "../../services/mps/index";
 import Marketplace from "./marketplace";
 import ProgressLoader from "rn-progress-loader";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function MarketplaceScreen({ navigation }) {
-  const [selectedRealm, setSelectedRealm] = useState("Ethereum");
+  const [selectedContent, setSelectedContents] = useState([]);
+  const [selectedRealm, setSelectedRealm] = useState("Solana");
   const [mpsDay, setMpsDay] = useState([]);
   const [mpsWeek, setMpsWeek] = useState([]);
   const [mpsMonth, setMpsMonth] = useState([]);
@@ -26,14 +28,20 @@ export default function MarketplaceScreen({ navigation }) {
     myFunction();
   }, []);
 
-  const myFunction = async () => {
+  const myFunction = async (realm) => {
     try {
       setLoading(true);
-      setMpsDay(await getAllTemporality(selectedRealm, "Day"));
-      setMpsWeek(await getAllTemporality(selectedRealm, "Week"));
-      setMpsMonth(await getAllTemporality(selectedRealm, "Month"));
+      if (realm) {
+        setMpsDay(await getAllTemporality(realm, "Day"));
+        setMpsWeek(await getAllTemporality(realm, "Week"));
+        setMpsMonth(await getAllTemporality(realm, "Month"));
+      } else {
+        setMpsDay(await getAllTemporality(selectedRealm, "Day"));
+        setMpsWeek(await getAllTemporality(selectedRealm, "Week"));
+        setMpsMonth(await getAllTemporality(selectedRealm, "Month"));
+      }
+
       setLoading(false);
-      console.log("chargement fini")
     } catch (err) {
       console.log(err);
       Alert.alert("Error");
@@ -67,6 +75,8 @@ export default function MarketplaceScreen({ navigation }) {
         >
           {selectedTab === 0 ? (
             <Marketplace
+              selectedContent={selectedContent}
+              setSelectedContents={setSelectedContents}
               selectedRealm={selectedRealm}
               navigation={navigation}
               mpsDay={mpsDay}
@@ -84,7 +94,7 @@ export default function MarketplaceScreen({ navigation }) {
           )}
         </View>
 
-        <Footer styles={styles}></Footer>
+        {/* <Footer styles={styles}></Footer> */}
       </View>
     </View>
   );
@@ -103,11 +113,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -263,10 +273,10 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -277,7 +287,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -363,7 +373,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

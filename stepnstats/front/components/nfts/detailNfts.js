@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import Footer from "../footer";
+import OptimizeModal from "./optimizeModal";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function DetailNfts({
   data,
@@ -18,23 +20,77 @@ export default function DetailNfts({
   setmodalOneNfts,
   deleteOneNft,
 }) {
-  const [maxStat, setMaxStat] = useState(
-    Math.max(data.efficiency, data.luck, data.comfort, data.resilience)
-  );
+  const [maxStat, setMaxStat] = useState();
   const [widthEfficiency, setWidthEfficiency] = useState("0%");
   const [widthLuck, setWidthLuck] = useState("0%");
   const [widthComfort, setWidthComfort] = useState("0%");
   const [widthResilience, setwidthResilience] = useState("0%");
   const [baseStats, setBaseStats] = useState(data.base);
+  // Optimize Modal
+  const [optimizeModalVisible, setOptimizeModalVisible] = useState(false);
+  const [optimized, setOptimized] = useState({});
+  const imagePath = {
+    walker: [
+      require("../../assets/shoes/walker/shoe1.png"),
+      require("../../assets/shoes/walker/shoe2.png"),
+      require("../../assets/shoes/walker/shoe3.png"),
+      require("../../assets/shoes/walker/shoe4.png"),
+      require("../../assets/shoes/walker/shoe5.png"),
+      require("../../assets/shoes/walker/shoe6.png"),
+      require("../../assets/shoes/walker/shoe7.png"),
+      require("../../assets/shoes/walker/shoe8.png"),
+      require("../../assets/shoes/walker/shoe9.png"),
+      require("../../assets/shoes/walker/shoe1.png"),
+      require("../../assets/shoes/walker/shoe10.png"),
+    ],
+    jogger: [
+      require("../../assets/shoes/jogger/shoe1.png"),
+      require("../../assets/shoes/jogger/shoe2.png"),
+      require("../../assets/shoes/jogger/shoe3.png"),
+      require("../../assets/shoes/jogger/shoe4.png"),
+      require("../../assets/shoes/jogger/shoe5.png"),
+      require("../../assets/shoes/jogger/shoe6.png"),
+      require("../../assets/shoes/jogger/shoe7.png"),
+      require("../../assets/shoes/jogger/shoe8.png"),
+      require("../../assets/shoes/jogger/shoe9.png"),
+      require("../../assets/shoes/jogger/shoe1.png"),
+      require("../../assets/shoes/jogger/shoe10.png"),
+    ],
+    runner: [
+      require("../../assets/shoes/runner/shoe1.png"),
+      require("../../assets/shoes/runner/shoe2.png"),
+      require("../../assets/shoes/runner/shoe3.png"),
+      require("../../assets/shoes/runner/shoe4.png"),
+      require("../../assets/shoes/runner/shoe5.png"),
+      require("../../assets/shoes/runner/shoe6.png"),
+      require("../../assets/shoes/runner/shoe7.png"),
+      require("../../assets/shoes/runner/shoe8.png"),
+      require("../../assets/shoes/runner/shoe9.png"),
+      require("../../assets/shoes/runner/shoe1.png"),
+      require("../../assets/shoes/runner/shoe10.png"),
+    ],
+    trainer: [
+      require("../../assets/shoes/trainer/shoe1.png"),
+      require("../../assets/shoes/trainer/shoe2.png"),
+      require("../../assets/shoes/trainer/shoe3.png"),
+      require("../../assets/shoes/trainer/shoe4.png"),
+      require("../../assets/shoes/trainer/shoe5.png"),
+      require("../../assets/shoes/trainer/shoe6.png"),
+      require("../../assets/shoes/trainer/shoe7.png"),
+      require("../../assets/shoes/trainer/shoe8.png"),
+      require("../../assets/shoes/trainer/shoe9.png"),
+      require("../../assets/shoes/trainer/shoe1.png"),
+      require("../../assets/shoes/trainer/shoe10.png"),
+    ],
+  };
   useEffect(() => {
     defineMaxStat();
-  }, []);
+  });
 
   function baseStatsButton() {
     console.log(baseStats);
   }
   var color;
-  var widthStats = {};
 
   const qualityColor = {
     Common: "#BABCBE",
@@ -43,38 +99,79 @@ export default function DetailNfts({
     Epic: "#A398EB",
     Legendary: "#F5A836",
   };
+
+  const sockets = {
+    efficiency: require("../../assets/socket/efficiency/efficiency.png"),
+    efficiencyLvl0: require("../../assets/socket/efficiency/efficiency_0.png"),
+    efficiencyLvl1: require("../../assets/socket/efficiency/efficiency_1.png"),
+    efficiencyLvl2: require("../../assets/socket/efficiency/efficiency_2.png"),
+    efficiencyLvl3: require("../../assets/socket/efficiency/efficiency_3.png"),
+    efficiencyLvl4: require("../../assets/socket/efficiency/efficiency_4.png"),
+    efficiencyLvl5: require("../../assets/socket/efficiency/efficiency_5.png"),
+    luck: require("../../assets/socket/luck/luck.png"),
+    luckLvl0: require("../../assets/socket/luck/luck_0.png"),
+    luckLvl1: require("../../assets/socket/luck/luck_1.png"),
+    luckLvl2: require("../../assets/socket/luck/luck_2.png"),
+    luckLvl3: require("../../assets/socket/luck/luck_3.png"),
+    luckLvl4: require("../../assets/socket/luck/luck_4.png"),
+    luckLvl5: require("../../assets/socket/luck/luck_5.png"),
+    comfort: require("../../assets/socket/comfort/comfortability.png"),
+    comfortLvl0: require("../../assets/socket/comfort/comfortability_0.png"),
+    comfortLvl1: require("../../assets/socket/comfort/comfortability_1.png"),
+    comfortLvl2: require("../../assets/socket/comfort/comfortability_2.png"),
+    comfortLvl3: require("../../assets/socket/comfort/comfortability_3.png"),
+    comfortLvl4: require("../../assets/socket/comfort/comfortability_4.png"),
+    comfortLvl5: require("../../assets/socket/comfort/comfortability_5.png"),
+    resilience: require("../../assets/socket/resilience/resilience.png"),
+    resilienceLvl0: require("../../assets/socket/resilience/resilience_0.png"),
+    resilienceLvl1: require("../../assets/socket/resilience/resilience_1.png"),
+    resilienceLvl2: require("../../assets/socket/resilience/resilience_2.png"),
+    resilienceLvl3: require("../../assets/socket/resilience/resilience_3.png"),
+    resilienceLvl4: require("../../assets/socket/resilience/resilience_4.png"),
+    resilienceLvl5: require("../../assets/socket/resilience/resilience_5.png"),
+  };
   {
-    data != 0 ? (color = qualityColor[data.quality]) : (color = "#E2E2E2");
+    data != 0 ? (color = qualityColor[data.quality]) : (color = "#BABCBE");
   }
+
   function defineMaxStat() {
-    setMaxStat(Math.max(data.efficiency, data.luck, data.comfort, data.resilience))
+    setMaxStat(
+      Math.max(data.efficiency, data.luck, data.comfort, data.resilience)
+    );
     setWidthEfficiency(
       maxStat == data.efficiency
-        ? String(((data.efficiency / maxStat) * 100).toFixed(0) - 24) + "%"
+        ? String(((data.efficiency / maxStat) * 100).toFixed(0)) + "%"
         : String(((data.efficiency / maxStat) * 100).toFixed(0)) + "%"
     );
     setWidthLuck(
       maxStat == data.luck
-        ? String(((data.luck / maxStat) * 100).toFixed(0) - 24) + "%"
+        ? String(((data.luck / maxStat) * 100).toFixed(0)) + "%"
         : String(((data.luck / maxStat) * 100).toFixed(0)) + "%"
     );
-    console.log(maxStat)
-      console.log(data.luck / maxStat)
+    // console.log(maxStat);
+    // console.log(data.luck / maxStat);
     setWidthComfort(
       maxStat == data.comfort
-        ? String(((data.comfort / maxStat) * 100).toFixed(0) - 24) + "%"
+        ? String(((data.comfort / maxStat) * 100).toFixed(0)) + "%"
         : String(((data.comfort / maxStat) * 100).toFixed(0)) + "%"
     );
     setwidthResilience(
       maxStat == data.resilience
-        ? String(((data.resilience / maxStat) * 100).toFixed(0) - 24) + "%"
+        ? String(((data.resilience / maxStat) * 100).toFixed(0)) + "%"
         : String(((data.resilience / maxStat) * 100).toFixed(0)) + "%"
     );
-
   }
 
   return (
     <View style={{ height: "100%", width: "100%" }}>
+      <OptimizeModal
+      optimized={optimized}
+      setOptimized={setOptimized}
+        setModalVisible={setOptimizeModalVisible}
+        modalVisible={optimizeModalVisible}
+        minLvl={data.lvl}
+        data={data}
+      ></OptimizeModal>
       <View
         style={{
           backgroundColor: color,
@@ -88,48 +185,10 @@ export default function DetailNfts({
           borderWidth: 2,
         }}
       >
-        <Text style={{ fontSize: 12, fontWeight: "700" }}>GST KILLER</Text>
+        <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+          {data.name ? data.name : "-"}
+        </Text>
       </View>
-      {/* // TODO: Show Realm */}
-      {/* {data.realm == "Solana" ? (
-        <Image
-          source={require("../../assets/sol_realm.png")}
-          style={{
-            position: "absolute",
-            right: "5%",
-            top: "5%",
-            height: "20%",
-            width: "15%",
-            resizeMode: "contain",
-          }}
-        ></Image>
-      ) : data.realm == "Bnb" ? (
-        <Image
-          source={require("../../assets/bsc_realm.png")}
-          style={{
-            position: "absolute",
-            right: "5%",
-            top: "5%",
-            height: "20%",
-            width: "15%",
-            resizeMode: "contain",
-          }}
-        ></Image>
-      ) : data.realm == "Ethereum" ? (
-        <Image
-          source={require("../../assets/eth_realm.png")}
-          style={{
-            position: "absolute",
-            right: "5%",
-            top: "5%",
-            height: "20%",
-            width: "15%",
-            resizeMode: "contain",
-          }}
-        ></Image>
-      ) : (
-        <View></View>
-      )} */}
       <View
         style={{
           position: "absolute",
@@ -241,12 +300,12 @@ export default function DetailNfts({
           }}
         >
           <Image
-            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
-            source={require("../../assets/socket/locked.png")}
+            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            source={sockets[data.socket1]}
           ></Image>
           <Image
-            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
-            source={require("../../assets/socket/locked.png")}
+            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            source={sockets[data.socket2]}
           ></Image>
         </View>
         <View
@@ -261,7 +320,7 @@ export default function DetailNfts({
           <Pressable
             onPress={() => {
               previousNft();
-              defineMaxStat()
+              defineMaxStat();
             }}
           >
             <Icon type="antdesign" name="left" size={60} color="black"></Icon>
@@ -276,7 +335,11 @@ export default function DetailNfts({
           >
             {data != undefined ? (
               <Image
-                source={require("../../assets/shoes/Runner.png")}
+                source={
+                  imagePath[data.type.toLowerCase()][
+                    Number(String(data.nftId).slice(-1))
+                  ]
+                }
                 style={{ height: "100%", width: "130%", resizeMode: "contain" }}
               ></Image>
             ) : (
@@ -292,7 +355,7 @@ export default function DetailNfts({
           <Pressable
             onPress={() => {
               nextNft();
-              defineMaxStat()
+              defineMaxStat();
             }}
           >
             <Icon type="antdesign" name="right" size={60} color="black"></Icon>
@@ -308,12 +371,12 @@ export default function DetailNfts({
           }}
         >
           <Image
-            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
-            source={require("../../assets/socket/locked.png")}
+            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            source={sockets[data.socket3]}
           ></Image>
           <Image
-            style={{ width: "15%", height:"100%", resizeMode: "contain" }}
-            source={require("../../assets/socket/locked.png")}
+            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            source={sockets[data.socket4]}
           ></Image>
         </View>
         <View
@@ -332,13 +395,13 @@ export default function DetailNfts({
         >
           <Text
             style={{
-              fontSize: 12,
+              fontSize: RFValue(12, 800),
               fontWeight: "700",
             }}
           >
             #
           </Text>
-          <Text style={{ fontSize: 12, fontWeight: "700" }}>
+          <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
             {data ? data.nftId : ""}
           </Text>
         </View>
@@ -360,7 +423,7 @@ export default function DetailNfts({
               borderWidth: 2,
             }}
           >
-            <Text style={{ fontSize: 12, fontWeight: "700" }}>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
               {data != undefined ? data.quality : "-"}
             </Text>
           </View>
@@ -374,7 +437,7 @@ export default function DetailNfts({
               borderWidth: 2,
             }}
           >
-            <Text style={{ fontSize: 12, fontWeight: "700" }}>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
               {data != undefined ? data.type : "-"}
             </Text>
           </View>
@@ -388,7 +451,7 @@ export default function DetailNfts({
               borderWidth: 2,
             }}
           >
-            <Text style={{ fontSize: 12, fontWeight: "700" }}>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
               {/* TODO get price */}
               47$
             </Text>
@@ -404,7 +467,7 @@ export default function DetailNfts({
             justifyContent: "center",
           }}
         >
-          <Text style={{ marginLeft: "4%", fontSize: 12, fontWeight: "700" }}>
+          <Text style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}>
             Level {data ? data.lvl : ""}
           </Text>
         </View>
@@ -421,7 +484,7 @@ export default function DetailNfts({
             style={{
               position: "absolute",
               left: 0,
-              fontSize: 16,
+              fontSize: RFValue(16, 800),
               fontWeight: "700",
             }}
           >
@@ -434,7 +497,7 @@ export default function DetailNfts({
             // TODO: request the user to add the base stats shoes to optimize
             onPress={() => baseStatsButton()}
           >
-            <Text style={{ fontSize: 12, fontWeight: "700" }}>Base</Text>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>Base</Text>
           </Pressable>
           <Pressable
             style={{
@@ -447,9 +510,9 @@ export default function DetailNfts({
               justifyContent: "center",
               marginHorizontal: "1%",
             }}
-            onPress={() => console.log("optimize")}
+            onPress={() => {data.base ? setOptimizeModalVisible(true): Alert.alert("To optimize a sneaker you need to upload the base stats.")}}
           >
-            <Text style={{ fontSize: 12, fontWeight: "700" }}>Optimize</Text>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>Optimize</Text>
           </Pressable>
         </View>
         <View
@@ -487,7 +550,7 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: 12, fontWeight: "700" }}
+                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
               >
                 Efficiency
               </Text>
@@ -495,7 +558,7 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "70%",
+                width: "60%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -506,12 +569,15 @@ export default function DetailNfts({
                 style={{
                   width: widthEfficiency,
                   backgroundColor: "#9DF8B6",
-                  height: "30%",
+                  height: "25%",
+                  borderWidth: 1,
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{ width: "20%" }}>{data ? data.efficiency : 0}</Text>
             </View>
+            <Text style={{ width: "20%", marginLeft: "2%" }}>
+              {data ? data.efficiency : 0}
+            </Text>
           </View>
           <View
             style={{
@@ -540,7 +606,7 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: 12, fontWeight: "700" }}
+                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
               >
                 Luck
               </Text>
@@ -548,7 +614,7 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "70%",
+                width: "60%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -559,12 +625,15 @@ export default function DetailNfts({
                 style={{
                   width: widthLuck,
                   backgroundColor: "#9DF8B6",
-                  height: "30%",
+                  height: "25%",
+                  borderWidth: 1,
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{ width: "20%" }}>{data ? data.luck : 0}</Text>
             </View>
+            <Text style={{ width: "20%", marginLeft: "2%" }}>
+              {data ? data.luck : 0}
+            </Text>
           </View>
           <View
             style={{
@@ -593,7 +662,7 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: 12, fontWeight: "700" }}
+                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
               >
                 Comfort
               </Text>
@@ -601,7 +670,7 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "70%",
+                width: "60%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -612,12 +681,15 @@ export default function DetailNfts({
                 style={{
                   width: widthComfort,
                   backgroundColor: "#9DF8B6",
-                  height: "30%",
+                  height: "25%",
+                  borderWidth: 1,
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{ width: "20%" }}>{data ? data.comfort : 0}</Text>
             </View>
+            <Text style={{ width: "20%", marginLeft: "2%" }}>
+              {data ? data.comfort : 0}
+            </Text>
           </View>
 
           <View
@@ -647,7 +719,7 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: 12, fontWeight: "700" }}
+                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
               >
                 Resilience
               </Text>
@@ -655,7 +727,7 @@ export default function DetailNfts({
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
             <View
               style={{
-                width: "70%",
+                width: "60%",
                 height: "100%",
                 flexDirection: "row",
                 alignItems: "center",
@@ -666,12 +738,15 @@ export default function DetailNfts({
                 style={{
                   width: widthResilience,
                   backgroundColor: "#9DF8B6",
-                  height: "30%",
+                  height: "25%",
+                  borderWidth: 1,
                   marginRight: "4%",
                 }}
               ></View>
-              <Text style={{ width: "20%" }}>{data ? data.resilience : 0}</Text>
             </View>
+            <Text style={{ width: "20%", marginLeft: "2%" }}>
+              {data ? data.resilience : 0}
+            </Text>
           </View>
         </View>
       </View>
@@ -711,11 +786,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -872,11 +947,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -888,7 +963,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -980,7 +1055,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

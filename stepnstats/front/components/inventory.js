@@ -13,9 +13,10 @@ import Footer from "./footer";
 import Header from "./header";
 import AllNftsScreen from "./nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
-import RunsScreen from "./runsScreen";
+import RunsScreen from "./run/runsScreen";
 import { getAllMyMb } from "../services/mbs/index";
 import { getAllMyNft } from "../services/nfts/index";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function Invenrtory({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
@@ -68,7 +69,7 @@ export default function Invenrtory({ navigation }) {
           )}
         </View>
 
-        <Footer styles={styles}></Footer>
+        {/* <Footer styles={styles}></Footer> */}
       </View>
     </View>
   );
@@ -87,11 +88,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -247,10 +248,10 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -347,7 +348,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

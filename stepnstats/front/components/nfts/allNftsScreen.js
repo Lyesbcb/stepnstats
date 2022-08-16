@@ -10,6 +10,8 @@ import {
   RefreshControl,
   Modal,
   TouchableOpacity,
+  FlatList,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState, componentDidMount } from "react";
 import LittleNfts from "./littleNfts";
@@ -25,6 +27,7 @@ import DetailNfts from "./detailNfts";
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import { TouchableWithoutFeedback } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   const [realm, setRealm] = useState("Solana");
@@ -33,6 +36,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   const [modalOneNfts, setmodalOneNfts] = useState(false);
   const [nftsSelected, setNftsSelected] = useState(1);
   const [refreshing, setRefreshing] = React.useState(false);
+
 
   async function onRefresh() {
     await setRefreshing(true);
@@ -50,7 +54,11 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
 
     if (!result.cancelled) {
       setLoading(true);
-      await uploadNft(result, realm);
+      try{
+        await uploadNft(result, realm);
+      }catch (error){
+        Alert.alert(error)
+      }
       setLoading(false);
       await myFunction();
     }
@@ -74,7 +82,6 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   }
 
   function nextNft() {
-    console.log("next")
     if (nftsSelected != nfts.length - 1) {
       setNftsSelected(nftsSelected + 1);
     } else {
@@ -83,7 +90,6 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   }
 
   function previousNft() {
-    console.log("previous")
     if (nftsSelected != 0) {
       setNftsSelected(nftsSelected - 1);
     } else {
@@ -91,22 +97,6 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
     }
   }
 
-  function showNfts() {
-    return nfts.map((nft, i) => {
-      return (
-        <Pressable
-          onPress={() => {
-            setNftsSelected(i);
-            setmodalOneNfts(true);
-          }}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-          key={nft.id}
-        >
-          <LittleNfts data={nft}></LittleNfts>
-        </Pressable>
-      );
-    });
-  }
   return (
     <View
       style={{
@@ -177,14 +167,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
           </TouchableWithoutFeedback>
         </TouchableOpacity>
       </Modal>
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          flexGrow: 1,
-          width: "100%",
-          justifyContent: "space-between",
-        }}
+      <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -193,15 +176,35 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
             onRefresh={onRefresh}
           />
         }
-      >
-        <Pressable
-          onPress={() => setmodalRealmVisible(true)}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-        >
-          <LittleNfts data={0}></LittleNfts>
-        </Pressable>
-        {nfts.length ? showNfts() : <View></View>}
-      </ScrollView>
+        columnWrapperStyle={{ justifyContent: "space-evenly" }}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        data={[0].concat(nfts)} //list of data array [{},{}]
+        renderItem={({ item, index }) => (
+          <Pressable
+            onPress={() => {
+              if (!index) {
+                setmodalRealmVisible(true);
+              } else {
+                setNftsSelected(index - 1);
+                setmodalOneNfts(true);
+              }
+            }}
+            style={{
+              width: "45%",
+              height: Dimensions.get("window").height * 0.22,
+              margin: "2%",
+            }}
+            key={item.id}
+          >
+            {!index ? (
+              <LittleNfts data={0}></LittleNfts>
+            ) : (
+              <LittleNfts data={item}></LittleNfts>
+            )}
+          </Pressable>
+        )}
+      />
     </View>
   );
 }
@@ -219,11 +222,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -378,11 +381,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -394,7 +397,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -486,7 +489,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

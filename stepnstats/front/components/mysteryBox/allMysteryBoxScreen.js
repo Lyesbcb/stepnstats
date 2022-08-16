@@ -14,6 +14,8 @@ import {
   Modal,
   Alert,
   RefreshControl,
+  FlatList,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import LittleMysteryBox from "./littleMysteryBox";
@@ -29,6 +31,7 @@ import BouncingPreloader from "react-native-bouncing-preloaders";
 import DetailMysteryBox from "./detailMysteryBox";
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
@@ -60,7 +63,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
       Alert.alert(error);
     }
   }
-  
+
   function nextMb() {
     if (mbSelected != mbs.length - 1) {
       setMbSelected(mbSelected + 1);
@@ -83,38 +86,25 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 0.2,
-      exif: true
+      exif: true,
     });
-    console.log(result)
     if (!result.cancelled) {
       setLoading(true);
-      await uploadMb(result, realm);
+      try {
+        await uploadMb(result, realm);
+      } catch (error) {
+        Alert.alert(error);
+      }
       setLoading(false);
       await myFunction();
     }
   };
 
-  function showMysteryBox() {
-    return mbs.map((mb, i) => {
-      return (
-        <Pressable
-          onPress={() => {
-            setMbSelected(i);
-            setmodalOneMysteryBox(true);
-          }}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-          key={mb.id}
-        >
-          <LittleMysteryBox data={mb}></LittleMysteryBox>
-        </Pressable>
-      );
-    });
-  }
   return (
     <View
       style={{
         width: "90%",
-        height: "65%",
+        height: "62%",
       }}
     >
       <ProgressLoader
@@ -177,14 +167,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
           </View>
         </TouchableOpacity>
       </Modal>
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          flexGrow: 1,
-          width: "100%",
-          justifyContent: "space-between",
-        }}
+      <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -193,40 +176,40 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
             onRefresh={onRefresh}
           />
         }
-      >
-        <Pressable
-          onPress={() => setmodalRealmVisible(true)}
-          style={{ width: "45%", height: "35%", margin: "2%" }}
-        >
-          <LittleMysteryBox data={0}></LittleMysteryBox>
-        </Pressable>
-        {showMysteryBox()}
-      </ScrollView>
-      {/* <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <BouncingPreloader
-          icons={[
-            require("../assets/gem/efficiency/lvl1.png"),
-            require("../assets/gem/comfort/lvl1.png"),
-            require("../assets/gem/resilience/lvl1.png"),
-            require("../assets/gem/luck/lvl7.png"),
-            require("../assets/gem/resilience/lvl9.png"),
-            require("../assets/gem/luck/lvl3.png"),
-          ]}
-          leftRotation="-680deg"
-          rightRotation="360deg"
-          leftDistance={-180}
-          rightDistance={-250}
-          speed={1200}
-        />
-      </View> */}
+        columnWrapperStyle={{ justifyContent: "space-evenly" }}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        data={[0].concat(mbs)} //list of data array [{},{}]
+        renderItem={({ item, index }) => (
+          <Pressable
+            onPress={() => {
+              if (!index) {
+                setmodalRealmVisible(true);
+              } else {
+                setMbSelected(index - 1);
+                setmodalOneMysteryBox(true);
+              }
+            }}
+            style={{
+              width: "45%",
+              height: Dimensions.get("window").height * 0.22,
+              margin: "2%",
+            }}
+            key={item.id}
+          >
+            {!index ? (
+              <LittleMysteryBox data={0}></LittleMysteryBox>
+            ) : (
+              <LittleMysteryBox data={item}></LittleMysteryBox>
+            )}
+          </Pressable>
+        )}
+      />
     </View>
   );
 }
+
+//you are using emulator?
 
 const styles = StyleSheet.create({
   realm: {
@@ -253,11 +236,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -414,11 +397,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -430,7 +413,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -517,7 +500,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

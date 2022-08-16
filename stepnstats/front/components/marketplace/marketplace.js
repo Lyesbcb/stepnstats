@@ -6,21 +6,18 @@ import Legend from "./legend";
 import { useEffect, useState, useCallback } from "react";
 import Modal from "react-native-modal";
 import Filter from "./filter";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function Marketplace({
   selectedRealm,
   setSelectedRealm,
-  navigation,
   mpsDay,
   mpsWeek,
   mpsMonth,
-  myFunction
+  myFunction,
+  selectedContent,
+  setSelectedContents,
 }) {
-  const [selectedContent, setSelectedContents] = useState([
-    "luckLvl2",
-    "efficiencyLvl2",
-    "comfortLvl2",
-  ]);
   const color = ["#BABCBE", "#AED144", "#47ACED", "#A398EB", "#F5A836"];
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
   const [isModalVisible, setModalVisible] = useState(false);
@@ -49,10 +46,16 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsDay.length; i++) {
+            if (i === 0) {
+              tempDatasets[y].data.push(0);
+            }
             tempDatasets[y].data.push(mpsDay[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsDay.length; i++) {
+          if (i === 0) {
+            tempLabels.push("");
+          }
           tempLabels.push(
             new Date(mpsDay[i].createdAt).toLocaleTimeString().slice(0, -3)
           );
@@ -79,6 +82,8 @@ export default function Marketplace({
             width={Dimensions.get("window").width - 50}
             height={Dimensions.get("window").width - 150}
             yAxisInterval={2}
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
             chartConfig={{
               backgroundGradientFrom: "white",
               backgroundGradientTo: "white",
@@ -91,7 +96,7 @@ export default function Marketplace({
                 stroke: "white",
               },
               propsForVerticalLabels: {
-                fontSize: 10,
+                fontSize: RFValue(10, 800),
               },
             }}
             style={{
@@ -115,10 +120,16 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsWeek.length; i += 91) {
+            if (i === 0) {
+              tempDatasets[y].data.push(0);
+            }
             tempDatasets[y].data.push(mpsWeek[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsWeek.length; i += 91) {
+          if (i === 0) {
+            tempLabels.push("");
+          }
           tempLabels.push(
             new Date(mpsWeek[i].createdAt).toLocaleDateString().slice(0, -5)
           );
@@ -157,7 +168,7 @@ export default function Marketplace({
                 stroke: "white",
               },
               propsForVerticalLabels: {
-                fontSize: 10,
+                fontSize: RFValue(10, 800),
               },
             }}
             style={{
@@ -181,10 +192,16 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsMonth.length; i += 225) {
+            if (i === 0) {
+              tempDatasets[y].data.push(0);
+            }
             tempDatasets[y].data.push(mpsMonth[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsMonth.length; i += 225) {
+          if (i === 0) {
+            tempLabels.push("");
+          }
           tempLabels.push(
             new Date(mpsMonth[i].createdAt).toLocaleDateString().slice(0, -5)
           );
@@ -223,7 +240,7 @@ export default function Marketplace({
                 stroke: "white",
               },
               propsForVerticalLabels: {
-                fontSize: 10,
+                fontSize: RFValue(10, 800),
               },
             }}
             style={{
@@ -252,14 +269,17 @@ export default function Marketplace({
             borderWidth: 1,
             borderColor: "black",
             shadowColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 4,
-              height: 4,
-            },
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        ></View>
+        >
+          <View>
+            <Icon></Icon>
+            <Text style={{ fontSize: RFValue(30, 800), fontWeight: "800" }}>
+              Click on filter
+            </Text>
+          </View>
+        </View>
       );
     }
   }
@@ -300,36 +320,77 @@ export default function Marketplace({
           marginBottom: "4%",
         }}
       >
-        <Pressable
+        <View
           style={{
-            backgroundColor: "#9DF8B6",
-            justifyContent: "center",
-            alignContent: "center",
-            width: "20%",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "30%",
             height: "100%",
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 1,
-              height: 1,
-            },
+            alignItems: "center",
           }}
-          onPress={() => setModalVisible(true)}
         >
-          <Text
+          <Pressable
             style={{
-              fontWeight: "800",
-              fontSize: 20,
-              textAlign: "center",
-              textAlignVertical: "center",
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: "60%",
+              height: "100%",
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
             }}
+            onPress={() => setModalVisible(true)}
           >
-            Filter
-          </Text>
-        </Pressable>
+            <Text
+              style={{
+                fontWeight: "800",
+                fontSize: RFValue(20, 800),
+                textAlign: "center",
+                textAlignVertical: "center",
+              }}
+            >
+              Filter
+            </Text>
+          </Pressable>
+          {selectedRealm == "Solana" ? (
+            <Image
+              source={require("../../assets/sol_realm.png")}
+              style={{
+                width: "30%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : selectedRealm == "Bnb" ? (
+            <Image
+              source={require("../../assets/bsc_realm.png")}
+              style={{
+                width: "30%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : selectedRealm == "Ethereum" ? (
+            <Image
+              source={require("../../assets/eth_realm.png")}
+              style={{
+                width: "30%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : (
+            <View></View>
+          )}
+        </View>
+
         <View
           style={{
             justifyContent: "space-evenly",
@@ -342,8 +403,14 @@ export default function Marketplace({
               setSelectedTemporality("Day");
             }}
           >
-            <View style={styles.weekTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>D</Text>
+            <View
+              style={
+                selectedTemporality === "Day"
+                  ? styles.dayTemporalityActive
+                  : styles.dayTemporality
+              }
+            >
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>D</Text>
             </View>
           </Pressable>
           <Pressable
@@ -351,8 +418,14 @@ export default function Marketplace({
               setSelectedTemporality("Week");
             }}
           >
-            <View style={styles.monthTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>W</Text>
+            <View
+              style={
+                selectedTemporality === "Week"
+                  ? styles.weekTemporalityActive
+                  : styles.weekTemporality
+              }
+            >
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>W</Text>
             </View>
           </Pressable>
           <Pressable
@@ -360,8 +433,14 @@ export default function Marketplace({
               setSelectedTemporality("Month");
             }}
           >
-            <View style={styles.yearTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>M</Text>
+            <View
+              style={
+                selectedTemporality === "Month"
+                  ? styles.monthTemporalityActive
+                  : styles.monthTemporality
+              }
+            >
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>M</Text>
             </View>
           </Pressable>
         </View>
@@ -369,16 +448,40 @@ export default function Marketplace({
 
       {setChart()}
       <View style={{ width: "80%", height: "30%" }}>
-        <Text
+        <View
           style={{
+            width: "100%",
+            height: "10%",
+            alignContent: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginTop: "4%",
-            marginLeft: "4%",
-            fontWeight: "800",
-            fontSize: 18,
           }}
         >
-          Legend
-        </Text>
+          <Text
+            style={{
+              fontWeight: "800",
+              fontSize: RFValue(18, 800),
+            }}
+          >
+            Legend
+          </Text>
+          <Pressable
+            onPress={() => {
+              setSelectedContents([]);
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "700",
+                fontSize: RFValue(16, 800),
+                color: "gold",
+              }}
+            >
+              Delete all
+            </Text>
+          </Pressable>
+        </View>
         <View style={{ flexDirection: "column", marginTop: "4%", flexGrow: 1 }}>
           {setLegends()}
         </View>
@@ -400,11 +503,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -501,13 +604,61 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
-  weekTemporality: {
+  dayTemporality: {
     width: 30,
     height: 30,
     backgroundColor: "#61F2FC",
     borderRadius: 5,
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+  },
+  dayTemporalityActive: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#61F2FC",
+    borderRadius: 5,
+    borderColor: "black",
+    borderWidth: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+  },
+  weekTemporality: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#EB78E7",
+    borderRadius: 5,
+    borderColor: "black",
+    borderWidth: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+  },
+  weekTemporalityActive: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#EB78E7",
+    borderRadius: 5,
+    borderColor: "black",
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
     shadowOpacity: 1,
@@ -520,10 +671,10 @@ const styles = StyleSheet.create({
   monthTemporality: {
     width: 30,
     height: 30,
-    backgroundColor: "#EB78E7",
+    backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 0,
     alignItems: "center",
     justifyContent: "center",
     shadowOpacity: 1,
@@ -533,13 +684,13 @@ const styles = StyleSheet.create({
       height: 2,
     },
   },
-  yearTemporality: {
+  monthTemporalityActive: {
     width: 30,
     height: 30,
     backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
     shadowOpacity: 1,
@@ -557,10 +708,10 @@ const styles = StyleSheet.create({
     top: "3%",
   },
   selectorTextPrimary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -571,7 +722,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -660,7 +811,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

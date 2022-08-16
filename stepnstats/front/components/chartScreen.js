@@ -9,6 +9,7 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import Footer from "./footer";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function ChartScreen({ props, navigation }) {
   return (
@@ -42,17 +43,17 @@ export default function ChartScreen({ props, navigation }) {
         <View style={styles.selectTemporality}>
           <Pressable>
             <View style={styles.weekTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>W</Text>
+              <Text style={{ color: "white", fontSize: RFValue(20, 800) }}>W</Text>
             </View>
           </Pressable>
           <Pressable>
             <View style={styles.monthTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>M</Text>
+              <Text style={{ color: "white", fontSize: RFValue(20, 800) }}>M</Text>
             </View>
           </Pressable>
           <Pressable>
             <View style={styles.yearTemporality}>
-              <Text style={{ color: "white", fontSize: 20 }}>Y</Text>
+              <Text style={{ color: "white", fontSize: RFValue(20, 800) }}>Y</Text>
             </View>
           </Pressable>
         </View>
@@ -125,7 +126,7 @@ export default function ChartScreen({ props, navigation }) {
           }}
           bezier
         />
-        <Footer styles={styles}></Footer>
+        {/* <Footer styles={styles}></Footer> */}
       </View>
     </View>
   );
@@ -144,11 +145,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -304,10 +305,10 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

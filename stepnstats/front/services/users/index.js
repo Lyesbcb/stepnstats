@@ -6,7 +6,8 @@ module.exports = {
   registerUser,
   authenticateUser,
   updateUser,
-  logoutUser
+  logoutUser,
+  firstLaunch
 };
 const baseURL = config.baseUrl + "/users";
 
@@ -27,7 +28,6 @@ async function authenticateUser(params) {
 
   await axios(config)
     .then(async function (response) {
-      console.log(response.data);
       // Save username and password
       await secureSave("token", response.data.token);
       await secureSave("id", String(response.data.id));
@@ -55,7 +55,6 @@ async function registerUser(params) {
 
   await axios(config)
     .then(async function (response) {
-      console.log(response.data);
       // Save username and password
       await secureSave("username", response.data.username);
       await secureSave("password", params.password);
@@ -87,7 +86,6 @@ async function updateUser(params) {
 
   await axios(config)
     .then(async function (response) {
-      console.log(response.data);
       // Save username and password
       await secureSave("username", response.data.username);
       await secureSave("password", params.password);
@@ -105,12 +103,21 @@ async function logoutUser(){
   await deleteSecuretValueFor("username")
   await deleteSecuretValueFor("id")
   await deleteSecuretValueFor("anonymous") 
-  var params = {
-    "username": "anonymous",
-    "password": generatePassword(24),
-    "anonymous": true
+}
+
+async function firstLaunch(){
+  var getUsername = await getSecuretValueFor("username");
+  if(!getUsername){
+    var params = {
+        "username": "anonymous",
+        "password": generatePassword(24),
+        "anonymous": true
+      }
+    await registerUser(params)
+    await authenticateUser({})
+  }else{
+    await authenticateUser({})
   }
-  await registerUser(params)
 }
 
 function generatePassword(length) {

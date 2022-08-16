@@ -1,4 +1,3 @@
-from tkinter import image_names
 from text_reader import parse_text
 from colortools import dominant
 import numpy as np
@@ -9,17 +8,17 @@ import cv2 as cv
 reader = easyocr.Reader(['en'], gpu=False)
 
 def crop_bot(img):
-    _, w, _ = img.shape
+    h, w, _ = img.shape
 
     for y in range(-1, -400, -1):
         clr = img[y, w//2]
         b, g, r = clr
 
-        #print(y, b, g, r)
+        # print(h + y, w // 2, b, g, r)
 
         if (220 > b > 180 and
             255 >= g > 230 and
-            157 > r > 80):
+            165 > r > 80):
 
             return img[:y,:]
 
@@ -174,6 +173,7 @@ def bot_part(img):
 
 def get_quality(color):
     b, g, r = color
+    #print(b, g, r)
 
     if (215 < b < 250 and
         215 < g < 250 and
@@ -188,7 +188,7 @@ def get_quality(color):
           60  < r < 100):
           return "Rare"
     elif (190 < b < 210 and
-          90  < g < 110 and
+          95  < g < 110 and
           145 < r < 155):
           return "Epic"
 
@@ -200,12 +200,16 @@ def get_tplvlgst(img, info, nondurab=None):
 
     def get_typelevelqual():
         tpimg = gimg[:int(h/5), int(w/10):int(w/2.8)] if nondurab is None else gimg[:int(h/14), int(w/10):int(w/2)]
-        tplevel = "".join(reader.readtext(tpimg, detail=0, allowlist="jogerwalkuntiv0123456789")).lower()
+        tplevel = "".join(reader.readtext(tpimg, detail=0, allowlist="jgerwalkuntiv0123456789")).lower()
 
         if not ("lv" in tplevel):
-            return "", "", ""
+            if not ("v" in tplevel):
+                return "", "", ""
+            else:
+                i = tplevel.index("v") - 1
+        else:
+            i = tplevel.index("lv")
 
-        i = tplevel.index("lv")
         level = tplevel[i+2:i+4]
         
         if "gger" in tplevel:
@@ -223,12 +227,13 @@ def get_tplvlgst(img, info, nondurab=None):
         doms = dominant(qimg)
 
         for dom in doms:
-            if (dom[0] > 250 and
-                dom[1] > 250 and
-                dom[2] > 250):
+            if (dom[0] >= 240 and
+                dom[1] > 245  and
+                dom[2] >= 240):
                 continue
             else:
                 qual = get_quality(dom)
+                break
 
         return tp, level, qual 
 
@@ -323,13 +328,16 @@ def get_kmdrstps(img, info):
 
 def get_ideng(oimg, info):
     h, w, _ = oimg.shape
-    img = oimg[int(h/3.5):int(h/2.2), :]
+    img = oimg[int(h/4):int(h/2.2), :]
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
     def get_energy():
-        enimg = gimg[int(h/50):int(h/10),int(w/1.3):]
+        enimg = gimg[:int(h/8),int(w/1.3):]
 
-        energy = parse_text(enimg, config="--psm 7 -c tessedit_char_whitelist=0123456789-.", process=False)
+        energy = "".join(reader.readtext(enimg, detail=0, allowlist="x0123456789.-"))
+
+        if "x" in energy:
+            energy = energy[2:]
 
         if "-" in energy:
             energy = energy.replace("-", "")
@@ -337,7 +345,7 @@ def get_ideng(oimg, info):
         return energy
 
     def get_id():
-        idimg = gimg[int(h/15):int(h/7), int(w/8):int(w/2.0)]
+        idimg = gimg[int(h/8):int(h/6.5), int(w/8):int(w/2.0)]
 
         id = parse_text(idimg, config="--psm 7 -c tessedit_char_whitelist=#0123456789", process=False)
 
@@ -348,3 +356,4 @@ def get_ideng(oimg, info):
 
     info["energy"] = get_energy()
     info["nftId"]  = get_id()
+ 

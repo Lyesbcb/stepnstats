@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Text, View, Pressable, Image, Alert, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function Filter({
   setSelectedRealm,
@@ -37,41 +38,71 @@ export default function Filter({
     setScrollQuality("");
   }
 
+  function setSelectedContent(array) {
+    if (array.length > 4) {
+      Alert.alert("Max filter");
+    } else {
+      setSelectedContents(array);
+    }
+  }
+
   function add() {
     var value = "";
-    var alreadyExist = false;
+    var error = false;
+    var errorMessage = "Error";
     if (type === "Sneakers") {
       if (sneakersRarity !== "") {
-        alreadyExist = true;
+        if (sneakersQuality != "") {
+          value = sneakersRarity.toLocaleLowerCase() + sneakersQuality;
+        } else {
+          error = true;
+          errorMessage = "You must choose sneaker quality!";
+        }
       } else {
-        value = sneakerClass.toLowerCase() + sneakersQuality;
+        if ((sneakerClass !== "") & (sneakersQuality !== "")) {
+          value = sneakerClass.toLocaleLowerCase() + sneakersQuality;
+        } else {
+          error = true;
+          errorMessage = "You must choose sneaker class and quality!";
+        }
       }
     }
     if (type === "Shoeboxes") {
       if (shoeboxesRarity !== "") {
-        alreadyExist = true;
+        error = true;
       } else {
-        alreadyExist = true;
-        value = shoeboxesQuality.toLowerCase() + "Shoebox";
+        error = true;
+        value = shoeboxesQuality.toLocaleLowerCase() + "Shoebox";
       }
     }
-    if (type === "Scroll") {
-      value = scrollQuality.toLowerCase() + "Scroll";
+    if (type === "Scrolls") {
+      if (scrollQuality !== "") {
+        value = scrollQuality.toLocaleLowerCase() + "Scroll";
+      } else {
+        error = true;
+        errorMessage = "You must choose scroll quality!";
+      }
     }
     if (type === "Gems") {
-      value = gemType.toLocaleLowerCase() + "Lvl" + gemLvl;
+      if ((gemType !== "") & (gemLvl !== "")) {
+        value = gemType.toLocaleLowerCase() + "Lvl" + gemLvl;
+      } else {
+        error = true;
+        errorMessage = "You must choose gem type and level!";
+      }
     }
     for (var i = 0; i < selectedContent.length; i++) {
       if (selectedContent[i] === value) {
-        alreadyExist = true;
+        error = true;
+        errorMessage = "This filter already exist!";
       }
     }
-    if (alreadyExist) {
-      Alert.alert("This filter already exist!");
+    if (error) {
+      Alert.alert(errorMessage);
     } else {
       var tempArray = selectedContent;
       tempArray.push(value);
-      setSelectedContents(tempArray);
+      setSelectedContent(tempArray);
       setModalVisible(false);
     }
   }
@@ -90,7 +121,13 @@ export default function Filter({
         alignItems: "center",
       }}
     >
-      <Text style={{ fontSize: 20, fontWeight: "800", marginVertical: "4%" }}>
+      <Text
+        style={{
+          fontSize: RFValue(20, 800),
+          fontWeight: "800",
+          marginVertical: "4%",
+        }}
+      >
         Chart Filter
       </Text>
       <Pressable
@@ -103,7 +140,7 @@ export default function Filter({
       >
         <Text
           style={{
-            fontSize: 14,
+            fontSize: RFValue(14, 800),
             fontWeight: "800",
             color: "gold",
           }}
@@ -135,7 +172,7 @@ export default function Filter({
             style={{ width: "15%", height: "100%" }}
             onPress={() => {
               setSelectedRealm("Solana");
-              myFunction();
+              myFunction("Solana");
             }}
           >
             <Image
@@ -149,7 +186,7 @@ export default function Filter({
             style={{ width: "15%", height: "100%" }}
             onPress={() => {
               setSelectedRealm("Bnb");
-              myFunction();
+              myFunction("Bnb");
             }}
           >
             <Image
@@ -161,7 +198,7 @@ export default function Filter({
             style={{ width: "15%", height: "100%" }}
             onPress={() => {
               setSelectedRealm("Ethereum");
-              myFunction();
+              myFunction("Ethereum");
             }}
           >
             <Image
@@ -780,7 +817,7 @@ export default function Filter({
                   fontWeight: "700",
                   textAlign: "center",
                   textAlignVertical: "center",
-                  fontSize: 20,
+                  fontSize: RFValue(20, 800),
                 }}
               >
                 ADD
@@ -1013,7 +1050,7 @@ export default function Filter({
                   fontWeight: "700",
                   textAlign: "center",
                   textAlignVertical: "center",
-                  fontSize: 20,
+                  fontSize: RFValue(20, 800),
                 }}
               >
                 ADD
@@ -1283,7 +1320,7 @@ export default function Filter({
                   fontWeight: "700",
                   textAlign: "center",
                   textAlignVertical: "center",
-                  fontSize: 20,
+                  fontSize: RFValue(20, 800),
                 }}
               >
                 ADD
@@ -1293,7 +1330,178 @@ export default function Filter({
         </View>
       ) : type === "Scrolls" ? (
         // Shoebox
-        <View></View>
+        <View
+          style={{
+            height: "65%",
+            width: "100%",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              height: "30%",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Text style={{ left: "4%", top: "-4%" }}>Quality</Text>
+            <View
+              style={{
+                width: "100%",
+                height: "30%",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+              }}
+            >
+              <Pressable
+                style={
+                  scrollQuality === "Common"
+                    ? styles.buttonActive
+                    : styles.button
+                }
+                onPress={
+                  scrollQuality === "Common"
+                    ? () => setScrollQuality("")
+                    : () => setScrollQuality("Common")
+                }
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Common
+                </Text>
+              </Pressable>
+              <Pressable
+                style={
+                  scrollQuality === "Uncommon"
+                    ? styles.buttonActive
+                    : styles.button
+                }
+                onPress={
+                  scrollQuality === "Uncommon"
+                    ? () => setScrollQuality("")
+                    : () => setScrollQuality("Uncommon")
+                }
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Uncommon
+                </Text>
+              </Pressable>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                height: "30%",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+              }}
+            >
+              <Pressable
+                style={
+                  scrollQuality === "Rare" ? styles.buttonActive : styles.button
+                }
+                onPress={
+                  scrollQuality === "Rare"
+                    ? () => setScrollQuality("")
+                    : () => setScrollQuality("Rare")
+                }
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Rare
+                </Text>
+              </Pressable>
+              <Pressable
+                style={
+                  scrollQuality === "Epic" ? styles.buttonActive : styles.button
+                }
+                onPress={
+                  scrollQuality === "Epic"
+                    ? () => setScrollQuality("")
+                    : () => setScrollQuality("Epic")
+                }
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Epic
+                </Text>
+              </Pressable>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                height: "30%",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+              }}
+            >
+              <Pressable
+                style={
+                  scrollQuality === "Legendary"
+                    ? styles.buttonActive
+                    : styles.button
+                }
+                onPress={
+                  scrollQuality === "Legendary"
+                    ? () => setScrollQuality("")
+                    : () => setScrollQuality("Legendary")
+                }
+              >
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  Legendary
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View
+            style={{
+              height: "10%",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Pressable style={styles.buttonActive} onPress={() => add()}>
+              <Text
+                style={{
+                  fontWeight: "700",
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: RFValue(20, 800),
+                }}
+              >
+                ADD
+              </Text>
+            </Pressable>
+          </View>
+        </View>
       ) : (
         <View></View>
       )}

@@ -1,6 +1,7 @@
 import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function LittleMysteryBox({ data }) {
   const [date, setDate] = useState("--/--/----");
@@ -281,7 +282,7 @@ export default function LittleMysteryBox({ data }) {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 10 }}>Lvl {data != 0 ? data.lvl : "-"}</Text>
+        <Text style={{ fontSize: RFValue(10, 800) }}>Lvl {data != 0 ? data.lvl : "-"}</Text>
       </View>
       <View
         style={{
@@ -328,7 +329,7 @@ export default function LittleMysteryBox({ data }) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 10 }}>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
             {data != 0 ? date : "../../../...."}
           </Text>
         </View>
@@ -341,8 +342,8 @@ export default function LittleMysteryBox({ data }) {
             flexDirection: "row",
           }}
         >
-          <Text style={{ fontSize: 10 }}>{data != 0 ? data.mbPrice : "--.--"} $</Text>
-          <Text style={{ fontSize: 10 }}>
+          <Text style={{ fontSize: RFValue(10, 800) }}>{data != 0 ? data.mbPrice : "--.--"} $</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
           </Text>
         </View>
         <View
@@ -389,11 +390,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -550,11 +551,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -658,7 +659,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });

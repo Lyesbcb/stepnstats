@@ -1,6 +1,7 @@
 import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function DetailMysteryBox({
   data,
@@ -401,7 +402,7 @@ export default function DetailMysteryBox({
           top: "4%",
         }}
       >
-        <Text style={{ color: "white", fontSize: 12 }}>
+        <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
           Lvl {data != undefined ? data.lvl : "-"}
         </Text>
       </View>
@@ -614,7 +615,7 @@ export default function DetailMysteryBox({
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontSize: 12 }}>
+            <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
               {data != undefined ? data.mbPrice : "--.--"} $
             </Text>
           </View>
@@ -628,7 +629,7 @@ export default function DetailMysteryBox({
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontSize: 12 }}>
+            <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
               {data != undefined ? date : "../../../...."}
             </Text>
           </View>
@@ -642,7 +643,7 @@ export default function DetailMysteryBox({
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontSize: 12 }}>
+            <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
               {/* Ajouter un truc ici */}
             </Text>
           </View>

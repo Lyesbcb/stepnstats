@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default function SelectRealmModal({
   setmodalVisible,
@@ -84,7 +85,7 @@ export default function SelectRealmModal({
                 color="black"
               ></Icon>
             </Pressable>
-            <Text style={{ fontSize: 24, fontWeight: "700" }}>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
               Select realm
             </Text>
             <View
@@ -151,7 +152,7 @@ export default function SelectRealmModal({
                   : Alert.alert("You must choose a realm!");
               }}
             >
-              <Text style={{ fontWeight: "700", fontSize: 24 }}>{textButton}</Text>
+              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>{textButton}</Text>
             </Pressable>
           </View>
         </TouchableOpacity>
@@ -184,11 +185,11 @@ const styles = StyleSheet.create({
   unofficial: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 14,
+    fontSize: RFValue(14, 800),
     fontWeight: "500",
   },
   supportText: {
-    fontSize: 12,
+    fontSize: RFValue(12, 800),
     fontWeight: "700",
   },
   supportButton: {
@@ -345,11 +346,11 @@ const styles = StyleSheet.create({
   },
   selectorTextPrimary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
     color: "white",
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
   },
   selector: {
     position: "absolute",
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
   },
   dateSelectorTextPrimary: {
     color: "white",
-    fontSize: 20,
+    fontSize: RFValue(20, 800),
   },
   dateSelector: {
     position: "absolute",
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 36,
+    fontSize: RFValue(36, 800),
     fontWeight: "700",
   },
 });
