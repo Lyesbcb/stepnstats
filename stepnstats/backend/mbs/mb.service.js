@@ -81,6 +81,7 @@ async function uploadFile(req, res) {
     });
     get_content_from_screen.stderr.setEncoding("utf8");
     await get_content_from_screen.stderr.on("data", async function (data) {
+      console.log(data)
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {

@@ -1,6 +1,19 @@
 {
   "expo": {
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "stepn-stats",
+            "project": "Stepn Stats",
+            "authToken": "85dbe1120b6011edb4fbfe37751bc6a5"
+          }
+        }
+      ]
+    },
     "plugins": [
+      ["sentry-expo"],
       [
         "expo-media-library",
         {
