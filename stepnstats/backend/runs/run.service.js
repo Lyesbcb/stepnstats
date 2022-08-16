@@ -35,7 +35,7 @@ async function uploadFile(req, res) {
     ) {
       throw "This run is already exist.";
     }
-    var run = await spawn("python", ["./python/run.py", req.file.path]);
+    var run = await spawn("python3", ["./python/run.py", req.file.path]);
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {

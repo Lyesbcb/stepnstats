@@ -19,7 +19,7 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    var nft = await spawn("python", ["./python/nft.py", req.file.path]);
+    var nft = await spawn("python3", ["./python/nft.py", req.file.path]);
     nft.stdout.setEncoding("utf8");
     await nft.stdout.on("data", async function (data) {
       data = data.replace(/'/g, '"');

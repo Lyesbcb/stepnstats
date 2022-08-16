@@ -37,7 +37,7 @@ async function uploadFile(req, res) {
     ) {
       throw "This mb is already exist.";
     }
-    var get_content_from_screen = await spawn("python", [
+    var get_content_from_screen = await spawn("python3", [
       "./python/get_content_from_screen.py",
       req.file.path,
     ]);
