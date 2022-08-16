@@ -35,7 +35,7 @@ async function createNft(params) {
     });
 }
 
-async function updateNft(id, params) {
+async function updateNft(params, id) {
   var token = await getSecuretValueFor("token");
   var config = {
     method: "put",
@@ -48,11 +48,17 @@ async function updateNft(id, params) {
   };
 
   await axios(config)
-    .then(async function (response) {
-      console.log(response.data);
+    .then(async (response) => {
+      if (response.status === 200) {
+        return await response;
+      }
+      throw await response;
     })
-    .catch(function (error) {
-      console.log(error.response.data.message);
+    .then(async (response) => {
+      return await response;
+    })
+    .catch(async function (error) {
+      throw await error.message;
     });
 }
 
@@ -157,7 +163,6 @@ async function getByNftId(nftId) {
       console.log(error.response.data.message);
     });
 }
-
 const luckEnergy = [
   {
     energy: 3,
@@ -275,7 +280,7 @@ function gemValue(gem, socket, value) {
   return Number(finalValue.toFixed(1));
 }
 
-function optimize(myNft) {
+async function optimize(myNft) {
   var points = 0;
   var efficiency = 0;
   var luck = 0;
@@ -286,51 +291,56 @@ function optimize(myNft) {
   var gemComfort = 0;
   var gemResilience = 0;
 
-  if (myNft.quality === "Common") {
-    points = myNft.lvl * 4;
-    comfort = 10;
-    points += Number(myNft.comfort.toFixed(0)) - 10;
-  }
-  if (myNft.quality === "Uncommon") {
-    points = myNft.lvl * 6;
-    comfort = 20;
-    points += myNft.comfort - 20;
-  }
-  if (myNft.quality === "Rare") {
-    points = myNft.lvl * 8;
-    comfort = 20;
-    points += myNft.comfort - 20;
-  }
-  if (myNft.quality === "Epic") {
-    points = myNft.lvl * 10;
-    comfort = 20;
-    points += myNft.comfort - 20;
-  }
   for (var i = 1; i < 5; i++) {
     if (myNft[`socket${i}`].includes("efficiency")) {
       gemEfficiency += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.efficiency
+        myNft.efficiencyBase
       );
     }
     if (myNft[`socket${i}`].includes("luck")) {
-      gemLuck += gemValue(myNft[`gem${i}`], myNft[`socket${i}`], myNft.luck);
+      gemLuck += gemValue(
+        myNft[`gem${i}`],
+        myNft[`socket${i}`],
+        myNft.luckBase
+      );
     }
     if (myNft[`socket${i}`].includes("comfort")) {
       gemComfort += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.comfort
+        myNft.comfortBase
       );
     }
     if (myNft[`socket${i}`].includes("resilience")) {
       gemResilience += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.resilience
+        myNft.resilienceBase
       );
     }
+  }
+
+  if (myNft.quality === "Common") {
+    points = myNft.lvl * 4;
+    comfort = Math.abs(Number(myNft.comfortBase.toFixed(0)) - 10);
+    points += Number(myNft.comfortBase.toFixed(0)) - 10;
+  }
+  if (myNft.quality === "Uncommon") {
+    points = myNft.lvl * 6;
+    comfort = Math.abs(Number(myNft.comfortBase.toFixed(0)) - 20);
+    points += Number(myNft.comfortBase.toFixed(0)) - 20;
+  }
+  if (myNft.quality === "Rare") {
+    points = myNft.lvl * 8;
+    comfort = Math.abs(Number(myNft.comfortBase.toFixed(0)) - 20);
+    points += Number(myNft.comfortBase.toFixed(0)) - 20;
+  }
+  if (myNft.quality === "Epic") {
+    points = myNft.lvl * 10;
+    comfort = Math.abs(Number(myNft.comfortBase.toFixed(0)) - 20);
+    points += Number(myNft.comfortBase.toFixed(0)) - 20;
   }
   if (myNft.strategy === "GST") {
     resilience += Number((points / 6).toFixed(0));
@@ -340,11 +350,16 @@ function optimize(myNft) {
   }
 
   if (myNft.strategy === "MYSTERY BOX") {
-    var maxLuck = gemLuck + myNft.luck + points;
-    luck +=
-      luckEnergy[getClosestEnergyLuck(myNft.energy, maxLuck)].luck -
-      (myNft.luck + gemLuck);
-    points -= luck;
+    var maxLuck = gemLuck + myNft.luckBase + points;
+    var average = luckEnergy[getClosestEnergyLuck(myNft.energy, maxLuck)].luck;
+    if (average <= gemLuck + myNft.luckBase) {
+      // Pas besoin d'attribuer des points en luck
+    } else {
+      var diff = average - (gemLuck + myNft.luckBase);
+      // attribuer diff en points
+      luck += diff;
+      points -= luck;
+    }
     resilience += Number((points / 6).toFixed(0));
     points -= resilience;
     efficiency += points;
@@ -356,26 +371,35 @@ function optimize(myNft) {
     efficiency += Number((points / 2).toFixed(0));
     points -= resilience;
     points -= efficiency;
-    var maxLuck = gemLuck + myNft.luck + points;
-    luck +=
-      luckEnergy[getClosestEnergyLuck(myNft.energy, maxLuck)].luck - myNft.luck;
-    points -= luck;
+    var maxLuck = gemLuck + myNft.luckBase + points;
+    var average = luckEnergy[getClosestEnergyLuck(myNft.energy, maxLuck)].luck;
+    if (average <= gemLuck + myNft.luckBase) {
+      // Pas besoin d'attribuer des points en luck
+    } else {
+      var diff = average - (gemLuck + myNft.luckBase);
+      // attribuer diff en points
+      luck += diff;
+      points -= luck;
+    }
+    resilience += Number((points / 6).toFixed(0));
+    points -= resilience;
+    efficiency += points;
+    points -= efficiency;
   }
-
-  return {
-    stats: {
-      efficiency: Number(efficiency.toFixed(0)),
-      luck: Number(luck.toFixed(0)),
-      comfort: Number(comfort.toFixed(0)),
-      resilience: Number(resilience.toFixed(0)),
-    },
-    gem: {
-      gemEfficiency,
-      gemLuck,
-      gemComfort,
-      gemResilience,
-    },
+  const params = {
+    lvlOptimized: myNft.lvl,
+    efficiencyOptimized: Number(efficiency.toFixed(0)) + gemEfficiency,
+    luckOptimized: Number(luck.toFixed(0)) + gemLuck,
+    comfortOptimized: Number(comfort.toFixed(0)) + gemComfort,
+    resilienceOptimized: Number(resilience.toFixed(0)) + gemResilience,
+    gem1Optimized: myNft.gem1,
+    gem2Optimized: myNft.gem2,
+    gem3Optimized: myNft.gem3,
+    gem4Optimized: myNft.gem4,
+    id: myNft.id,
   };
+  console.log(params);
+  return await updateNft(params, myNft.id);
 }
 
 function getMaxMb(myNft) {
@@ -392,46 +416,50 @@ function getMaxMb(myNft) {
   if (myNft.quality === "Common") {
     points = myNft.lvl * 4;
     comfort = 10;
-    points += Number(myNft.comfort.toFixed(0)) - 10;
+    points += Number(myNft.comfortBase.toFixed(0)) - 10;
   }
   if (myNft.quality === "Uncommon") {
     points = myNft.lvl * 6;
     comfort = 20;
-    points += myNft.comfort - 20;
+    points += myNft.comfortBase - 20;
   }
   if (myNft.quality === "Rare") {
     points = myNft.lvl * 8;
     comfort = 20;
-    points += myNft.comfort - 20;
+    points += myNft.comfortBase - 20;
   }
   if (myNft.quality === "Epic") {
     points = myNft.lvl * 10;
     comfort = 20;
-    points += myNft.comfort - 20;
+    points += myNft.comfortBase - 20;
   }
   for (var i = 1; i < 5; i++) {
     if (myNft[`socket${i}`].includes("efficiency")) {
       gemEfficiency += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.efficiency
+        myNft.efficiencyBase
       );
     }
     if (myNft[`socket${i}`].includes("luck")) {
-      gemLuck += gemValue(myNft[`gem${i}`], myNft[`socket${i}`], myNft.luck);
+      gemLuck += gemValue(
+        myNft[`gem${i}`],
+        myNft[`socket${i}`],
+        myNft.luckBase
+      );
     }
     if (myNft[`socket${i}`].includes("comfort")) {
       gemComfort += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.comfort
+        myNft.comfortBase
       );
     }
     if (myNft[`socket${i}`].includes("resilience")) {
       gemResilience += gemValue(
         myNft[`gem${i}`],
         myNft[`socket${i}`],
-        myNft.resilience
+        myNft.resilienceBase
       );
     }
   }
@@ -443,6 +471,6 @@ function getMaxMb(myNft) {
     efficiency += Number((points / 2).toFixed(0));
     points -= resilience + efficiency;
   }
-  var maxLuck = gemLuck + myNft.luck + points;
+  var maxLuck = gemLuck + myNft.luckBase + points;
   return getClosestEnergyLuck(myNft.energy, maxLuck) + 1;
 }

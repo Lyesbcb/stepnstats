@@ -16,7 +16,7 @@ router.post(
 );
 router.get("/", authorize(Role.Admin), getAll);
 router.get("/my", authorize(), getAllMy);
-router.put("/:id", authorize(), updateSchema, update);
+router.put("/:id", authorize(), update);
 router.delete("/:id", authorize(), _delete);
 router.get("/nftId", authorize(), getByNftId);
 
@@ -100,6 +100,7 @@ function update(req, res, next) {
 }
 
 function _delete(req, res, next) {
+  console.log(req)
   nftService
     .delete(req)
     .then(() => res.json({ message: "nft deleted successfully" }))

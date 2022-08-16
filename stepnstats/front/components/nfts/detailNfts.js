@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import OptimizeModal from "./optimizeModal";
 import { RFValue } from "react-native-responsive-fontsize";
+import { updateNft } from "../../services/nfts/index";
 
 export default function DetailNfts({
   data,
@@ -19,13 +20,14 @@ export default function DetailNfts({
   previousNft,
   setmodalOneNfts,
   deleteOneNft,
+  myFunction,
 }) {
   const [maxStat, setMaxStat] = useState();
   const [widthEfficiency, setWidthEfficiency] = useState("0%");
   const [widthLuck, setWidthLuck] = useState("0%");
   const [widthComfort, setWidthComfort] = useState("0%");
   const [widthResilience, setwidthResilience] = useState("0%");
-  const [baseStats, setBaseStats] = useState(data.base);
+  const [stats, setStats] = useState(data.fileNameBase ? "base" : "increased");
   // Optimize Modal
   const [optimizeModalVisible, setOptimizeModalVisible] = useState(false);
   const [optimized, setOptimized] = useState({});
@@ -83,13 +85,47 @@ export default function DetailNfts({
       require("../../assets/shoes/trainer/shoe10.png"),
     ],
   };
+  const contents = {
+    efficiencyLvl1: require("../../assets/gem/efficiency/lvl1.png"),
+    efficiencyLvl2: require("../../assets/gem/efficiency/lvl2.png"),
+    efficiencyLvl3: require("../../assets/gem/efficiency/lvl3.png"),
+    efficiencyLvl4: require("../../assets/gem/efficiency/lvl4.png"),
+    efficiencyLvl5: require("../../assets/gem/efficiency/lvl5.png"),
+    efficiencyLvl6: require("../../assets/gem/efficiency/lvl6.png"),
+    efficiencyLvl7: require("../../assets/gem/efficiency/lvl7.png"),
+    efficiencyLvl8: require("../../assets/gem/efficiency/lvl8.png"),
+    efficiencyLvl9: require("../../assets/gem/efficiency/lvl9.png"),
+    luckLvl1: require("../../assets/gem/luck/lvl1.png"),
+    luckLvl2: require("../../assets/gem/luck/lvl2.png"),
+    luckLvl3: require("../../assets/gem/luck/lvl3.png"),
+    luckLvl4: require("../../assets/gem/luck/lvl4.png"),
+    luckLvl5: require("../../assets/gem/luck/lvl5.png"),
+    luckLvl6: require("../../assets/gem/luck/lvl6.png"),
+    luckLvl7: require("../../assets/gem/luck/lvl7.png"),
+    luckLvl8: require("../../assets/gem/luck/lvl8.png"),
+    luckLvl9: require("../../assets/gem/luck/lvl9.png"),
+    comfortLvl1: require("../../assets/gem/comfort/lvl1.png"),
+    comfortLvl2: require("../../assets/gem/comfort/lvl2.png"),
+    comfortLvl3: require("../../assets/gem/comfort/lvl3.png"),
+    comfortLvl4: require("../../assets/gem/comfort/lvl4.png"),
+    comfortLvl5: require("../../assets/gem/comfort/lvl5.png"),
+    comfortLvl6: require("../../assets/gem/comfort/lvl6.png"),
+    comfortLvl7: require("../../assets/gem/comfort/lvl7.png"),
+    comfortLvl8: require("../../assets/gem/comfort/lvl8.png"),
+    comfortLvl9: require("../../assets/gem/comfort/lvl9.png"),
+    resilienceLvl1: require("../../assets/gem/resilience/lvl1.png"),
+    resilienceLvl2: require("../../assets/gem/resilience/lvl2.png"),
+    resilienceLvl3: require("../../assets/gem/resilience/lvl3.png"),
+    resilienceLvl4: require("../../assets/gem/resilience/lvl4.png"),
+    resilienceLvl5: require("../../assets/gem/resilience/lvl5.png"),
+    resilienceLvl6: require("../../assets/gem/resilience/lvl6.png"),
+    resilienceLvl7: require("../../assets/gem/resilience/lvl7.png"),
+    resilienceLvl8: require("../../assets/gem/resilience/lvl8.png"),
+    resilienceLvl9: require("../../assets/gem/resilience/lvl9.png"),
+  };
   useEffect(() => {
     defineMaxStat();
   });
-
-  function baseStatsButton() {
-    console.log(baseStats);
-  }
   var color;
 
   const qualityColor = {
@@ -133,44 +169,148 @@ export default function DetailNfts({
   {
     data != 0 ? (color = qualityColor[data.quality]) : (color = "#BABCBE");
   }
-
+  async function remake() {
+    try {
+      await updateNft(
+        {
+          lvlOptimized: null,
+          efficiencyOptimized: null,
+          luckOptimized: null,
+          comfortOptimized: null,
+          resilienceOptimized: null,
+          gem1Optimized: null,
+          gem2Optimized: null,
+          gem3Optimized: null,
+          gem4Optimized: null,
+          id: data.id,
+        },
+        data.id
+      );
+      await defineMaxStat();
+      setStats("base");
+      setOptimizeModalVisible(true);
+    } catch (error) {
+      Alert.alert(error);
+    }
+  }
   function defineMaxStat() {
-    setMaxStat(
-      Math.max(data.efficiency, data.luck, data.comfort, data.resilience)
-    );
-    setWidthEfficiency(
-      maxStat == data.efficiency
-        ? String(((data.efficiency / maxStat) * 100).toFixed(0)) + "%"
-        : String(((data.efficiency / maxStat) * 100).toFixed(0)) + "%"
-    );
-    setWidthLuck(
-      maxStat == data.luck
-        ? String(((data.luck / maxStat) * 100).toFixed(0)) + "%"
-        : String(((data.luck / maxStat) * 100).toFixed(0)) + "%"
-    );
-    // console.log(maxStat);
-    // console.log(data.luck / maxStat);
-    setWidthComfort(
-      maxStat == data.comfort
-        ? String(((data.comfort / maxStat) * 100).toFixed(0)) + "%"
-        : String(((data.comfort / maxStat) * 100).toFixed(0)) + "%"
-    );
-    setwidthResilience(
-      maxStat == data.resilience
-        ? String(((data.resilience / maxStat) * 100).toFixed(0)) + "%"
-        : String(((data.resilience / maxStat) * 100).toFixed(0)) + "%"
-    );
+    if (stats === "base") {
+      setMaxStat(
+        Math.max(
+          data.efficiencyBase,
+          data.luckBase,
+          data.comfortBase,
+          data.resilienceBase
+        )
+      );
+      setWidthEfficiency(
+        maxStat == data.efficiencyBase
+          ? String(((data.efficiencyBase / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.efficiencyBase / maxStat) * 100).toFixed(0)) + "%"
+      );
+      setWidthLuck(
+        maxStat == data.luckBase
+          ? String(((data.luckBase / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.luckBase / maxStat) * 100).toFixed(0)) + "%"
+      );
+      // console.log(maxStat);
+      // console.log(data.luckBase / maxStat);
+      setWidthComfort(
+        maxStat == data.comfortBase
+          ? String(((data.comfortBase / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.comfortBase / maxStat) * 100).toFixed(0)) + "%"
+      );
+      setwidthResilience(
+        maxStat == data.resilienceBase
+          ? String(((data.resilienceBase / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.resilienceBase / maxStat) * 100).toFixed(0)) + "%"
+      );
+    }
+    if (stats === "increased") {
+      setMaxStat(
+        Math.max(
+          data.efficiencyIncreased,
+          data.luckIncreased,
+          data.comfortIncreased,
+          data.resilienceIncreased
+        )
+      );
+      setWidthEfficiency(
+        maxStat == data.efficiencyIncreased
+          ? String(((data.efficiencyIncreased / maxStat) * 100).toFixed(0)) +
+              "%"
+          : String(((data.efficiencyIncreased / maxStat) * 100).toFixed(0)) +
+              "%"
+      );
+      setWidthLuck(
+        maxStat == data.luckIncreased
+          ? String(((data.luckIncreased / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.luckIncreased / maxStat) * 100).toFixed(0)) + "%"
+      );
+      // console.log(maxStat);
+      // console.log(data.luckIncreased / maxStat);
+      setWidthComfort(
+        maxStat == data.comfortIncreased
+          ? String(((data.comfortIncreased / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.comfortIncreased / maxStat) * 100).toFixed(0)) + "%"
+      );
+      setwidthResilience(
+        maxStat == data.resilienceIncreased
+          ? String(((data.resilienceIncreased / maxStat) * 100).toFixed(0)) +
+              "%"
+          : String(((data.resilienceIncreased / maxStat) * 100).toFixed(0)) +
+              "%"
+      );
+    }
+    if (stats === "optimized") {
+      setMaxStat(
+        Math.max(
+          data.efficiencyOptimized,
+          data.luckOptimized,
+          data.comfortOptimized,
+          data.resilienceOptimized
+        )
+      );
+      setWidthEfficiency(
+        maxStat == data.efficiencyOptimized
+          ? String(((data.efficiencyOptimized / maxStat) * 100).toFixed(0)) +
+              "%"
+          : String(((data.efficiencyOptimized / maxStat) * 100).toFixed(0)) +
+              "%"
+      );
+      setWidthLuck(
+        maxStat == data.luckOptimized
+          ? String(((data.luckOptimized / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.luckOptimized / maxStat) * 100).toFixed(0)) + "%"
+      );
+      // console.log(maxStat);
+      // console.log(data.luckOptimized / maxStat);
+      setWidthComfort(
+        maxStat == data.comfortOptimized
+          ? String(((data.comfortOptimized / maxStat) * 100).toFixed(0)) + "%"
+          : String(((data.comfortOptimized / maxStat) * 100).toFixed(0)) + "%"
+      );
+      setwidthResilience(
+        maxStat == data.resilienceOptimized
+          ? String(((data.resilienceOptimized / maxStat) * 100).toFixed(0)) +
+              "%"
+          : String(((data.resilienceOptimized / maxStat) * 100).toFixed(0)) +
+              "%"
+      );
+    }
   }
 
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <OptimizeModal
-      optimized={optimized}
-      setOptimized={setOptimized}
+        optimized={optimized}
+        setOptimized={setOptimized}
         setModalVisible={setOptimizeModalVisible}
         modalVisible={optimizeModalVisible}
         minLvl={data.lvl}
         data={data}
+        myFunction={myFunction}
+        setStats={setStats}
       ></OptimizeModal>
       <View
         style={{
@@ -303,6 +443,20 @@ export default function DetailNfts({
             style={{ width: "15%", height: "100%", resizeMode: "contain" }}
             source={sockets[data.socket1]}
           ></Image>
+          {data.gem1Optimized & (stats === "optimized") ? (
+            <Image
+              style={{
+                width: "40%",
+                height: "100%",
+                resizeMode: "contain",
+                position: "absolute",
+              }}
+              source={contents[data.gem1Optimized]}
+            ></Image>
+          ) : (
+            <View></View>
+          )}
+
           <Image
             style={{ width: "15%", height: "100%", resizeMode: "contain" }}
             source={sockets[data.socket2]}
@@ -452,8 +606,7 @@ export default function DetailNfts({
             }}
           >
             <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
-              {/* TODO get price */}
-              47$
+              {/* TODO get price */}$
             </Text>
           </View>
         </View>
@@ -467,9 +620,135 @@ export default function DetailNfts({
             justifyContent: "center",
           }}
         >
-          <Text style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}>
+          <Text
+            style={{
+              marginLeft: "4%",
+              fontSize: RFValue(12, 800),
+              fontWeight: "700",
+            }}
+          >
             Level {data ? data.lvl : ""}
           </Text>
+        </View>
+        <View
+          style={{
+            width: "80%",
+            marginTop: "1%",
+            height: "6%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {/* Base stats button */}
+          <Pressable
+            style={
+              stats === "base"
+                ? styles.baseStatsInactive
+                : styles.baseStatsActive
+            }
+            onPress={() => {
+              if (stats !== "base") {
+                if (data.fileNameBase) {
+                  setStats("base");
+                } else {
+                  Alert.alert(
+                    "To show the base stats you need to add base stats screen."
+                  );
+                }
+              }
+              defineMaxStat();
+            }}
+          >
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+              Base
+            </Text>
+          </Pressable>
+          {/* Increased stats button */}
+          <Pressable
+            style={
+              stats === "increased"
+                ? styles.baseStatsInactive
+                : styles.baseStatsActive
+            }
+            onPress={() => {
+              if (stats !== "increased") {
+                if (data.fileNameIncreased) {
+                  setStats("increased");
+                } else {
+                  Alert.alert(
+                    "To show the increased stats you need to add increased stats screen."
+                  );
+                }
+              }
+              defineMaxStat();
+            }}
+          >
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+              Increased
+            </Text>
+          </Pressable>
+          {/* Optimized stats button */}
+          <View
+            style={
+              data.efficiencyOptimized
+                ? stats === "optimized"
+                  ? styles.optimizedActive
+                  : styles.optimized
+                : styles.toOptimized
+            }
+          >
+            <Pressable
+              onPress={() => {
+                if (data.fileNameBase) {
+                  if (data.efficiencyOptimized) {
+                    if (stats !== "optimized") {
+                      setStats("optimized");
+                      defineMaxStat();
+                    }
+                  } else {
+                    setOptimizeModalVisible(true);
+                  }
+                } else {
+                  Alert.alert(
+                    "To optimize a sneaker you need to upload the base stats."
+                  );
+                }
+              }}
+            >
+              <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+                Optimize
+              </Text>
+            </Pressable>
+            {data.efficiencyOptimized ? (
+              <View
+                style={{
+                  height: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "25%",
+                }}
+              >
+                <View
+                  style={{ height: "80%", width: 1, backgroundColor: "black" }}
+                >
+                  <Text></Text>
+                </View>
+                <Pressable onPress={async () => await remake()}>
+                  <Icon
+                    style={{ width: "100%" }}
+                    size={20}
+                    type="material-community"
+                    name="reload"
+                    color="black"
+                  ></Icon>
+                </Pressable>
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </View>
         </View>
         <View
           style={{
@@ -490,30 +769,6 @@ export default function DetailNfts({
           >
             Attributes
           </Text>
-          <Pressable
-            style={
-              data.base ? styles.baseStatsInactive : styles.baseStatsActive
-            }
-            // TODO: request the user to add the base stats shoes to optimize
-            onPress={() => baseStatsButton()}
-          >
-            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>Base</Text>
-          </Pressable>
-          <Pressable
-            style={{
-              backgroundColor: "yellow",
-              borderWidth: "2",
-              borderRadius: 20,
-              width: "25%",
-              height: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-              marginHorizontal: "1%",
-            }}
-            onPress={() => {data.base ? setOptimizeModalVisible(true): Alert.alert("To optimize a sneaker you need to upload the base stats.")}}
-          >
-            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>Optimize</Text>
-          </Pressable>
         </View>
         <View
           style={{
@@ -550,7 +805,11 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
+                style={{
+                  marginLeft: "4%",
+                  fontSize: RFValue(12, 800),
+                  fontWeight: "700",
+                }}
               >
                 Efficiency
               </Text>
@@ -576,7 +835,13 @@ export default function DetailNfts({
               ></View>
             </View>
             <Text style={{ width: "20%", marginLeft: "2%" }}>
-              {data ? data.efficiency : 0}
+              {stats === "base"
+                ? data.efficiencyBase
+                : stats === "increased"
+                ? data.efficiencyIncreased
+                : stats === "optimized"
+                ? data.efficiencyOptimized + data.efficiencyBase
+                : 0}
             </Text>
           </View>
           <View
@@ -606,7 +871,11 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
+                style={{
+                  marginLeft: "4%",
+                  fontSize: RFValue(12, 800),
+                  fontWeight: "700",
+                }}
               >
                 Luck
               </Text>
@@ -632,7 +901,13 @@ export default function DetailNfts({
               ></View>
             </View>
             <Text style={{ width: "20%", marginLeft: "2%" }}>
-              {data ? data.luck : 0}
+              {stats === "base"
+                ? data.luckBase
+                : stats === "increased"
+                ? data.luckIncreased
+                : stats === "optimized"
+                ? data.luckOptimized + Number(data.luckBase.toFixed(0))
+                : 0}
             </Text>
           </View>
           <View
@@ -662,7 +937,11 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
+                style={{
+                  marginLeft: "4%",
+                  fontSize: RFValue(12, 800),
+                  fontWeight: "700",
+                }}
               >
                 Comfort
               </Text>
@@ -688,7 +967,13 @@ export default function DetailNfts({
               ></View>
             </View>
             <Text style={{ width: "20%", marginLeft: "2%" }}>
-              {data ? data.comfort : 0}
+              {stats === "base"
+                ? data.comfortBase
+                : stats === "increased"
+                ? data.comfortIncreased
+                : stats === "optimized"
+                ? data.comfortOptimized + data.comfortBase
+                : 0}
             </Text>
           </View>
 
@@ -719,7 +1004,11 @@ export default function DetailNfts({
                 }}
               ></Image>
               <Text
-                style={{ marginLeft: "4%", fontSize: RFValue(12, 800), fontWeight: "700" }}
+                style={{
+                  marginLeft: "4%",
+                  fontSize: RFValue(12, 800),
+                  fontWeight: "700",
+                }}
               >
                 Resilience
               </Text>
@@ -734,6 +1023,7 @@ export default function DetailNfts({
                 justifyContent: "space-between",
               }}
             >
+              {/* TODO delimitation entre base et increased ou optimized */}
               <View
                 style={{
                   width: widthResilience,
@@ -745,7 +1035,13 @@ export default function DetailNfts({
               ></View>
             </View>
             <Text style={{ width: "20%", marginLeft: "2%" }}>
-              {data ? data.resilience : 0}
+              {stats === "base"
+                ? data.resilienceBase
+                : stats === "increased"
+                ? data.resilienceIncreased
+                : stats === "optimized"
+                ? data.resilienceOptimized + data.resilienceBase
+                : 0}
             </Text>
           </View>
         </View>
@@ -755,11 +1051,40 @@ export default function DetailNfts({
 }
 
 const styles = StyleSheet.create({
+  optimizedActive: {
+    backgroundColor: "grey",
+    borderWidth: "2",
+    borderRadius: 20,
+    width: "35%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
+  optimized: {
+    backgroundColor: "white",
+    borderWidth: "2",
+    borderRadius: 20,
+    width: "35%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
+  toOptimized: {
+    backgroundColor: "yellow",
+    borderWidth: "2",
+    borderRadius: 20,
+    width: "25%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   baseStatsActive: {
     borderWidth: "2",
     borderRadius: 20,
-    width: "20%",
-    height: "80%",
+    width: "25%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "1%",
@@ -767,8 +1092,8 @@ const styles = StyleSheet.create({
   baseStatsInactive: {
     borderWidth: "2",
     borderRadius: 20,
-    width: "20%",
-    height: "80%",
+    width: "25%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "1%",

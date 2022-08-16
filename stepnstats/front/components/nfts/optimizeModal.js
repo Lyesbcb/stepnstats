@@ -29,6 +29,8 @@ export default function OptimizeModal({
   data,
   optimized,
   setOptimized,
+  myFunction,
+  setStats,
 }) {
   const [step, setStep] = useState(0);
   // Step 0 (Energy)
@@ -44,14 +46,14 @@ export default function OptimizeModal({
   const [maxMb, setMaxMb] = useState(0);
   // Step 5 (name)
   const [name, setName] = useState("");
-  function nextStep() {
-    if (step === 5) {
+  async function nextStep() {
+    if (step === 3) {
       const myNft = {
         energy: energy,
-        efficiency: data.efficiency,
-        luck: data.luck,
-        comfort: data.comfort,
-        resilience: data.resilience,
+        efficiencyBase: data.efficiencyBase,
+        luckBase: data.luckBase,
+        comfortBase: data.comfortBase,
+        resilienceBase: data.resilienceBase,
         quality: data.quality,
         actualLvl: data.lvl,
         lvl: lvl,
@@ -60,22 +62,55 @@ export default function OptimizeModal({
         gem3: gem.gem3,
         gem4: gem.gem4,
         socket1: data.socket1,
-        socket2: data.socket1,
-        socket3: data.socket1,
-        socket4: data.socket1,
+        socket2: data.socket2,
+        socket3: data.socket3,
+        socket4: data.socket4,
         strategy: strategy,
+        id: data.id,
       };
-      setOptimized(optimize(myNft));
-      setStep(0);
-      setModalVisible(false);
-    } else {
-      if (step === 3) {
+      setMaxMb(getMaxMb(myNft));
+      if ((strategy === "GST") & (step === 3)) {
+        setStep(step + 2);
         const myNft = {
           energy: energy,
-          efficiency: data.efficiency,
-          luck: data.luck,
-          comfort: data.comfort,
-          resilience: data.resilience,
+          efficiencyBase: data.efficiencyBase,
+          luckBase: data.luckBase,
+          comfortBase: data.comfortBase,
+          resilienceBase: data.resilienceBase,
+          quality: data.quality,
+          actualLvl: data.lvl,
+          lvl: lvl,
+          gem1: gem.gem1,
+          gem2: gem.gem2,
+          gem3: gem.gem3,
+          gem4: gem.gem4,
+          socket1: data.socket1,
+          socket2: data.socket2,
+          socket3: data.socket3,
+          socket4: data.socket4,
+          strategy: strategy,
+          id: data.id,
+        };
+        try {
+          await optimize(myNft);
+        } catch (error) {
+          Alert.alert(error);
+        }
+        await myFunction();
+        setStep(0);
+        setStats("optimized");
+        setModalVisible(false);
+      } else {
+        setStep(step + 1);
+      }
+    } else {
+      if (step === 4) {
+        const myNft = {
+          energy: energy,
+          efficiencyBase: data.efficiencyBase,
+          luckBase: data.luckBase,
+          comfortBase: data.comfortBase,
+          resilienceBase: data.resilienceBase,
           quality: data.quality,
           actualLvl: data.lvl,
           lvl: lvl,
@@ -88,31 +123,34 @@ export default function OptimizeModal({
           socket3: data.socket1,
           socket4: data.socket1,
           strategy: strategy,
+          id: data.id,
         };
-        setMaxMb(getMaxMb(myNft));
-        if (strategy === "GST") {
-          setStep(step + 2);
-        } else {
-          setStep(step + 1);
+        try {
+          await optimize(myNft);
+        } catch (error) {
+          Alert.alert(error);
         }
+        await myFunction();
+        setStep(0);
+        setStats("optimized");
+        setModalVisible(false);
       } else {
         setStep(step + 1);
       }
     }
   }
   function previousStep() {
-    if ((step === 5) & (strategy === "GST")) {
-      setStep(step - 2);
-    } else {
-      setStep(step - 1);
-    }
+    setStep(step - 1);
   }
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)}
+      onRequestClose={() => {
+        setModalVisible(false);
+        setStep(0);
+      }}
     >
       <TouchableOpacity
         style={{
@@ -162,14 +200,6 @@ export default function OptimizeModal({
             maxMb={maxMb}
             mysteryBoxLevel={mysteryBoxLevel}
             setMysteryBoxLevel={setMysteryBoxLevel}
-            setModalVisible={setModalVisible}
-            nextStep={nextStep}
-            previousStep={previousStep}
-          />
-        ) : step === 5 ? (
-          <SelectName
-            name={name}
-            setName={setName}
             setModalVisible={setModalVisible}
             nextStep={nextStep}
             previousStep={previousStep}

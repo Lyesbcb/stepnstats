@@ -37,7 +37,6 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
   const [nftsSelected, setNftsSelected] = useState(1);
   const [refreshing, setRefreshing] = React.useState(false);
 
-
   async function onRefresh() {
     await setRefreshing(true);
     await myFunction();
@@ -54,13 +53,13 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
 
     if (!result.cancelled) {
       setLoading(true);
-      try{
+      try {
         await uploadNft(result, realm);
-      }catch (error){
-        Alert.alert(error)
+        await myFunction();
+      } catch (error) {
+        Alert.alert(error);
       }
       setLoading(false);
-      await myFunction();
     }
   };
 
@@ -138,7 +137,8 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
             <View
               style={{
                 backgroundColor: "white",
-                height: "60%",
+                marginTop: "8%",
+                height: "67%",
                 width: "90%",
                 borderRadius: 30,
                 borderWidth: 1,
@@ -159,6 +159,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
                   previousNft={previousNft}
                   setmodalOneNfts={setmodalOneNfts}
                   deleteOneNft={deleteOneNft}
+                  myFunction={myFunction}
                 ></DetailNfts>
               ) : (
                 <View></View>

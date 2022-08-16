@@ -11,8 +11,8 @@ const config = require("./config.json");
 
 const web = new WebClient(config.slack_token);
 const conversationId = "C03SNDBD7E0";
-app.use(bodyParser.urlencoded({ extended: true, limit: '500mb' }));
-app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors());
 
 // api routes
@@ -41,7 +41,6 @@ app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
 //     );
 //   }
 // }, 600000);
-
 
 // global error handler
 app.use(errorHandler);

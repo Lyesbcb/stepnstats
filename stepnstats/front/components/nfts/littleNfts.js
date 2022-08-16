@@ -138,7 +138,9 @@ export default function LittleNfts({ data }) {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: RFValue(10, 800) }}>{data != 0 ? data.type : "-"}</Text>
+        <Text style={{ fontSize: RFValue(10, 800) }}>
+          {data != 0 ? data.type : "-"}
+        </Text>
       </View>
       <View
         style={{
@@ -222,7 +224,9 @@ export default function LittleNfts({ data }) {
         >
           {/* TODO: Price of the sneakers */}
           {/* <Text style={{ fontSize: RFValue(10, 800) }}>{data != 0 ? "?" : "-"}</Text> */}
-          <Text style={{ fontSize: RFValue(10, 800) }}>Lv {data != 0 ? data.lvl : "-"}</Text>
+          <Text style={{ fontSize: RFValue(10, 800) }}>
+            Lv {data != 0 ? data.lvl : "-"}
+          </Text>
         </View>
         <View
           style={{
@@ -262,7 +266,11 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data != 0 ? data.efficiency.toFixed(0) : "-"}
+            {data.fileNameBase
+              ? data.efficiencyBase.toFixed(0)
+              : data.fileNameIncreased
+              ? data.efficiencyIncreased.toFixed(0)
+              : "-"}
           </Text>
         </View>
         <View
@@ -278,7 +286,11 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data != 0 ? data.luck.toFixed(0) : "-"}
+            {data.fileNameBase
+              ? data.luckBase.toFixed(0)
+              : data.fileNameIncreased
+              ? data.luckIncreased.toFixed(0)
+              : "-"}
           </Text>
         </View>
         <View
@@ -294,7 +306,11 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data != 0 ? data.comfort.toFixed(0) : "-"}
+            {data.fileNameBase
+              ? data.comfortBase.toFixed(0)
+              : data.fileNameIncreased
+              ? data.comfortIncreased.toFixed(0)
+              : "-"}
           </Text>
         </View>
         <View
@@ -310,7 +326,11 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data != 0 ? data.resilience.toFixed(0) : "-"}
+            {data.fileNameBase
+              ? data.resilienceBase.toFixed(0)
+              : data.fileNameIncreased
+              ? data.resilienceIncreased.toFixed(0)
+              : "-"}
           </Text>
         </View>
       </View>

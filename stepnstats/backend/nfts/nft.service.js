@@ -19,15 +19,7 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    if (
-      await db.Nft.findOne({
-        where: { userId: req.user.id, fileName: req.file.filename },
-      })
-    ) {
-      throw "This nft is already exist.";
-    }
     var nft = await spawn("python", ["./python/nft.py", req.file.path]);
-
     nft.stdout.setEncoding("utf8");
     await nft.stdout.on("data", async function (data) {
       data = data.replace(/'/g, '"');
@@ -36,16 +28,7 @@ async function uploadFile(req, res) {
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
-        var tempBool = Boolean(params.base === "true");
-        if (!tempBool) {
-          throw "Upload only base stats sneaker!";
-        } else {
-          try {
-            res.send(await create(params));
-          } catch (error) {
-            res.status(400).json({ message: error });
-          }
-        }
+        res.send(await create(params));
       } catch (error) {
         res.status(400).json({ message: error });
       }
@@ -100,17 +83,97 @@ async function getByNftId(req) {
   return nft;
 }
 
-async function create(params) {
-  console.log(params);
-  if (
-    await db.Nft.findOne({
-      where: { userId: params.userId, nftId: params.nftId },
-    })
-  ) {
-    throw "This nft is already exist.";
+function renameProperty(obj, oldName, newName) {
+  obj[newName] = obj[oldName];
+  delete obj[oldName];
+  return obj;
+}
+
+function paramsToParamsBaseOrIncrease(params) {
+  if (params.base === "true") {
+    params = renameProperty(params, "efficiency", "efficiencyBase");
+    params = renameProperty(params, "luck", "luckBase");
+    params = renameProperty(params, "comfort", "comfortBase");
+    params = renameProperty(params, "resilience", "resilienceBase");
+    params = renameProperty(params, "fileName", "fileNameBase");
+  } else {
+    params = renameProperty(params, "efficiency", "efficiencyIncreased");
+    params = renameProperty(params, "luck", "luckIncreased");
+    params = renameProperty(params, "comfort", "comfortIncreased");
+    params = renameProperty(params, "resilience", "resilienceIncreased");
+    params = renameProperty(params, "fileName", "fileNameIncreased");
   }
+  return params;
+}
+
+async function create(params) {
+  // Check if base exist
+  if (params.base === "true") {
+    if (
+      await db.Nft.findOne({
+        where: {
+          userId: params.userId,
+          nftId: params.nftId,
+          fileNameBase: {
+            [db.Op.ne]: null,
+          },
+          lvl: {
+            [db.Op.eq]: params.lvl,
+          },
+        },
+      })
+    ) {
+      throw "This nft with base stats is already saved.";
+    } else {
+      var nft = await db.Nft.findOne({
+        where: {
+          userId: params.userId,
+          nftId: params.nftId,
+        },
+      });
+      if (nft) {
+        Object.assign(nft, paramsToParamsBaseOrIncrease(params));
+        await nft.save();
+        return await getNft(id);
+      } else {
+        return await db.Nft.create(paramsToParamsBaseOrIncrease(params));
+      }
+    }
+  } else {
+    if (
+      await db.Nft.findOne({
+        where: {
+          userId: params.userId,
+          nftId: params.nftId,
+          fileNameIncreased: {
+            [db.Op.ne]: null,
+          },
+          lvl: {
+            [db.Op.eq]: params.lvl,
+          },
+        },
+      })
+    ) {
+      throw "This nft with increased stats is already saved.";
+    } else {
+      var nft = await db.Nft.findOne({
+        where: {
+          userId: params.userId,
+          nftId: params.nftId,
+        },
+      });
+      if (nft) {
+        Object.assign(nft, paramsToParamsBaseOrIncrease(params));
+        console.log(nft);
+        return await nft.save();
+      } else {
+        return await db.Nft.create(paramsToParamsBaseOrIncrease(params));
+      }
+    }
+  }
+
+  // Check if Increased exist
   // save rnftun
-  return await db.Nft.create(params);
 }
 
 async function update(req) {
@@ -126,9 +189,7 @@ async function update(req) {
   params = req.body;
   // copy params to nfts and save
   Object.assign(nft, params);
-  await nft.save();
-
-  return getNft(id);
+  return await nft.save();
 }
 
 async function _delete(req) {
