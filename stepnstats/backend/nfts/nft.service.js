@@ -68,15 +68,14 @@ async function getAllMy(req) {
 
 async function getByNftId(req) {
   const nft = await db.Nft.findOne({
-    where: { nftId: req.query.nftId },
+    where: { nftId: req.query.nftId, userId: req.user.id },
     limit: 1,
   });
   if (!nft) throw "nft not found.";
   const currentUser = req.user;
   const userId = nft.userId;
-
   // only allow admins to access other user records
-  if (userId !== currentUser.id && currentUser.role !== Role.Admin) {
+  if (userId !== currentUser.id) {
     throw "Unauthorized";
   }
 

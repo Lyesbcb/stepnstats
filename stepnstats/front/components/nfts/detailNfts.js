@@ -213,8 +213,6 @@ export default function DetailNfts({
           ? String(((data.luckBase / maxStat) * 100).toFixed(0)) + "%"
           : String(((data.luckBase / maxStat) * 100).toFixed(0)) + "%"
       );
-      // console.log(maxStat);
-      // console.log(data.luckBase / maxStat);
       setWidthComfort(
         maxStat == data.comfortBase
           ? String(((data.comfortBase / maxStat) * 100).toFixed(0)) + "%"
@@ -439,28 +437,86 @@ export default function DetailNfts({
             alignItems: "center",
           }}
         >
-          <Image
-            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            source={sockets[data.socket1]}
-          ></Image>
-          {data.gem1Optimized & (stats === "optimized") ? (
+          <View
+            style={{
+              width: "20%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Image
-              style={{
-                width: "40%",
-                height: "100%",
-                resizeMode: "contain",
-                position: "absolute",
-              }}
-              source={contents[data.gem1Optimized]}
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+              source={
+                data.socket1.includes(0) & (data.lvl >= 5)
+                  ? sockets[data.socket1.slice(0, -1) + "1"]
+                  : sockets[data.socket1]
+              }
             ></Image>
-          ) : (
-            <View></View>
-          )}
-
-          <Image
-            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            source={sockets[data.socket2]}
-          ></Image>
+            {stats === "optimized" && data.gem1Optimized ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem1Optimized]}
+              ></Image>
+            ) : stats === "increased" && data.gem1Inscreased ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem1Inscreased]}
+              ></Image>
+            ) : (
+              <View></View>
+            )}
+          </View>
+          <View
+            style={{
+              width: "20%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+              source={
+                data.socket2.includes(0) & (data.lvl >= 5)
+                  ? sockets[data.socket2.slice(0, -1) + "1"]
+                  : sockets[data.socket2]
+              }
+            ></Image>
+            {stats === "optimized" && data.gem2Optimized ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem2Optimized]}
+              ></Image>
+            ) : stats === "increased" && data.gem2Inscreased ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem2Inscreased]}
+              ></Image>
+            ) : (
+              <View></View>
+            )}
+          </View>
         </View>
         <View
           style={{
@@ -524,14 +580,86 @@ export default function DetailNfts({
             alignItems: "center",
           }}
         >
-          <Image
-            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            source={sockets[data.socket3]}
-          ></Image>
-          <Image
-            style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            source={sockets[data.socket4]}
-          ></Image>
+          <View
+            style={{
+              width: "20%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+              source={
+                data.socket3.includes(0) & (data.lvl >= 5)
+                  ? sockets[data.socket3.slice(0, -1) + "1"]
+                  : sockets[data.socket3]
+              }
+            ></Image>
+            {stats === "optimized" && data.gem3Optimized ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem3Optimized]}
+              ></Image>
+            ) : stats === "increased" && data.gem3Inscreased ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem3Inscreased]}
+              ></Image>
+            ) : (
+              <View></View>
+            )}
+          </View>
+          <View
+            style={{
+              width: "20%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+              source={
+                data.socket4.includes(0) & (data.lvl >= 5)
+                  ? sockets[data.socket4.slice(0, -1) + "1"]
+                  : sockets[data.socket4]
+              }
+            ></Image>
+            {stats === "optimized" && data.gem3Optimized ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem3Optimized]}
+              ></Image>
+            ) : stats === "increased" && data.gem3Inscreased ? (
+              <Image
+                style={{
+                  width: "40%",
+                  height: "100%",
+                  resizeMode: "contain",
+                  position: "absolute",
+                }}
+                source={contents[data.gem3Inscreased]}
+              ></Image>
+            ) : (
+              <View></View>
+            )}
+          </View>
         </View>
         <View
           style={{

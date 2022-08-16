@@ -160,7 +160,7 @@ async function getByNftId(nftId) {
       return response.data;
     })
     .catch(function (error) {
-      console.log(error.response.data.message);
+      throw error.response.data.message;
     });
 }
 const luckEnergy = [
@@ -281,6 +281,7 @@ function gemValue(gem, socket, value) {
 }
 
 async function optimize(myNft) {
+  console.log(myNft);
   var points = 0;
   var efficiency = 0;
   var luck = 0;
@@ -398,7 +399,6 @@ async function optimize(myNft) {
     gem4Optimized: myNft.gem4,
     id: myNft.id,
   };
-  console.log(params);
   return await updateNft(params, myNft.id);
 }
 

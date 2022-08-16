@@ -266,10 +266,10 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data.fileNameBase
-              ? data.efficiencyBase.toFixed(0)
-              : data.fileNameIncreased
+            {data.fileNameIncreased
               ? data.efficiencyIncreased.toFixed(0)
+              : data.fileNameBase
+              ? data.efficiencyBase.toFixed(0)
               : "-"}
           </Text>
         </View>
@@ -286,10 +286,10 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data.fileNameBase
-              ? data.luckBase.toFixed(0)
-              : data.fileNameIncreased
+            {data.fileNameIncreased
               ? data.luckIncreased.toFixed(0)
+              : data.fileNameBase
+              ? data.luckBase.toFixed(0)
               : "-"}
           </Text>
         </View>
@@ -306,10 +306,10 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data.fileNameBase
-              ? data.comfortBase.toFixed(0)
-              : data.fileNameIncreased
+            {data.fileNameIncreased
               ? data.comfortIncreased.toFixed(0)
+              : data.fileNameBase
+              ? data.comfortBase.toFixed(0)
               : "-"}
           </Text>
         </View>
@@ -326,10 +326,10 @@ export default function LittleNfts({ data }) {
             style={{ resizeMode: "contain", height: "30%", width: "50%" }}
           ></Image>
           <Text style={{ fontSize: RFValue(10, 800) }}>
-            {data.fileNameBase
-              ? data.resilienceBase.toFixed(0)
-              : data.fileNameIncreased
+            {data.fileNameIncreased
               ? data.resilienceIncreased.toFixed(0)
+              : data.fileNameBase
+              ? data.resilienceBase.toFixed(0)
               : "-"}
           </Text>
         </View>

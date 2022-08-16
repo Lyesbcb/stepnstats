@@ -119,9 +119,9 @@ export default function OptimizeModal({
           gem3: gem.gem3,
           gem4: gem.gem4,
           socket1: data.socket1,
-          socket2: data.socket1,
-          socket3: data.socket1,
-          socket4: data.socket1,
+          socket2: data.socket2,
+          socket3: data.socket3,
+          socket4: data.socket4,
           strategy: strategy,
           id: data.id,
         };

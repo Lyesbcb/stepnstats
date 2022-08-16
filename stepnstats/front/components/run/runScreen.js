@@ -19,7 +19,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import LittleNfts from "../nfts/littleNfts";
 import { deleteRun } from "../../services/runs/index";
 export default function RunScreen({ navigation, route }) {
-  const [run, setRun] = useState(route.params.run);
+  const [run, setRun] = useState(JSON.parse(route.params).run);
   const [nft, setNft] = useState(0);
   useEffect(() => {
     myFunction();
@@ -45,6 +45,7 @@ export default function RunScreen({ navigation, route }) {
         setNft(tempNft);
       }
     } catch (error) {
+      Alert.alert(error);
       setNft(0);
     }
   }
@@ -70,6 +71,18 @@ export default function RunScreen({ navigation, route }) {
     let day = date.getDate();
     let hour = date.getHours();
     let minute = date.getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (day < 10) {
+      day = "0" + day;
+    }
     var date = `${day}/${month}/${year} ${hour}:${minute}`;
     return date;
   }
@@ -147,6 +160,13 @@ export default function RunScreen({ navigation, route }) {
             }}
           >
             <LittleNfts data={nft}></LittleNfts>
+            {nft.fileNameIncreased === null ? (
+              <Text style={{ fontSize: RFValue(10, 800), marginTop: "2%", textAlign: "center", color: "red" }}>
+                Please add your sneaker with increased stats!
+              </Text>
+            ) : (
+              <View></View>
+            )}
           </Pressable>
 
           <View
@@ -276,7 +296,7 @@ export default function RunScreen({ navigation, route }) {
             }}
             onPress={async () => {
               await deleteRun(run.id);
-              route.params.myFunction();
+              JSON.parse(route.params).myFunction();
               navigation.navigate("AllRunsScreen");
             }}
           >
@@ -350,16 +370,11 @@ export default function RunScreen({ navigation, route }) {
       </View>
       <LineChart
         data={{
-          labels: ["January", "February", "March", "April", "May", "June"],
+          labels: ["", "Soon here a chart to check your perfomances!"],
           datasets: [
             {
               data: [
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
+                0,
               ],
             },
           ],
