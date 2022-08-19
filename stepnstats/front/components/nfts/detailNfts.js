@@ -909,7 +909,7 @@ export default function DetailNfts({
           <View
             style={{
               height: "20%",
-              width: "100%%",
+              width: "100%",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -975,7 +975,7 @@ export default function DetailNfts({
           <View
             style={{
               height: "20%",
-              width: "100%%",
+              width: "100%",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -1041,7 +1041,7 @@ export default function DetailNfts({
           <View
             style={{
               height: "20%",
-              width: "100%%",
+              width: "100%",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -1108,7 +1108,7 @@ export default function DetailNfts({
           <View
             style={{
               height: "20%",
-              width: "100%%",
+              width: "100%",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -1181,7 +1181,7 @@ export default function DetailNfts({
 const styles = StyleSheet.create({
   optimizedActive: {
     backgroundColor: "grey",
-    borderWidth: "2",
+    borderWidth: 2,
     borderRadius: 20,
     width: "35%",
     height: "100%",
@@ -1191,7 +1191,7 @@ const styles = StyleSheet.create({
   },
   optimized: {
     backgroundColor: "white",
-    borderWidth: "2",
+    borderWidth: 2,
     borderRadius: 20,
     width: "35%",
     height: "100%",
@@ -1201,7 +1201,7 @@ const styles = StyleSheet.create({
   },
   toOptimized: {
     backgroundColor: "yellow",
-    borderWidth: "2",
+    borderWidth: 2,
     borderRadius: 20,
     width: "25%",
     height: "100%",
@@ -1209,7 +1209,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   baseStatsActive: {
-    borderWidth: "2",
+    borderWidth: 2,
     borderRadius: 20,
     width: "25%",
     height: "100%",
@@ -1218,7 +1218,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "1%",
   },
   baseStatsInactive: {
-    borderWidth: "2",
+    borderWidth: 2,
     borderRadius: 20,
     width: "25%",
     height: "100%",

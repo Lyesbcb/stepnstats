@@ -100,7 +100,7 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
     <View
       style={{
         width: "90%",
-        height: "65%",
+        height: "67%",
       }}
     >
       <ProgressLoader

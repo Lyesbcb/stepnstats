@@ -102,7 +102,7 @@ export default function OneRun({ navigation, run, myFunction }) {
         flexDirection: "row",
       }}
       key={run.id}
-      onPress={() => navigation.navigate("OneRunScreen", JSON.stringify({run, myFunction}))}
+      onPress={() => navigation.navigate("OneRunScreen", JSON.stringify({run, myFunction:myFunction}))}
     >
       <View
         style={{

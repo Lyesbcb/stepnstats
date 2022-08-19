@@ -321,7 +321,7 @@ export default function LittleMysteryBox({ data }) {
 
         <View
           style={{
-            height: "10%",
+            height: "13%",
             width: "60%",
             borderRadius: 20,
             backgroundColor: color,

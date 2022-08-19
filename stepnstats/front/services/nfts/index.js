@@ -86,6 +86,7 @@ async function uploadNft(image, realm) {
     // Start waiting screen
     return await fetch(baseURL + "/upload", options)
       .then(async (response) => {
+        console.log(response);
         if (response.ok) {
           return await response.json();
         }
@@ -95,7 +96,7 @@ async function uploadNft(image, realm) {
         return await response;
       })
       .catch(async function (error) {
-        throw await error.message;
+        // throw await error.message;
       });
     // Stop wainting screen
   }

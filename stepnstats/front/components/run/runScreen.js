@@ -296,7 +296,8 @@ export default function RunScreen({ navigation, route }) {
             }}
             onPress={async () => {
               await deleteRun(run.id);
-              JSON.parse(route.params).myFunction();
+              // JSON.parse(route.params).myFunction();
+              console.log(JSON.parse(route.params))
               navigation.navigate("AllRunsScreen");
             }}
           >

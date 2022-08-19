@@ -131,11 +131,13 @@ async function getAllMyRun(page) {
   };
 
   return await axios(config)
-    .then(async function (response) {
-      return response.data.rows;
-      // Set store with the data
-    })
-    .catch(function (error) {
-      console.log(error.response.data.message);
-    });
+  .then(async (response) => {
+    if (response.data) {
+      return await response.data.rows
+    }
+    throw await response
+  })
+  .catch(async function (error) {
+    throw await error.message
+  });
 }

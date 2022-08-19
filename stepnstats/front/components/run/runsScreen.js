@@ -45,7 +45,6 @@ export default function RunsScreen({ navigation }) {
   }, []);
 
   const myFunction = async () => {
-    console.log("myfunction");
     try {
       setRuns(await getAllMyRun(1));
     } catch (error) {

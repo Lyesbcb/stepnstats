@@ -451,7 +451,7 @@ export default function Marketplace({
         <View
           style={{
             width: "100%",
-            height: "10%",
+            height: "20%",
             alignContent: "center",
             flexDirection: "row",
             justifyContent: "space-between",
@@ -621,8 +621,8 @@ const styles = StyleSheet.create({
     },
   },
   dayTemporalityActive: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#61F2FC",
     borderRadius: 5,
     borderColor: "black",
@@ -637,8 +637,8 @@ const styles = StyleSheet.create({
     },
   },
   weekTemporality: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#EB78E7",
     borderRadius: 5,
     borderColor: "black",
@@ -653,8 +653,8 @@ const styles = StyleSheet.create({
     },
   },
   weekTemporalityActive: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#EB78E7",
     borderRadius: 5,
     borderColor: "black",
@@ -669,8 +669,8 @@ const styles = StyleSheet.create({
     },
   },
   monthTemporality: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",
@@ -685,8 +685,8 @@ const styles = StyleSheet.create({
     },
   },
   monthTemporalityActive: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",

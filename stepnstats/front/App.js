@@ -13,6 +13,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-elements/dist/icons/Icon";
 import Invenrtory from "./components/inventory";
 import Marketplace from "./components/marketplace/marketplaceScreen";
+import { RFValue } from "react-native-responsive-fontsize";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -46,7 +47,15 @@ function App() {
         inactiveColor="#000"
         barStyle={{ backgroundColor: "#fff" }}
         screenOptions={({ route, navigation }) => ({
-          tabBarVisible: isTabBarVisible(navigation.state),
+          tabBarIconStyle: {
+            textAlignVertical: "center",
+            justifyContent: "center",
+          },
+          tabBarItemStyle: {
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+          },
           headerShown: false,
           tabBarStyle: {
             position: "absolute",
@@ -81,17 +90,11 @@ function App() {
               iconName = focused ? "chart-box" : "chart-box";
             }
             return (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  top: "30%",
-                }}
-              >
+              <View>
                 <Icon
                   type="material-community"
                   name={iconName}
-                  size={23}
+                  size={RFValue(30, 800)}
                   color={color}
                 />
               </View>
