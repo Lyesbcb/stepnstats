@@ -39,6 +39,7 @@ async function uploadFile(req, res) {
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {
+      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
@@ -52,6 +53,7 @@ async function uploadFile(req, res) {
     });
     run.stderr.setEncoding("utf8");
     await run.stderr.on("data", async function (data) {
+      console.log(data)
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
