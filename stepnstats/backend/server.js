@@ -23,24 +23,24 @@ app.use("/nfts", require("./nfts/nfts.controller"));
 app.use("/mps/solana", require("./mps/solana/solanaMps.controller"));
 app.use("/mps/bnb", require("./mps/bnb/bnbMps.controller"));
 app.use("/mps/ethereum", require("./mps/ethereum/ethereumMps.controller"));
-// try {
-//   getMp.getMp();
-// } catch {
-//   console.log("Error to get marketplace");
-// }
-// setInterval(async function () {
-//   try {
-//     getMp.getMp();
-//   } catch (error) {
-//     const result = await web.chat.postMessage({
-//       text: `Une erreur lors de la récupération de la marketplace: ${error}`,
-//       channel: conversationId,
-//     });
-//     console.log(
-//       `Successfully send message ${result.ts} in conversation ${conversationId}`
-//     );
-//   }
-// }, 600000);
+try {
+  getMp.getMp();
+} catch {
+  console.log("Error to get marketplace");
+}
+setInterval(async function () {
+  try {
+    getMp.getMp();
+  } catch (error) {
+    const result = await web.chat.postMessage({
+      text: `Une erreur lors de la récupération de la marketplace: ${error}`,
+      channel: conversationId,
+    });
+    console.log(
+      `Successfully send message ${result.ts} in conversation ${conversationId}`
+    );
+  }
+}, 600000);
 
 // global error handler
 app.use(errorHandler);
