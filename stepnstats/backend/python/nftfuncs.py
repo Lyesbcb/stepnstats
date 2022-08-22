@@ -17,23 +17,29 @@ def get_idtpqualvl(oimg, info):
 
         id = "".join(reader.readtext(idimg, detail=0, allowlist="#0123456789new")).replace("#", "")[:9].replace("new", "")
 
-        if id == "":
-            return NULL
-        else:
-            return id
+        return id
 
     def get_qualtp():
         tpimg = gimg[int(h/8):int(h/5.5), int(w/12):int(w/1.6)]
         
         result = reader.readtext(tpimg, detail=0)
+        qual, tp = "", ""
 
         if len(result) > 1:
-            return result[-2:]
-        else:
-            return "", ""
+            qual, tp = result[-2:]
+            if "gger" in tp:
+                tp = "Jogger"
+            elif "lker" in tp:
+                tp = "Walker"
+            elif "nner" in tp:
+                tp = "Runner"
+            elif "ainer" in tp:
+                tp = "Trainer"
+        
+        return qual, tp
 
     def get_level():
-        lvlimg = gimg[int(h/5.5):int(h/4.2), int(w/12):int(w/3.0)]
+        lvlimg = gimg[int(h/5.5):int(h/4.2), int(w/12):int(w/1.5)]
 
         lvl = parse_text(lvlimg, config="--psm 7 -c tessedit_char_whitelist=0123456789", process=False)
 
@@ -49,14 +55,14 @@ def get_stats(oimg, info):
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
     def get_base():
-        bimg = gimg[int(h/25):int(h/12), int(w/1.8):int(w/1.4)]
+        bimg = gimg[int(h/25):int(h/12), int(w/1.8):int(w/1.55)]
 
         return np.sum((bimg < 240) & (bimg > 200)) > (h * w / 4000)
 
     def get_nmbrs():
         nimg = gimg[int(h/10):, int(w/1.3):int(w/1.07)]
         
-        nmbs = reader.readtext(nimg, detail=0)
+        nmbs = reader.readtext(nimg, detail=0, allowlist="0123456789.")
 
         if len(nmbs) > 4:
             nmbs = nmbs[-4:]
@@ -215,6 +221,8 @@ def crop(oimg):
     min_length = h // 1.5
     max_gap = 20
 
+    #cv.imshow("test", cv.resize(oimg, (500, 700)))
+    #cv.waitKey(0)
     lines = cv.HoughLinesP(img, rho, theta, 15, (), min_length, max_gap)
 
     cx1, cy1, cx2, cy2 = 0, h//2, w, h//2
@@ -230,7 +238,7 @@ def crop(oimg):
                 elif y > cy2:
                     cy2 = y
 
-    #cv.imshow('timg', timg)
+    #cv.imshow('timg', cv.resize(timg, (500, 700)))
     #cv.waitKey(0)
 
     return oimg[cy1:cy2, cx1:cx2]

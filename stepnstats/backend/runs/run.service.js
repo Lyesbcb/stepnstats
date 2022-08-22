@@ -2,6 +2,7 @@
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
 var spawn = require("child_process").spawn;
+var fs = require('fs')
 
 module.exports = {
   getAll,
@@ -28,17 +29,11 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
-    if (
-      await db.Run.findOne({
-        where: { userId: req.user.id, fileName: req.file.filename },
-      })
-    ) {
-      throw "This run is already exist.";
-    }
     var run = await spawn("python3", ["./python/run.py", req.file.path]);
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {
+      console.log(req.file.path)
       console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
@@ -48,7 +43,14 @@ async function uploadFile(req, res) {
       try {
         res.send(await create(params));
       } catch (error) {
-        res.status(400).json({ message: error });
+        fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
+          if (err) throw err
+        })
+        if(error){
+          res.status(400).json({ message: error });
+        }else{
+          res.status(400).json({ message: "Error on recognizing image" });
+        }
       }
     });
     run.stderr.setEncoding("utf8");
@@ -63,6 +65,9 @@ async function uploadFile(req, res) {
       throw stderr;
     }
   } catch (error) {
+    fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
+      if (err) throw err
+    })
     return res.status(400).json({ message: error });
   }
 }
@@ -80,7 +85,7 @@ async function getAllMy(req) {
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
     order: [["createdAt", "DESC"]],
-    limit: 10,
+    limit: 1000,
     subQuery: false,
   });
 }
@@ -99,15 +104,23 @@ async function getById(req) {
 }
 
 async function create(params) {
-  if (
-    await db.Run.findOne({
+  var res
+  try {
+    res = await db.Run.findOne({
       where: { userId: params.userId, date: params.date, nftId: params.nftId },
-    })
-  ) {
+    })     
+  }catch {
+    throw "Error on recognizing image";
+  }
+  if(res){
     throw "This run is already exist.";
   }
+  try{
+    return await db.Run.create(params);
+  }catch{
+    throw "Error on recognizing image";
+  }
   // save run
-  return await db.Run.create(params);
 }
 
 async function update(req) {

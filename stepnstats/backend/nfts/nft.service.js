@@ -2,6 +2,7 @@
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
 var spawn = require("child_process").spawn;
+var fs = require('fs')
 
 module.exports = {
   getAll,
@@ -22,6 +23,8 @@ async function uploadFile(req, res) {
     var nft = await spawn("python3", ["./python/nft.py", req.file.path]);
     nft.stdout.setEncoding("utf8");
     await nft.stdout.on("data", async function (data) {
+      console.log(req.file.path)
+      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
@@ -30,11 +33,15 @@ async function uploadFile(req, res) {
       try {
         res.send(await create(params));
       } catch (error) {
+        fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
+          if (err) throw err
+        })
         res.status(400).json({ message: error });
       }
     });
     nft.stderr.setEncoding("utf8");
     await nft.stderr.on("data", async function (data) {
+      console.log(data)
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -44,6 +51,9 @@ async function uploadFile(req, res) {
       throw stderr;
     }
   } catch (error) {
+    fs.rename(req.file.path, "./upload/error/nft/"+req.file.filename, function (err) {
+      if (err) throw err
+    })
     return res.status(400).json({ message: error });
   }
 }
@@ -61,7 +71,7 @@ async function getAllMy(req) {
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
     order: [["createdAt", "DESC"]],
-    limit: 10,
+    limit: 1000,
     subQuery: false,
   });
 }
@@ -71,7 +81,7 @@ async function getByNftId(req) {
     where: { nftId: req.query.nftId, userId: req.user.id },
     limit: 1,
   });
-  if (!nft) throw "nft not found.";
+  if (!nft) throw "Sneaker used for this run not found please add it on sneakers screen.";
   const currentUser = req.user;
   const userId = nft.userId;
   // only allow admins to access other user records
@@ -163,16 +173,12 @@ async function create(params) {
       });
       if (nft) {
         Object.assign(nft, paramsToParamsBaseOrIncrease(params));
-        console.log(nft);
         return await nft.save();
       } else {
         return await db.Nft.create(paramsToParamsBaseOrIncrease(params));
       }
     }
   }
-
-  // Check if Increased exist
-  // save rnftun
 }
 
 async function update(req) {

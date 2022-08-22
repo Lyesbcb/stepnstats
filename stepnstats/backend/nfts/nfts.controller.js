@@ -100,7 +100,6 @@ function update(req, res, next) {
 }
 
 function _delete(req, res, next) {
-  console.log(req)
   nftService
     .delete(req)
     .then(() => res.json({ message: "nft deleted successfully" }))

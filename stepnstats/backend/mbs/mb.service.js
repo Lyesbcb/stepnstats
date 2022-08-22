@@ -2,6 +2,7 @@
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
 var spawn = require("child_process").spawn;
+var fs = require('fs')
 
 module.exports = {
   getAll,
@@ -44,6 +45,8 @@ async function uploadFile(req, res) {
 
     get_content_from_screen.stdout.setEncoding("utf8");
     await get_content_from_screen.stdout.on("data", async function (data) {
+      console.log(req.file.path)
+      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
@@ -76,6 +79,9 @@ async function uploadFile(req, res) {
       try {
         res.send(await db.Mb.create(params));
       } catch (error) {
+        fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
+          if (err) throw err
+        })
         res.status(400).send({ message: "Error on recognizing image" });
       }
     });
@@ -94,6 +100,9 @@ async function uploadFile(req, res) {
     if (error == "") {
       return res.status(400).json({ message: "Error on recognizing image" });
     }
+    fs.rename(req.file.path, "./upload/error/mb/"+req.file.filename, function (err) {
+      if (err) throw err
+    })
     return res.status(400).json({ message: error });
   }
 }
@@ -111,7 +120,7 @@ async function getAllMy(req) {
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
     order: [["createdAt", "DESC"]],
-    limit: 10,
+    limit: 1000,
     subQuery: false,
   });
   for (var i = 0; i < mbs.length; i++) {

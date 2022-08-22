@@ -35,7 +35,9 @@ def get_run_durab(oimg):
     # cv.imshow("test.png", cv.resize(img, (250, 400)))
     # cv.waitKey(0)
     #---------------------------------------------------------------
-
+    for k, v in info.items():
+        if v == "":
+            info[k] = "0" 
     return info
 
 def get_run_nondurab(oimg):
@@ -63,7 +65,9 @@ def get_run_nondurab(oimg):
     # cv.imshow('nonduarb', img) #cv.resize(img))#, (250, 400)))
     # cv.waitKey(0)
     # --------------------------------------------------------------
-
+    for k, v in info.items():
+            if v == "":
+                info[k] = "0"
     return info
 
 

@@ -4,7 +4,6 @@ import numpy as np
 import easyocr
 import cv2 as cv
 
-
 reader = easyocr.Reader(['en'], gpu=False)
 
 def crop_bot(img):
@@ -14,7 +13,7 @@ def crop_bot(img):
         clr = img[y, w//2]
         b, g, r = clr
 
-        # print(h + y, w // 2, b, g, r)
+        #print(h + y, w // 2, b, g, r)
 
         if (220 > b > 180 and
             255 >= g > 230 and
@@ -59,12 +58,7 @@ def get_kmdt(img, tlbr, info):
         kmimg = img[:, int(w/1.8):w-int(w/9.5)]
         kmimg = cv.cvtColor(kmimg, cv.COLOR_BGR2GRAY)
 
-        rngd = cv.inRange(kmimg, 0, 235) 
-        km = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789,.", process=False)
-
-        if km == "":
-            rngd = cv.inRange(kmimg, 0, 220) 
-            km = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789,.", process=False)
+        km = "".join(reader.readtext(kmimg, detail=0, allowlist="0123456789.,"))
 
         if "," in km:
             km = km.replace(",", ".")
@@ -75,15 +69,34 @@ def get_kmdt(img, tlbr, info):
         dtimg = img[int(h/1.5):,int(w/5):int(w/1.8)]
         dtimg = cv.cvtColor(dtimg, cv.COLOR_BGR2GRAY)
 
-        rngd = cv.inRange(dtimg, 0, 240)
-        date = "".join(reader.readtext(rngd, detail=0, allowlist="0123456789/:")).replace(" ", "")
+        date = "".join(reader.readtext(dtimg, detail=0, allowlist="0123456789/:")).replace(" ", "")
 
-        date = date[:10] + " " + date[10:]
-        dt, tm = date.split(" ")
-        day, month, year = dt.split("/")
-        date = "{0}-{1}-{2}T{3}:00.000Z".format(year, month, day, tm)
+        try:
+            date = date[:10] + " " + date[10:]
+            dt, tm = date.split(" ")
+            tm = tm.replace("/", "")
+            if ":" in tm:
+                if tm.index(":") == 1:
+                    tm = "0" + tm
+            else:
+                tm = tm[:2] + ":" + tm[2:]
 
-        return date
+            tm = tm[:5]
+            if dt[2] != "/":
+                dt = dt[:2] + "/" + dt[2:]
+            if dt[5] != "/":
+                if dt[5] == "2":
+                    dt = dt[:5] + "/" + dt[5:]
+                else:
+                    dt = dt[:5] + "/" + dt[6:]
+            dt = dt[:10]
+            #print(dt, tm)
+
+            day, month, year = dt.split("/")
+            date = "{0}-{1}-{2}T{3}:00.000Z".format(year, month, day, tm)
+            return date
+        except:
+            return ""
 
     info["km"] = get_km() 
     info["date"] = get_date()
@@ -93,24 +106,15 @@ def get_kmdt_nd(img, tlbr, info):
     h, w, _ = img.shape
 
     def get_km():
-        kmimg = img[:, int(w/1.8):w-int(w/5)]
+        kmimg = img[:, int(w/1.8):w-int(w/5.5)]
         kmimg = cv.cvtColor(kmimg, cv.COLOR_BGR2GRAY)
 
-        rngd = cv.inRange(kmimg, 0, 235) 
-        km = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789,.", process=False)
+        km = "".join(reader.readtext(kmimg, detail=0, allowlist="0123456789.,"))
 
-        if km == "":
-            rngd = cv.inRange(kmimg, 0, 140) 
-            km = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789,.", process=False)
-
-        if km == "":
-            prsd = reader.readtext(rngd, detail=0)
-            if prsd != []:
-                km = prsd[0] 
-
+        #cv.imshow('test', kmimg)
+        #cv.waitKey(0)
         if "," in km:
             km = km.replace(",", ".")
-
 
         return km
 
@@ -118,20 +122,23 @@ def get_kmdt_nd(img, tlbr, info):
         dtimg = img[int(h/1.5):,int(w/5):int(w/1.8)]
         dtimg = cv.cvtColor(dtimg, cv.COLOR_BGR2GRAY)
 
-        rngd = cv.inRange(dtimg, 0, 200)
-        date = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789/:", process=False) 
+        #rngd = cv.inRange(dtimg, 0, 200)
+        date = "".join(reader.readtext(dtimg, detail=0, allowlist="0123456789:/"))
 
         if "/" in date:
-            date = date[:10] + " " + date[10:]
-            dt, tm = date.split(" ")
-            day, month, year = dt.split("/")
-            date = "{0}-{1}-{2}T{3}:00.000Z".format(year, month, day, tm)
+            try:
+                date = date[:10] + " " + date[10:]
+                dt, tm = date.split(" ")
+                if not (":" in tm):
+                    tm = tm[:2] + ":" + tm[2:]
+                day, month, year = dt.split("/")
+                date = "{0}-{1}-{2}T{3}:00.000Z".format(year, month, day, tm)
+                return date
+            except Exception as e:
+                return ""
 
-        return date
-
-    info["gst"] = get_km() 
+    info["gst/min"] = get_km() 
     info["date"] = get_date()
-
 
 
 def get_drst(img, tlbr, info):
@@ -142,23 +149,17 @@ def get_drst(img, tlbr, info):
         stpimg = img[:int(h/1.55),int(w/1.6):w-int(w/8)]
         stpimg = cv.cvtColor(stpimg, cv.COLOR_BGR2GRAY)
 
-        rngd   = cv.inRange(stpimg, 5, 220)
-        steps = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789", process=False)
+        steps = "".join(reader.readtext(stpimg, detail=0, allowlist="0123456789"))
 
-        if len(steps) < 4: 
-            rngd   = cv.threshold(stpimg, 0, 255, cv.THRESH_OTSU)[1]
-            steps = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789", process=False)
-
-        steps = steps.replace(" ", "")
-        
-        return steps 
+        return steps.replace(" ", "")
 
     def get_duration():
         drimg = img[:int(h/1.55),int(w/10):int(w/2)]
         drimg = cv.cvtColor(drimg, cv.COLOR_BGR2GRAY)
 
-        rngd   = cv.threshold(drimg, 0, 255, cv.THRESH_OTSU)[1]
-        duration = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789:", process=False)
+        #rngd   = cv.threshold(drimg, 0, 255, cv.THRESH_OTSU)[1]
+        #duration = parse_text(rngd, config="--psm 7 -c tessedit_char_whitelist=0123456789:", process=False).replace(" ", "")
+        duration = "".join(reader.readtext(drimg, detail=0, allowlist="0123456789:")).replace(" ", "")
 
         return duration
 
@@ -179,17 +180,17 @@ def get_quality(color):
         215 < g < 250 and
         215 < r < 250):
           return "Common"
-    elif (110 < b < 125 and
-          170 < g < 180 and
+    elif (110 < b < 130 and
+          170 < g < 185 and
           70  < r < 105):
         return "Uncommon"
     elif (200 < b < 215 and
           165 < g < 180 and
           60  < r < 100):
           return "Rare"
-    elif (190 < b < 210 and
-          95  < g < 110 and
-          145 < r < 155):
+    elif (185 < b < 210 and
+          90  < g < 110 and
+          135 < r < 155):
           return "Epic"
 
 
@@ -229,7 +230,7 @@ def get_tplvlgst(img, info, nondurab=None):
         for dom in doms:
             if (dom[0] >= 240 and
                 dom[1] > 245  and
-                dom[2] >= 240):
+                dom[2] >= 239):
                 continue
             else:
                 qual = get_quality(dom)
@@ -256,54 +257,42 @@ def get_tplvlgst(img, info, nondurab=None):
     info["gst"]   = get_gst()
     info["quality"] = qual
 
-def get_eniddlst(img, info):
-    h, w, _ = img.shape
-    img = img[int(h/1.8):,:]
+def get_eniddlst(oimg, info):
+    h, w, _ = oimg.shape
+    img = oimg[int(h/1.8):,:]
 
     def get_id():
         idimg = img[int(h/12):int(h/5),:int(w/2.5)]
+        gidimg = cv.cvtColor(idimg, cv.COLOR_BGR2GRAY)
 
-        id = parse_text(idimg, config="--psm 7 -c tessedit_char_whitelist=#0123456789")
+        #id = parse_text(gidimg, config="--psm 7 -c tessedit_char_whitelist=#0123456789", process=False)
+        id = "".join(reader.readtext(gidimg, detail=0, allowlist="#G0123456789"))
 
-        if "#" in id:
-            id = id.replace("#", "")
-
-        return id
+        return id.replace("G", "").replace("#", "").replace(" ", "")
 
     def get_durab():
-        drimg = img[int(h/6):int(h/2.7), int(w/3):int(w/2)]
+        drimg = img[int(h/5):int(h/3.1), int(w/3):int(w/2.2)]
+        dst = cv.inRange(drimg, (0, 0, 200), (50, 70, 255))
 
-        rngs = [
-                cv.inRange(drimg, (0, 0, 120), (120, 120, 255)),
-                cv.inRange(drimg, (0, 0, 120), (110, 110, 255)),
-                cv.inRange(drimg, (0, 0, 120), (50, 50, 255))
-        ]
-
-        for rng in rngs:
-            durab = parse_text(rng, config="--psm 7 -c tessedit_char_whitelist=-0123456789", process=False)
-
-            if durab == "":
-                continue
-            else:
-                break
+        durab = "".join(reader.readtext(drimg, detail=0, allowlist="-0123456789"))
 
         if durab == "":
-            durab = "".join(reader.readtext(cv.cvtColor(drimg, cv.COLOR_BGR2GRAY), detail=0))
+            durab = parse_text(dst, config="--psm 7 -c tessedit_char_whitelist=-0123456789", process=False)
 
         return durab.replace("-", "").replace(" ", "")
 
     def get_energy():
-        enimg = img[int(h/8):int(h/2.7), int(w/1.5):]
+        enimg = oimg[int(h/3):int(h/1.2), int(w/1.5):]
+        genimg = cv.cvtColor(enimg, cv.COLOR_BGR2GRAY)
 
-        energy = parse_text(enimg, config="--psm 7 -c tessedit_char_whitelist=0123456789,.-")
+        energy = reader.readtext(genimg, detail=0, allowlist="x.,-0123456789" )
 
-        if "-" in energy:
-            energy = energy.replace("-", "")
-        
-        if "," in energy:
-            energy = energy.replace(",", ".")
+        for en in energy:
+            if not ("x" in en) and ("." in en or "," in en):
+                return en.replace("-", "").replace(",", ".").replace(" ", "")
 
-        return energy 
+        return ""
+
 
     info["nftId"] = get_id()
     info["energy"] = get_energy()
@@ -314,14 +303,13 @@ def get_kmdrstps(img, info):
     img = img[int(h/2.1):int(h/1.9), :]
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-    text = reader.readtext(gimg, detail=0)
+    text = reader.readtext(gimg, detail=0, allowlist="0123456789:.")
 
     if len(text) != 3:
         km = dur = stp = ""
     else:
         km, dur, stp = text
         dur = dur.replace('.', ':')
-
     info['km'] = km
     info['duration'] = dur
     info['steps'] = stp
@@ -334,15 +322,13 @@ def get_ideng(oimg, info):
     def get_energy():
         enimg = gimg[:int(h/8),int(w/1.3):]
 
-        energy = "".join(reader.readtext(enimg, detail=0, allowlist="x0123456789.-"))
+        engs = reader.readtext(enimg, detail=0, allowlist="x0123456789.-")
 
-        if "x" in energy:
-            energy = energy[2:]
+        for en in engs:
+            if not ("x" in en):
+                energy = en
 
-        if "-" in energy:
-            energy = energy.replace("-", "")
-
-        return energy
+        return energy.replace("-", "").replace(" ", "")
 
     def get_id():
         idimg = gimg[int(h/8):int(h/6.5), int(w/8):int(w/2.0)]
