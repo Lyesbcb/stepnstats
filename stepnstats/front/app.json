@@ -31,7 +31,7 @@
     ],
     "name": "Stepn Stats",
     "slug": "StepnStats",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -46,7 +46,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lyesbenchoubane.stepnstats",
-      "buildNumber": "0.1.0"
+      "buildNumber": "0.1.1"
     },  
     "android": {
       "adaptiveIcon": {

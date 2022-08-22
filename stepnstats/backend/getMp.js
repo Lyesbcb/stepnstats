@@ -6,6 +6,7 @@ const solanaMpService = require("./mps/solana/solanaMp.service");
 const bnbMpService = require("./mps/bnb/bnbMp.service");
 const ethereumMpService = require("./mps/ethereum/ethereumMp.service");
 const CoinMarketCap = require("coinmarketcap-api");
+const totp = require("totp-generator");
 
 const apiKey = config.coinMarketCap_token;
 const client = new CoinMarketCap(apiKey);
@@ -22,18 +23,18 @@ module.exports = {
 
 async function getMp() {
   client
-  .getQuotes({ id: [1839, 1027, 18069, 5426, 16352, 20236, 21152] })
-  .then((data) => {
-    var result = data.data;
-    cryptoPrices.Ethereum = result["1027"].quote.USD.price;
-    cryptoPrices.Bnb = result["1839"].quote.USD.price;
-    cryptoPrices.gmt = result["18069"].quote.USD.price;
-    cryptoPrices.Solana = result["5426"].quote.USD.price;
-    cryptoPrices.gstSolana = result["16352"].quote.USD.price;
-    cryptoPrices.gstBnb = result["20236"].quote.USD.price;
-    cryptoPrices.gstEthereum = result["21152"].quote.USD.price;
-  })
-  .catch(console.error);
+    .getQuotes({ id: [1839, 1027, 18069, 5426, 16352, 20236, 21152] })
+    .then((data) => {
+      var result = data.data;
+      cryptoPrices.Ethereum = result["1027"].quote.USD.price;
+      cryptoPrices.Bnb = result["1839"].quote.USD.price;
+      cryptoPrices.gmt = result["18069"].quote.USD.price;
+      cryptoPrices.Solana = result["5426"].quote.USD.price;
+      cryptoPrices.gstSolana = result["16352"].quote.USD.price;
+      cryptoPrices.gstBnb = result["20236"].quote.USD.price;
+      cryptoPrices.gstEthereum = result["21152"].quote.USD.price;
+    })
+    .catch(console.error);
   const driver = new Builder()
     .forBrowser("chrome")
     .setChromeOptions(
@@ -78,6 +79,23 @@ async function getMp() {
       .click();
 
     await sleep(1000);
+    //2FA
+    const token = totp("UOGABBGUN476W5HP");
+    await driver
+      .findElement(
+        By.xpath(
+          "/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div[2]/input"
+        )
+      )
+      .sendKeys(token);
+    await sleep(1000);
+    // Click on comfirm
+    await driver
+      .findElement(
+        By.xpath("/html/body/div[2]/div/div/div/div[2]/div/div/div/div/button")
+      )
+      .click();
+    await sleep(1000);
     await selectRealm(driver, "Solana");
     // Click on sneakers
     await driver
@@ -96,7 +114,7 @@ async function getMp() {
       )
       .click();
     await sleep(1000);
-    await selectRarity(driver, "OG")
+    await selectRarity(driver, "OG");
     await sleep(1000);
     await selectRealm(driver, "BNB");
     await sleep(1000);
@@ -109,7 +127,7 @@ async function getMp() {
       )
       .click();
     await sleep(1000);
-    await selectRarity(driver, "OG")
+    await selectRarity(driver, "OG");
     await sleep(1000);
     await selectRealm(driver, "Ethereum");
     await sleep(1000);

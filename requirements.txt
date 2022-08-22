@@ -4,5 +4,6 @@ Python 3.10.5
   -pytesseract==0.3.9
 Node v16.15.0
 ChromeDriver 103.0.5060.134
+chrome
 npm
 pm2
