@@ -605,8 +605,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   dayTemporality: {
-    width: 30,
-    height: 30,
+    width: RFValue(30,800),
+    height: RFValue(30,800),
     backgroundColor: "#61F2FC",
     borderRadius: 5,
     borderColor: "black",

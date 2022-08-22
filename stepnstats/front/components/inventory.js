@@ -30,8 +30,8 @@ export default function Invenrtory({ navigation }) {
     try {
       setNfts(await getAllMyNft(1));
       setMbs(await getAllMyMb(1));
-    } catch {
-      Alert.alert("Error");
+    } catch (error){
+      Alert.alert(console.error());
     }
   };
 
