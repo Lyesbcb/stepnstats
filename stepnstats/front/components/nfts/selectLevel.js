@@ -56,7 +56,7 @@ export default function SelectLevel({
       }}
     >
       <TouchableOpacity style={styles.return} onPressIn={() => previousStep()}>
-        <Icon type="antdesign" name="left" size={20} color="black"></Icon>
+        <Icon type="antdesign" name="left" size={RFValue(20, 800)} color="black"></Icon>
       </TouchableOpacity>
       <Pressable
         style={{
@@ -82,7 +82,7 @@ export default function SelectLevel({
       >
         <Icon
           style={{ width: "100%" }}
-          size={20}
+          size={RFValue(20, 800)}
           type="antdesign"
           name="close"
           color="black"
@@ -122,7 +122,7 @@ export default function SelectLevel({
           >
             <Icon
               style={{ width: "100%" }}
-              size={40}
+              size={RFValue(40, 800)}
               type="antdesign"
               name="minus"
               color="black"
@@ -145,7 +145,7 @@ export default function SelectLevel({
           >
             <Icon
               style={{ width: "100%" }}
-              size={40}
+              size={RFValue(40, 800)}
               type="antdesign"
               name="plus"
               color="black"

@@ -77,7 +77,7 @@ export default function SelectEnergy({
         >
           <Icon
             style={{ width: "100%" }}
-            size={20}
+            size={RFValue(20, 800)}
             type="antdesign"
             name="close"
             color="black"
@@ -118,7 +118,7 @@ export default function SelectEnergy({
             >
               <Icon
                 style={{ width: "100%" }}
-                size={40}
+                size={RFValue(40, 800)}
                 type="antdesign"
                 name="minus"
                 color="black"
@@ -141,7 +141,7 @@ export default function SelectEnergy({
             >
               <Icon
                 style={{ width: "100%" }}
-                size={40}
+                size={RFValue(40, 800)}
                 type="antdesign"
                 name="plus"
                 color="black"

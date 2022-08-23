@@ -75,7 +75,7 @@ export default function HelpModal({
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="antdesign"
               name="close"
               color="black"

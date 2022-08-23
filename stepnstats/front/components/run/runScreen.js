@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import { LineChart } from "react-native-chart-kit";
+import { BarChart } from "react-native-chart-kit";
 import Footer from "../footer";
 import { Dimensions } from "react-native";
 import { getByNftId } from "../../services/nfts/index";
@@ -24,6 +24,23 @@ export default function RunScreen({ navigation, route }) {
   useEffect(() => {
     myFunction();
   }, []);
+
+  const chartData = {
+    labels: [
+      1.4, 1.48, 1.86, 1.87, 1.88, 1.92, 1.98, 2, 2.02, 2.03, 2.04, 2.05, 2.06,
+      2.07, 2.08, 2.09, 2.1, 2.11, 2.12, 2.13, 2.14, 2.15, 2.16, 2.17, 2.18,
+      2.2, 2.22, 2.23, 2.24, 2.25, 2.27, 2.28, 2.29, 2.3, 2.33, 2.37, 2.38, 2.4,
+      3.85,
+    ],
+    datasets: [
+      {
+        data: [
+          1, 1, 1, 1, 1, 1, 3, 8, 2, 1, 3, 1, 4, 3, 8, 6, 3, 2, 4, 2, 3, 3, 6,
+          3, 3, 8, 3, 2, 1, 1, 1, 3, 1, 2, 1, 1, 1, 1, 1,
+        ],
+      },
+    ],
+  };
 
   const mbsImage = [
     require("../../assets/mb/lvl1.png"),
@@ -104,7 +121,12 @@ export default function RunScreen({ navigation, route }) {
           style={{ ...styles.return, top: "18%" }}
           onPressIn={() => navigation.navigate("AllRunsScreen")}
         >
-          <Icon type="antdesign" name="left" size={20} color="black"></Icon>
+          <Icon
+            type="antdesign"
+            name="left"
+            size={RFValue(20, 800)}
+            color="black"
+          ></Icon>
         </TouchableOpacity>
         {/* Top part */}
         <View
@@ -161,7 +183,14 @@ export default function RunScreen({ navigation, route }) {
           >
             <LittleNfts data={nft}></LittleNfts>
             {nft.fileNameIncreased === null ? (
-              <Text style={{ fontSize: RFValue(10, 800), marginTop: "2%", textAlign: "center", color: "red" }}>
+              <Text
+                style={{
+                  fontSize: RFValue(10, 800),
+                  marginTop: "2%",
+                  textAlign: "center",
+                  color: "red",
+                }}
+              >
                 Please add your sneaker with increased stats!
               </Text>
             ) : (
@@ -271,7 +300,7 @@ export default function RunScreen({ navigation, route }) {
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="material-community"
               name="pencil-outline"
               color="black"
@@ -297,13 +326,13 @@ export default function RunScreen({ navigation, route }) {
             onPress={async () => {
               await deleteRun(run.id);
               // JSON.parse(route.params).myFunction();
-              console.log(JSON.parse(route.params))
+              console.log(JSON.parse(route.params));
               navigation.navigate("AllRunsScreen");
             }}
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="material-community"
               name="trash-can-outline"
               color="black"
@@ -369,45 +398,22 @@ export default function RunScreen({ navigation, route }) {
           </Text>
         </View>
       </View>
-      <LineChart
-        data={{
-          labels: ["", "Soon here a chart to check your perfomances!"],
-          datasets: [
-            {
-              data: [
-                0,
-              ],
-            },
-          ],
-        }}
+      <BarChart
+        data={chartData}
         width={Dimensions.get("window").width - 50}
-        height={Dimensions.get("window").height * 0.25}
-        yAxisInterval={1}
+        height={Dimensions.get("window").width - 150}
         chartConfig={{
+          backgroundColor: "white",
           backgroundGradientFrom: "white",
           backgroundGradientTo: "white",
           decimalPlaces: 0,
-          color: (opacity = 1) => "#4DC6F4",
-          labelColor: (opacity = 1) => `#4DC6F4`,
-          propsForDots: {
-            r: "3",
-            strokeWidth: "1",
-            stroke: "white",
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          style: {
+            borderRadius: 16,
           },
         }}
-        getDotColor={(dataPoint, dataPointIndex) => {
-          //based on condition we return the color as string
-          if (dataPointIndex === 2) return "red";
-        }}
-        getDotProps={(dataPoint, dataPointIndex) => {
-          //based on condition we return the color as string
-          if (dataPointIndex === 2)
-            return {
-              r: "10",
-              strokeWidth: "1",
-              stroke: "white",
-            };
-        }}
+        fromZero={true}
         style={{
           borderRadius: 12,
           borderWidth: 1,
@@ -420,7 +426,6 @@ export default function RunScreen({ navigation, route }) {
             height: 4,
           },
         }}
-        bezier
       />
       {/* <Footer styles={styles}></Footer> */}
     </View>
