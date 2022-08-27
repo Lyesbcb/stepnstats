@@ -3,7 +3,7 @@ import numpy as np
 from colortools import dominant
 from text_reader import parse_text
 from runfuncs import reader
-from math import dist
+from math import dist, prod
 import sys
 
 
@@ -55,9 +55,20 @@ def get_stats(oimg, info):
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
     def get_base():
-        bimg = gimg[int(h/25):int(h/12), int(w/1.8):int(w/1.55)]
-
-        return np.sum((bimg < 240) & (bimg > 200)) > (h * w / 4000)
+        bimg = gimg[int(h/25):int(h/12), int(w/2.0):int(w/1.1)]
+        dst = cv.inRange(bimg, 200, 240)
+        dst = cv.erode(dst, (5, 5), iterations=2)
+        dst = cv.GaussianBlur(dst, (5, 5), 2)
+        cnts = cv.findContours(dst, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)[0]
+        vareas = 0
+        for cnt in cnts:
+            area = prod(cv.boundingRect(cnt)[2:])
+            if area > (h * w / 500):
+                vareas += 1
+        #print("Valid Areas:", vareas)
+        #cv.imshow("thresh", dst)
+        #cv.waitKey(0)
+        return vareas > 1
 
     def get_nmbrs():
         nimg = gimg[int(h/10):, int(w/1.3):int(w/1.07)]
@@ -153,7 +164,7 @@ def get_sockets(oimg, info):
             #print(clr)
             if not ((clr[0] > 190) and
                     (clr[1] > 210) and
-                    (clr[2] > 210)):
+                    (clr[2] > 205)):
                 break
         
         tps = {

@@ -36,7 +36,7 @@ async function uploadFile(req, res) {
         where: { userId: req.user.id, fileName: req.file.filename },
       })
     ) {
-      throw "This mb is already exist.";
+      throw "This mb is already exists.";
     }
     var get_content_from_screen = await spawn("python3", [
       "./python/get_content_from_screen.py",
@@ -77,17 +77,20 @@ async function uploadFile(req, res) {
       params.prices = prices[0];
       params.mbPrice = await getMbPrice(params);
       try {
-        res.send(await db.Mb.create(params));
+        return res.send(await db.Mb.create(params));
       } catch (error) {
-        fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
+        fs.rename(req.file.path, "./upload/error/mb/"+req.file.filename, function (err) {
           if (err) throw err
         })
-        res.status(400).send({ message: "Error on recognizing image" });
+        console.log("ErrorDatabase")
+        console.log(error)
+        return res.status(400).send({ message: "Error on recognizing image" });
       }
     });
     get_content_from_screen.stderr.setEncoding("utf8");
     await get_content_from_screen.stderr.on("data", async function (data) {
       console.log(data)
+      console.log("ErrorScript")
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -103,6 +106,7 @@ async function uploadFile(req, res) {
     fs.rename(req.file.path, "./upload/error/mb/"+req.file.filename, function (err) {
       if (err) throw err
     })
+    console.log("ErrorGlobal")
     return res.status(400).json({ message: error });
   }
 }
@@ -170,7 +174,7 @@ async function create(params, userId) {
       where: { userId: userId, fileName: params.fileName },
     })
   ) {
-    throw "This mb is already exist.";
+    throw "This mb is already exists.";
   }
   params.userId = userId;
   // save rmbun

@@ -94,7 +94,7 @@ export default function Filter({
     for (var i = 0; i < selectedContent.length; i++) {
       if (selectedContent[i] === value) {
         error = true;
-        errorMessage = "This filter already exist!";
+        errorMessage = "This filter already exists!";
       }
     }
     if (error) {

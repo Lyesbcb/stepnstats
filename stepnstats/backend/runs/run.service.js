@@ -41,21 +41,23 @@ async function uploadFile(req, res) {
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
       try {
-        res.send(await create(params));
+        return res.send(await create(params));
       } catch (error) {
         fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
           if (err) throw err
         })
+        console.log("ErrorDatabase")
         if(error){
-          res.status(400).json({ message: error });
+          return res.status(400).json({ message: error });
         }else{
-          res.status(400).json({ message: "Error on recognizing image" });
+          return res.status(400).json({ message: "Error on recognizing image" });
         }
       }
     });
     run.stderr.setEncoding("utf8");
     await run.stderr.on("data", async function (data) {
       console.log(data)
+      console.log("ErrorScript")
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -68,6 +70,7 @@ async function uploadFile(req, res) {
     fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
       if (err) throw err
     })
+    console.log("ErrorGlobal")
     return res.status(400).json({ message: error });
   }
 }
@@ -75,6 +78,7 @@ async function uploadFile(req, res) {
 async function getAll(req) {
   return await db.Run.findAndCountAll({
     offset: (req.query.page - 1) * 1,
+    order: [["date", "DESC"]],
     limit: 10,
     subQuery: false,
   });
@@ -84,7 +88,7 @@ async function getAllMy(req) {
   return await db.Run.findAndCountAll({
     where: { userId: req.user.id },
     offset: (req.query.page - 1) * 1,
-    order: [["createdAt", "DESC"]],
+    order: [["date", "DESC"]],
     limit: 1000,
     subQuery: false,
   });
@@ -113,11 +117,12 @@ async function create(params) {
     throw "Error on recognizing image";
   }
   if(res){
-    throw "This run is already exist.";
+    throw "This run is already exists.";
   }
   try{
     return await db.Run.create(params);
-  }catch{
+  }catch (err) {
+    console.log(err)
     throw "Error on recognizing image";
   }
   // save run

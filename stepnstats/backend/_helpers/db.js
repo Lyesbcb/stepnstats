@@ -9,7 +9,7 @@ module.exports = db = {
 initialize();
 
 async function initialize() {
-  // create db if it doesn't already exist
+  // create db if it doesn't already exists
   const { host, port, user, password, database } = config.database;
 
   // connect to db
