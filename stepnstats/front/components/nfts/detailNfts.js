@@ -194,6 +194,11 @@ export default function DetailNfts({
     }
   }
   function defineMaxStat() {
+    if(stats === "base" && data.efficiencyBase === null){
+      setStats("increased")
+    }else if (stats === "increased" && data.efficiencyIncreased === null){
+      setStats("base")
+    }
     if (stats === "base") {
       setMaxStat(
         Math.max(
@@ -358,7 +363,7 @@ export default function DetailNfts({
         >
           <Icon
             style={{ width: "100%" }}
-            size={20}
+            size={RFValue(20, 800)}
             type="material-community"
             name="pencil-outline"
             color="black"
@@ -385,7 +390,7 @@ export default function DetailNfts({
         >
           <Icon
             style={{ width: "100%" }}
-            size={20}
+            size={RFValue(20, 800)}
             type="material-community"
             name="trash-can-outline"
             color="black"
@@ -412,7 +417,7 @@ export default function DetailNfts({
         >
           <Icon
             style={{ width: "100%" }}
-            size={20}
+            size={RFValue(20, 800)}
             type="material-community"
             name="close"
             color="black"
@@ -533,7 +538,12 @@ export default function DetailNfts({
               defineMaxStat();
             }}
           >
-            <Icon type="antdesign" name="left" size={60} color="black"></Icon>
+            <Icon
+              type="antdesign"
+              name="left"
+              size={RFValue(60, 800)}
+              color="black"
+            ></Icon>
           </Pressable>
 
           <View
@@ -568,7 +578,12 @@ export default function DetailNfts({
               defineMaxStat();
             }}
           >
-            <Icon type="antdesign" name="right" size={60} color="black"></Icon>
+            <Icon
+              type="antdesign"
+              name="right"
+              size={RFValue(60, 800)}
+              color="black"
+            ></Icon>
           </Pressable>
         </View>
         <View
@@ -866,7 +881,7 @@ export default function DetailNfts({
                 <Pressable onPress={async () => await remake()}>
                   <Icon
                     style={{ width: "100%" }}
-                    size={20}
+                    size={RFValue(20, 800)}
                     type="material-community"
                     name="reload"
                     color="black"

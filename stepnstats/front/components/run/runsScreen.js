@@ -41,7 +41,9 @@ export default function RunsScreen({ navigation }) {
     await setRefreshing(false);
   }
   useEffect(() => {
-    myFunction();
+    const unsubscribe = navigation.addListener("focus", () => {
+      myFunction();
+    });
   }, []);
 
   const myFunction = async () => {
@@ -267,7 +269,7 @@ export default function RunsScreen({ navigation }) {
               }}
             ></Text>
           </View>
-          <Icon type="antdesign" name="right" size={50} color="black"></Icon>
+          <Icon type="antdesign" name="right" size={RFValue(50, 800)} color="black"></Icon>
         </View>
       </Pressable>
       <View style={{ height: "42%" }}>
@@ -284,7 +286,11 @@ export default function RunsScreen({ navigation }) {
           keyExtractor={(item) => item.id}
           data={runs}
           renderItem={({ item }) => (
-            <OneRun run={item} navigation={navigation} myFunction={myFunction}></OneRun>
+            <OneRun
+              run={item}
+              navigation={navigation}
+              myFunction={myFunction}
+            ></OneRun>
           )}
         />
       </View>

@@ -173,7 +173,7 @@ export default function LittleNfts({ data }) {
           ) : (
             <Icon
               style={{ width: "100%" }}
-              size={70}
+              size={RFValue(70, 800)}
               type="antdesign"
               name="plus"
               color="black"

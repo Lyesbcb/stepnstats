@@ -466,7 +466,7 @@ export default function DetailMysteryBox({
           <Icon
             type="antdesign"
             name="left"
-            size={60}
+            size={RFValue(60, 800)}
             color="black"
             onPress={() => {
               previousMb();
@@ -497,7 +497,7 @@ export default function DetailMysteryBox({
           <Icon
             type="antdesign"
             name="right"
-            size={60}
+            size={RFValue(60, 800)}
             color="black"
             onPress={() => {
               nextMb();
@@ -535,7 +535,7 @@ export default function DetailMysteryBox({
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="material-community"
               name="pencil-outline"
               color="black"
@@ -562,7 +562,7 @@ export default function DetailMysteryBox({
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="material-community"
               name="trash-can-outline"
               color="black"
@@ -589,7 +589,7 @@ export default function DetailMysteryBox({
           >
             <Icon
               style={{ width: "100%" }}
-              size={20}
+              size={RFValue(20, 800)}
               type="material-community"
               name="close"
               color="black"

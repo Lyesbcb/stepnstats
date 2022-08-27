@@ -21,7 +21,96 @@ export default function Marketplace({
   const color = ["#BABCBE", "#AED144", "#47ACED", "#A398EB", "#F5A836"];
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currency, setCurrency] = useState("Dollars");
 
+  const colors = {
+    efficiencyLvl1: "#A4976B",
+    efficiencyLvl2: "#B6A361",
+    efficiencyLvl3: "#C9AF56",
+    efficiencyLvl4: "#DBBB4C",
+    efficiencyLvl5: "#EDC641",
+    efficiencyLvl6: "#FFD237",
+    luckLvl1: "#739AA4",
+    luckLvl2: "#6CA7B6",
+    luckLvl3: "#66B4C9",
+    luckLvl4: "#5FC1DB",
+    luckLvl5: "#59CEED",
+    luckLvl6: "#52DBFF",
+    comfortLvl1: "#A45B5B",
+    comfortLvl2: "#B64949",
+    comfortLvl3: "#C83737",
+    comfortLvl4: "#DA2525",
+    comfortLvl5: "#EC1212",
+    comfortLvl6: "#FE0000",
+    resilienceLvl1: "#857D9D",
+    resilienceLvl2: "#877CAB",
+    resilienceLvl3: "#8A7BBA",
+    resilienceLvl4: "#8C7AC8",
+    resilienceLvl5: "#8F78D7",
+    resilienceLvl6: "#9177E5",
+    runnerCommon: "#A1A2A3",
+    joggerCommon: "#A9ABAC",
+    walkerCommon: "#B2B3B5",
+    trainerCommon: "#BABCBE",
+    runnerUncommon: "#9AAE5E",
+    joggerUncommon: "#A1BA55",
+    walkerUncommon: "#A7C54D",
+    trainerUncommon: "#AED144",
+    runnerRare: "#5F99BE",
+    joggerRare: "#579FCE",
+    walkerRare: "#4FA6DD",
+    trainerRare: "#47ACED",
+    runnerEpic: "#948EBD",
+    joggerEpic: "#9991CC",
+    walkerEpic: "#9E95DC",
+    trainerEpic: "#A398EB",
+    commonScroll: "#BABCBE",
+    uncommonScroll: "#AED144",
+    rareScroll: "#47ACED",
+    epicScroll: "#A398EB",
+    legendaryScroll: "#F5A836",
+    genesisCommon: "#BABCBE",
+    genesisUncommon: "#AED144",
+    genesisRare: "#47ACED",
+    genesisEpic: "#A398EB",
+    ogCommon: "#BABCBE",
+    ogUncommon: "#AED144",
+    ogRare: "#47ACED",
+    ogEpic: "#A398EB",
+  };
+
+  const chartConfigCrypto = {
+    backgroundGradientFrom: "white",
+    backgroundGradientTo: "white",
+    decimalPlaces: 3,
+    color: (opacity = 1) => "black",
+    labelColor: (opacity = 1) => `black`,
+    propsForDots: {
+      r: "3",
+      strokeWidth: "1",
+      stroke: "white",
+    },
+    propsForVerticalLabels: {
+      fontSize: RFValue(10, 800),
+    },
+    useShadowColorFromDataset: true,
+  };
+  const chartConfigDollars = {
+    backgroundGradientFrom: "white",
+    backgroundGradientTo: "white",
+    decimalPlaces: 0,
+    color: (opacity = 1) => "black",
+    labelColor: (opacity = 1) => `black`,
+    propsForDots: {
+      r: "3",
+      strokeWidth: "1",
+      stroke: "white",
+    },
+    propsForVerticalLabels: {
+      fontSize: RFValue(10, 800),
+    },
+    useShadowColorFromDataset: true,
+  };
   function setLegends() {
     return selectedContent.map((content, i) => {
       return (
@@ -31,7 +120,7 @@ export default function Marketplace({
           key={i}
           id={i}
           name={content}
-          myColor={color[i]}
+          myColor={colors[selectedContent[i]]}
         ></Legend>
       );
     });
@@ -46,59 +135,51 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsDay.length; i++) {
-            if (i === 0) {
-              tempDatasets[y].data.push(0);
+            if (currency === "Crypto") {
+              tempDatasets[y].data.push(mpsDay[i][selectedContent[y]]);
+            } else {
+              tempDatasets[y].data.push(
+                Number(mpsDay[i][selectedContent[y]]) *
+                  mpsDay[i][selectedRealm]
+              );
             }
-            tempDatasets[y].data.push(mpsDay[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsDay.length; i++) {
-          if (i === 0) {
-            tempLabels.push("");
-          }
           tempLabels.push(
             new Date(mpsDay[i].createdAt).toLocaleTimeString().slice(0, -3)
           );
         }
         if (tempDatasets[0]) {
-          tempDatasets[0].color = () => color[0];
+          tempDatasets[0].color = () => colors[selectedContent[0]];
         }
         if (tempDatasets[1]) {
-          tempDatasets[1].color = () => color[1];
+          tempDatasets[1].color = () => colors[selectedContent[1]];
         }
         if (tempDatasets[2]) {
-          tempDatasets[2].color = () => color[2];
+          tempDatasets[2].color = () => colors[selectedContent[2]];
         }
         if (tempDatasets[3]) {
-          tempDatasets[3].color = () => color[3];
+          tempDatasets[3].color = () => colors[selectedContent[3]];
         }
         return (
           <LineChart
-            verticalLabelRotation={90}
+            fromZero={true}
+            verticalLabelRotation={80}
             data={{
               labels: tempLabels,
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 150}
+            height={Dimensions.get("window").width - 50}
             yAxisInterval={2}
             // yAxisLabel="$"
             // yAxisSuffix="k"
-            chartConfig={{
-              backgroundGradientFrom: "white",
-              backgroundGradientTo: "white",
-              decimalPlaces: 3,
-              color: (opacity = 1) => "black",
-              labelColor: (opacity = 1) => `black`,
-              propsForDots: {
-                r: "3",
-                strokeWidth: "1",
-                stroke: "white",
-              },
-              propsForVerticalLabels: {
-                fontSize: RFValue(10, 800),
-              },
-            }}
+
+            yAxisLabel={currency === "Crypto" ? "" : "$"}
+            chartConfig={
+              currency === "Crypto" ? chartConfigCrypto : chartConfigDollars
+            }
             style={{
               borderRadius: 12,
               borderWidth: 1,
@@ -120,57 +201,48 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsWeek.length; i += 91) {
-            if (i === 0) {
-              tempDatasets[y].data.push(0);
+            if (currency === "Crypto") {
+              tempDatasets[y].data.push(mpsWeek[i][selectedContent[y]]);
+            } else {
+              tempDatasets[y].data.push(
+                Number(mpsWeek[i][selectedContent[y]]) *
+                  mpsWeek[i][selectedRealm]
+              );
             }
-            tempDatasets[y].data.push(mpsWeek[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsWeek.length; i += 91) {
-          if (i === 0) {
-            tempLabels.push("");
-          }
           tempLabels.push(
             new Date(mpsWeek[i].createdAt).toLocaleDateString().slice(0, -5)
           );
         }
         if (tempDatasets[0]) {
-          tempDatasets[0].color = () => color[0];
+          tempDatasets[0].color = () => colors[selectedContent[0]];
         }
         if (tempDatasets[1]) {
-          tempDatasets[1].color = () => color[1];
+          tempDatasets[1].color = () => colors[selectedContent[1]];
         }
         if (tempDatasets[2]) {
-          tempDatasets[2].color = () => color[2];
+          tempDatasets[2].color = () => colors[selectedContent[2]];
         }
         if (tempDatasets[3]) {
-          tempDatasets[3].color = () => color[3];
+          tempDatasets[3].color = () => colors[selectedContent[3]];
         }
         return (
           <LineChart
-            verticalLabelRotation={90}
+            fromZero={true}
+            verticalLabelRotation={80}
             data={{
               labels: tempLabels,
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 150}
+            height={Dimensions.get("window").width - 50}
             yAxisInterval={2}
-            chartConfig={{
-              backgroundGradientFrom: "white",
-              backgroundGradientTo: "white",
-              decimalPlaces: 3,
-              color: (opacity = 1) => "black",
-              labelColor: (opacity = 1) => `black`,
-              propsForDots: {
-                r: "3",
-                strokeWidth: "1",
-                stroke: "white",
-              },
-              propsForVerticalLabels: {
-                fontSize: RFValue(10, 800),
-              },
-            }}
+            yAxisLabel={currency === "Crypto" ? "" : "$"}
+            chartConfig={
+              currency === "Crypto" ? chartConfigCrypto : chartConfigDollars
+            }
             style={{
               borderRadius: 12,
               borderWidth: 1,
@@ -192,57 +264,48 @@ export default function Marketplace({
           tempDatasets[y] = { data: [] };
           tempDatasets[y].strokeWidth = 2;
           for (var i = 0; i < mpsMonth.length; i += 225) {
-            if (i === 0) {
-              tempDatasets[y].data.push(0);
+            if (currency === "Crypto") {
+              tempDatasets[y].data.push(mpsMonth[i][selectedContent[y]]);
+            } else {
+              tempDatasets[y].data.push(
+                Number(mpsMonth[i][selectedContent[y]]) *
+                  mpsMonth[i][selectedRealm]
+              );
             }
-            tempDatasets[y].data.push(mpsMonth[i][selectedContent[y]]);
           }
         }
         for (var i = 0; i < mpsMonth.length; i += 225) {
-          if (i === 0) {
-            tempLabels.push("");
-          }
           tempLabels.push(
             new Date(mpsMonth[i].createdAt).toLocaleDateString().slice(0, -5)
           );
         }
         if (tempDatasets[0]) {
-          tempDatasets[0].color = () => color[0];
+          tempDatasets[0].color = () => colors[selectedContent[0]];
         }
         if (tempDatasets[1]) {
-          tempDatasets[1].color = () => color[1];
+          tempDatasets[1].color = () => colors[selectedContent[1]];
         }
         if (tempDatasets[2]) {
-          tempDatasets[2].color = () => color[2];
+          tempDatasets[2].color = () => colors[selectedContent[2]];
         }
         if (tempDatasets[3]) {
-          tempDatasets[3].color = () => color[3];
+          tempDatasets[3].color = () => colors[selectedContent[3]];
         }
         return (
           <LineChart
-            verticalLabelRotation={90}
+            fromZero={true}
+            verticalLabelRotation={80}
             data={{
               labels: tempLabels,
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 150}
+            height={Dimensions.get("window").width - 50}
             yAxisInterval={2}
-            chartConfig={{
-              backgroundGradientFrom: "white",
-              backgroundGradientTo: "white",
-              decimalPlaces: 3,
-              color: (opacity = 1) => "black",
-              labelColor: (opacity = 1) => `black`,
-              propsForDots: {
-                r: "3",
-                strokeWidth: "1",
-                stroke: "white",
-              },
-              propsForVerticalLabels: {
-                fontSize: RFValue(10, 800),
-              },
-            }}
+            yAxisLabel={currency === "Crypto" ? "" : "$"}
+            chartConfig={
+              currency === "Crypto" ? chartConfigCrypto : chartConfigDollars
+            }
             style={{
               borderRadius: 12,
               borderWidth: 1,
@@ -263,7 +326,7 @@ export default function Marketplace({
       return (
         <View
           width={Dimensions.get("window").width - 50} // from react-native
-          height={Dimensions.get("window").width - 150}
+          height={Dimensions.get("window").width - 50}
           style={{
             borderRadius: 12,
             borderWidth: 1,
@@ -276,7 +339,7 @@ export default function Marketplace({
           <View>
             <Icon></Icon>
             <Text style={{ fontSize: RFValue(30, 800), fontWeight: "800" }}>
-              Click on filter
+              Click on add
             </Text>
           </View>
         </View>
@@ -356,7 +419,7 @@ export default function Marketplace({
                 textAlignVertical: "center",
               }}
             >
-              Filter
+              ADD
             </Text>
           </Pressable>
           {selectedRealm == "Solana" ? (
@@ -410,7 +473,9 @@ export default function Marketplace({
                   : styles.dayTemporality
               }
             >
-              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>D</Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                D
+              </Text>
             </View>
           </Pressable>
           <Pressable
@@ -425,7 +490,9 @@ export default function Marketplace({
                   : styles.weekTemporality
               }
             >
-              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>W</Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                W
+              </Text>
             </View>
           </Pressable>
           <Pressable
@@ -440,14 +507,79 @@ export default function Marketplace({
                   : styles.monthTemporality
               }
             >
-              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>M</Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                M
+              </Text>
             </View>
           </Pressable>
         </View>
       </View>
+      <View>
+        {setChart()}
+        <Pressable
+          style={{
+            width: RFValue(30, 800),
+            height: RFValue(30, 800),
+            backgroundColor: "white",
+            borderRadius: 5,
+            borderColor: "black",
+            borderWidth: 2,
+            alignItems: "center",
+            justifyContent: "center",
+            shadowOpacity: 1,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            },
+            bottom: "5%",
+            left: "5%",
+            position: "absolute",
+          }}
+          onPress={() => {
+            currency === "Crypto"
+              ? setCurrency("Dollars")
+              : setCurrency("Crypto");
+          }}
+        >
+          {currency === "Crypto" ? (
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              $
+            </Text>
+          ) : selectedRealm === "Solana" ? (
+            <Image
+              source={require("../../assets/solana.png")}
+              style={{
+                width: "60%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : selectedRealm === "Ethereum" ? (
+            <Image
+              source={require("../../assets/ethereum.png")}
+              style={{
+                width: "60%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : selectedRealm === "Bnb" ? (
+            <Image
+              source={require("../../assets/bnb.png")}
+              style={{
+                width: "60%",
+                height: "100%",
+                resizeMode: "contain",
+              }}
+            ></Image>
+          ) : (
+            <View></View>
+          )}
+        </Pressable>
+      </View>
 
-      {setChart()}
-      <View style={{ width: "80%", height: "30%" }}>
+      <View style={{ width: "80%", height: "20%" }}>
         <View
           style={{
             width: "100%",
@@ -482,7 +614,9 @@ export default function Marketplace({
             </Text>
           </Pressable>
         </View>
-        <View style={{ flexDirection: "column", marginTop: "4%", flexGrow: 1 }}>
+        <View
+          style={{ flexDirection: "column", marginTop: "4%", height: "100%" }}
+        >
           {setLegends()}
         </View>
       </View>
@@ -605,8 +739,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   dayTemporality: {
-    width: 30,
-    height: 30,
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#61F2FC",
     borderRadius: 5,
     borderColor: "black",
@@ -621,8 +755,8 @@ const styles = StyleSheet.create({
     },
   },
   dayTemporalityActive: {
-    width: RFValue(30,800),
-    height: RFValue(30,800),
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#61F2FC",
     borderRadius: 5,
     borderColor: "black",
@@ -637,8 +771,8 @@ const styles = StyleSheet.create({
     },
   },
   weekTemporality: {
-    width: RFValue(30,800),
-    height: RFValue(30,800),
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#EB78E7",
     borderRadius: 5,
     borderColor: "black",
@@ -653,8 +787,8 @@ const styles = StyleSheet.create({
     },
   },
   weekTemporalityActive: {
-    width: RFValue(30,800),
-    height: RFValue(30,800),
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#EB78E7",
     borderRadius: 5,
     borderColor: "black",
@@ -669,8 +803,8 @@ const styles = StyleSheet.create({
     },
   },
   monthTemporality: {
-    width: RFValue(30,800),
-    height: RFValue(30,800),
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",
@@ -685,8 +819,8 @@ const styles = StyleSheet.create({
     },
   },
   monthTemporalityActive: {
-    width: RFValue(30,800),
-    height: RFValue(30,800),
+    width: RFValue(30, 800),
+    height: RFValue(30, 800),
     backgroundColor: "#FFE922",
     borderRadius: 5,
     borderColor: "black",

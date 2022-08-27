@@ -20,7 +20,7 @@ export default function ChartScreen({ props, navigation }) {
           <Icon
             type="antdesign"
             name="left"
-            size={50}
+            size={RFValue(50, 800)}
             style={{ paddingHorizontal: 10 }}
           ></Icon>
           <View
@@ -36,7 +36,7 @@ export default function ChartScreen({ props, navigation }) {
           <Icon
             type="antdesign"
             name="right"
-            size={50}
+            size={RFValue(50, 800)}
             style={{ paddingHorizontal: 10 }}
           ></Icon>
         </View>
@@ -61,7 +61,7 @@ export default function ChartScreen({ props, navigation }) {
           <Icon
             type="antdesign"
             name="left"
-            size={30}
+            size={RFValue(30, 800)}
             style={{ paddingHorizontal: 10 }}
           ></Icon>
           <View
@@ -76,7 +76,7 @@ export default function ChartScreen({ props, navigation }) {
           <Icon
             type="antdesign"
             name="right"
-            size={30}
+            size={RFValue(30, 800)}
             style={{ paddingHorizontal: 10 }}
             onPress={() => nextTemporality()}
           ></Icon>

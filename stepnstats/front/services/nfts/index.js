@@ -96,7 +96,7 @@ async function uploadNft(image, realm) {
         return await response;
       })
       .catch(async function (error) {
-        // throw await error.message;
+        throw await error.message;
       });
     // Stop wainting screen
   }

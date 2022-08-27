@@ -151,7 +151,7 @@ export default function SelectGemLevel({
       }}
     >
       <TouchableOpacity style={styles.return} onPressIn={() => previousStep()}>
-        <Icon type="antdesign" name="left" size={20} color="black"></Icon>
+        <Icon type="antdesign" name="left" size={RFValue(20, 800)} color="black"></Icon>
       </TouchableOpacity>
       <Pressable
         style={{
@@ -177,7 +177,7 @@ export default function SelectGemLevel({
       >
         <Icon
           style={{ width: "100%" }}
-          size={20}
+          size={RFValue(20, 800)}
           type="antdesign"
           name="close"
           color="black"

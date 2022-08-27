@@ -296,7 +296,7 @@ export default function OneRun({ navigation, run, myFunction }) {
             {run.duration}
           </Text>
         </View>
-        <Icon type="antdesign" name="right" size={50} color="black"></Icon>
+        <Icon type="antdesign" name="right" size={RFValue(50, 800)} color="black"></Icon>
       </View>
     </Pressable>
   );

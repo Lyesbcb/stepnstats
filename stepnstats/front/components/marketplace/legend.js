@@ -87,7 +87,7 @@ export default function Legend({
         alignItems: "center",
         width: "100%",
         marginBottom: "2%",
-        height: "20%",
+        height: "22%",
       }}
     >
       <View
@@ -106,10 +106,11 @@ export default function Legend({
             flexDirection: "row",
             justifyContent: "space-evenly",
             width: "20%",
+            alignItems:"center"
           }}
         >
           <Pressable onPress={() => Alert.alert("Comming soon")}>
-            <Icon type="material-community" name="bell" size={25}></Icon>
+            <Icon type="material-community" name="bell" size={RFValue(20, 800)}></Icon>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -120,7 +121,7 @@ export default function Legend({
               console.log(selectedContent)
             }}
           >
-            <Icon type="material-community" name="close" size={25}></Icon>
+            <Icon type="material-community" name="close" size={RFValue(25, 800)}></Icon>
           </Pressable>
         </View>
       </View>
