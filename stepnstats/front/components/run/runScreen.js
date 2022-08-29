@@ -38,7 +38,19 @@ export default function RunScreen({ navigation, route }) {
     require("../../assets/mb/lvl9.png"),
     require("../../assets/mb/lvl10.png"),
   ];
-
+  function chartColors() {
+    var tempArray = [];
+    for (var i = 0; i < gstData.value.length; i++) {
+      if (
+        gstData.value[i] ===
+        Number((run.gst / minuteConverter(run.duration) / 60).toFixed(1))
+      ) {
+        tempArray.push((opacity = 1) => `red`);
+      }
+      tempArray.push((opacity = 1) => `black`);
+    }
+    return tempArray;
+  }
   async function myFunction() {
     try {
       var tempNft = await getByNftId(run.nftId);
@@ -62,23 +74,6 @@ export default function RunScreen({ navigation, route }) {
       setNft(0);
     }
   }
-
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: [
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-        ],
-      },
-    ],
-  };
-
   function minuteConverter(time) {
     const [h, m, s] = time.split(":");
     const value = +h + +m / 60 + s / 3600;
@@ -409,21 +404,23 @@ export default function RunScreen({ navigation, route }) {
             datasets: [
               {
                 data: gstData.count,
+                colors: chartColors(),
               },
             ],
           }}
           width={Dimensions.get("window").width - 50}
           height={Dimensions.get("window").width - 150}
+          withCustomBarColorFromData={true}
+          flatColor={true}
+          showBarTops={false}
           chartConfig={{
+            barPercentage: 1,
             backgroundColor: "white",
             backgroundGradientFrom: "white",
             backgroundGradientTo: "white",
             decimalPlaces: 0,
             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
           }}
           fromZero={true}
           style={{

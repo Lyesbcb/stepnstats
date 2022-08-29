@@ -30,6 +30,7 @@ export default function DetailNfts({
   const [stats, setStats] = useState(data.fileNameBase ? "base" : "increased");
   // Optimize Modal
   const [optimizeModalVisible, setOptimizeModalVisible] = useState(false);
+  const [dailyIncomeModalVisible, setDailyIncomeModalVisible] = useState(false);
   const [optimized, setOptimized] = useState({});
   const imagePath = {
     walker: [
@@ -194,10 +195,10 @@ export default function DetailNfts({
     }
   }
   function defineMaxStat() {
-    if(stats === "base" && data.efficiencyBase === null){
-      setStats("increased")
-    }else if (stats === "increased" && data.efficiencyIncreased === null){
-      setStats("base")
+    if (stats === "base" && data.efficiencyBase === null) {
+      setStats("increased");
+    } else if (stats === "increased" && data.efficiencyIncreased === null) {
+      setStats("base");
     }
     if (stats === "base") {
       setMaxStat(
@@ -315,6 +316,11 @@ export default function DetailNfts({
         myFunction={myFunction}
         setStats={setStats}
       ></OptimizeModal>
+      <DailyIncomeModal
+        setModalVisible={setDailyIncomeModalVisible}
+        modalVisible={dailyIncomeModalVisible}
+        data={data}
+      ></DailyIncomeModal>
       <View
         style={{
           backgroundColor: color,
@@ -339,9 +345,32 @@ export default function DetailNfts({
           right: "2%",
           justifyContent: "space-evenly",
           flexDirection: "row",
-          width: "35%",
+          width: "45%",
         }}
       >
+        <Pressable
+          style={{
+            backgroundColor: "#9DF8B6",
+            justifyContent: "center",
+            alignContent: "center",
+            width: 32,
+            height: 32,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: "black",
+            shadowOpacity: 1,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 1,
+              height: 1,
+            },
+          }}
+          onPress={() => setDailyIncomeModalVisible(true)}
+        >
+          <Text style={{ textAlign: "center", textAlignVertical: "center", fontSize: RFValue(15,800), fontWeight: "700"}}>
+            D
+          </Text>
+        </Pressable>
         <Pressable
           style={{
             backgroundColor: "#9DF8B6",

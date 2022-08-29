@@ -124,7 +124,7 @@ export default function SelectMysteryBoxLevel({
               height: 1,
             },
           }}
-          onPress={() => setmodalVisible(false)}
+          onPress={() => setModalVisible(false)}
         >
           <Icon
             style={{ width: "100%" }}

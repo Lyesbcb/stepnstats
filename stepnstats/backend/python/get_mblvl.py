@@ -35,7 +35,7 @@ def crop_blks(img):
 def get_mblvl(img):
     cimg = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
-    dst = cv.inRange(cimg, (0, 0, 120), (255, 255, 255))
+    dst = cv.inRange(cimg, (0, 0, 125), (255, 255, 255))
     cnts, _ = cv.findContours(dst, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     toph = dst.shape[0]
     mh = int(toph / 5)

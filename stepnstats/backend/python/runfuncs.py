@@ -249,6 +249,9 @@ def get_tplvlgst(img, info, nondurab=None):
         if "," in gst:
             gst = gst.replace(",", ".")
 
+        if not (":" in gst):
+            gst = gst[:-2] + "." + gst[-2:]
+            
         return gst
 
     tp, level, qual = get_typelevelqual()
