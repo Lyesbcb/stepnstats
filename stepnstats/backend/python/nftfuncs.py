@@ -172,7 +172,7 @@ def get_sockets(oimg, info):
             (100, 205, 240):"efficiency",
             (240, 172, 148):"resilience",
             (205, 190, 160):"luck"
-!        }
+        }
 
         bdst = None 
         tp   = None

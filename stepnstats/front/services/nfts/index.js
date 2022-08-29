@@ -28,7 +28,6 @@ async function createNft(params) {
   await axios(config)
     .then(async function (response) {
       // Save to store
-      console.log(response);
     })
     .catch(function (error) {
       console.log(error.response.data.message);
@@ -86,7 +85,6 @@ async function uploadNft(image, realm) {
     // Start waiting screen
     return await fetch(baseURL + "/upload", options)
       .then(async (response) => {
-        console.log(response);
         if (response.ok) {
           return await response.json();
         }
@@ -115,7 +113,6 @@ async function deleteNft(id) {
 
   await axios(config)
     .then(async function (response) {
-      console.log(response.data);
       // re Nft getAllMyNft to actualize
     })
     .catch(function (error) {
@@ -282,7 +279,6 @@ function gemValue(gem, socket, value) {
 }
 
 async function optimize(myNft) {
-  console.log(myNft);
   var points = 0;
   var efficiency = 0;
   var luck = 0;

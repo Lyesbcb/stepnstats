@@ -13,6 +13,7 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import OptimizeModal from "./optimizeModal";
 import { RFValue } from "react-native-responsive-fontsize";
 import { updateNft } from "../../services/nfts/index";
+import DailyIncomeModal from "./dailyIncomeModal";
 
 export default function DetailNfts({
   data,
@@ -199,6 +200,12 @@ export default function DetailNfts({
       setStats("increased");
     } else if (stats === "increased" && data.efficiencyIncreased === null) {
       setStats("base");
+    } else if (stats === "optimized" && data.efficiencyOptimized === null) {
+      if (data.efficiencyBase === null) {
+        setStats("increased");
+      } else {
+        setStats("base");
+      }
     }
     if (stats === "base") {
       setMaxStat(
@@ -251,8 +258,6 @@ export default function DetailNfts({
           ? String(((data.luckIncreased / maxStat) * 100).toFixed(0)) + "%"
           : String(((data.luckIncreased / maxStat) * 100).toFixed(0)) + "%"
       );
-      // console.log(maxStat);
-      // console.log(data.luckIncreased / maxStat);
       setWidthComfort(
         maxStat == data.comfortIncreased
           ? String(((data.comfortIncreased / maxStat) * 100).toFixed(0)) + "%"
@@ -287,8 +292,6 @@ export default function DetailNfts({
           ? String(((data.luckOptimized / maxStat) * 100).toFixed(0)) + "%"
           : String(((data.luckOptimized / maxStat) * 100).toFixed(0)) + "%"
       );
-      // console.log(maxStat);
-      // console.log(data.luckOptimized / maxStat);
       setWidthComfort(
         maxStat == data.comfortOptimized
           ? String(((data.comfortOptimized / maxStat) * 100).toFixed(0)) + "%"
@@ -367,7 +370,14 @@ export default function DetailNfts({
           }}
           onPress={() => setDailyIncomeModalVisible(true)}
         >
-          <Text style={{ textAlign: "center", textAlignVertical: "center", fontSize: RFValue(15,800), fontWeight: "700"}}>
+          <Text
+            style={{
+              textAlign: "center",
+              textAlignVertical: "center",
+              fontSize: RFValue(15, 800),
+              fontWeight: "700",
+            }}
+          >
             D
           </Text>
         </Pressable>
@@ -680,7 +690,7 @@ export default function DetailNfts({
                   : sockets[data.socket4]
               }
             ></Image>
-            {stats === "optimized" && data.gem3Optimized ? (
+            {stats === "optimized" && data.gem4Optimized ? (
               <Image
                 style={{
                   width: "40%",
@@ -688,9 +698,9 @@ export default function DetailNfts({
                   resizeMode: "contain",
                   position: "absolute",
                 }}
-                source={contents[data.gem3Optimized]}
+                source={contents[data.gem4Optimized]}
               ></Image>
-            ) : stats === "increased" && data.gem3Inscreased ? (
+            ) : stats === "increased" && data.gem4Inscreased ? (
               <Image
                 style={{
                   width: "40%",
@@ -698,7 +708,7 @@ export default function DetailNfts({
                   resizeMode: "contain",
                   position: "absolute",
                 }}
-                source={contents[data.gem3Inscreased]}
+                source={contents[data.gem4Inscreased]}
               ></Image>
             ) : (
               <View></View>

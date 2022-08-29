@@ -4,3 +4,4 @@ eas.json
 upload
 android.json
 config.json
+__pycache__
