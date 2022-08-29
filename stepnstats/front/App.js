@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, Alert } from "react-native";
+import { StyleSheet, View, Image, Alert, StatusBar } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import AllNftsScreen from "./components/nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./components/mysteryBox/allMysteryBoxScreen";
@@ -41,6 +41,7 @@ function App() {
   };
   return (
     <NavigationContainer>
+      <StatusBar barStyle={"dark-content"} />
       <Tab.Navigator
         initialRouteName="Home"
         activeColor="#ff0071"
