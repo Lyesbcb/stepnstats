@@ -7,7 +7,7 @@ export default function Filter({
   setSelectedRealm,
   selectedRealm,
   selectedContent,
-  setSelectedContents,
+  setSelectedContent,
   setModalVisible,
   myFunction,
 }) {
@@ -38,13 +38,6 @@ export default function Filter({
     setScrollQuality("");
   }
 
-  function setSelectedContent(array) {
-    if (array.length > 4) {
-      Alert.alert("Max filter");
-    } else {
-      setSelectedContents(array);
-    }
-  }
 
   function add() {
     var value = "";

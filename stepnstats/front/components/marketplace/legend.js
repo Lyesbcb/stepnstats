@@ -9,7 +9,7 @@ export default function Legend({
   myColor,
   deleteContent,
   selectedContent,
-  setSelectedContents,
+  setSelectedContent,
 }) {
   const contents = {
     efficiencyLvl1: "Efficiency Lvl 1",
@@ -87,7 +87,7 @@ export default function Legend({
         alignItems: "center",
         width: "100%",
         marginBottom: "2%",
-        height: "22%",
+        height: 30,
       }}
     >
       <View
@@ -109,19 +109,17 @@ export default function Legend({
             alignItems:"center"
           }}
         >
-          <Pressable onPress={() => Alert.alert("Comming soon")}>
-            <Icon type="material-community" name="bell" size={RFValue(20, 800)}></Icon>
+          <Pressable onPress={() => Alert.alert("Coming soon")}>
+            <Icon type="material-community" name="bell" size={20}></Icon>
           </Pressable>
           <Pressable
             onPress={() => {
-              console.log(selectedContent)
               var tempArray = selectedContent.slice();
               tempArray.splice(id, 1);
-              setSelectedContents(tempArray);
-              console.log(selectedContent)
+              setSelectedContent(tempArray);
             }}
           >
-            <Icon type="material-community" name="close" size={RFValue(25, 800)}></Icon>
+            <Icon type="material-community" name="close" size={25}></Icon>
           </Pressable>
         </View>
       </View>

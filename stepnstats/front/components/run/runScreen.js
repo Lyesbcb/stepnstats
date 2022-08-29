@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import { BarChart } from "react-native-chart-kit";
+import { BarChart, LineChart } from "react-native-chart-kit";
 import Footer from "../footer";
 import { Dimensions } from "react-native";
 import { getByNftId } from "../../services/nfts/index";
@@ -71,7 +71,12 @@ export default function RunScreen({ navigation, route }) {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
+        data: [Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100],
       },
     ],
   };
@@ -145,9 +150,10 @@ export default function RunScreen({ navigation, route }) {
           <View
             style={{
               flexDirection: "row",
-              width: "30%",
-              justifyContent: "space-between",
+              width: "70%",
               alignItems: "flex-end",
+              height: "100%",
+              justifyContent: "flex-end",
             }}
           >
             <Text style={{ fontSize: RFValue(48, 800), fontWeight: "700" }}>
@@ -427,6 +433,67 @@ export default function RunScreen({ navigation, route }) {
           },
         }}
       />
+      {/* <LineChart
+        data={{
+          labels: ["10", "20", "30", "40", "50", "60"],
+          datasets: [
+            {
+              data: [Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100,
+            Math.random() * 100],
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // optional
+            },
+            
+          ],
+        }}
+        width={Dimensions.get("window").width - 50}
+        height={Dimensions.get("window").width - 200}
+        chartConfig={{
+          backgroundColor: "white",
+          backgroundGradientFrom: "white",
+          backgroundGradientTo: "white",
+          decimalPlaces: 0,
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+        }}
+        renderDotContent={({ x, y, index }) => {
+          return (
+            <View
+              style={{
+                height: 24,
+                width: 24,
+                position: "absolute",
+                top: y + 30, // <--- relevant to height / width (
+                left: x - 5, // <--- width / 2
+              }}
+            >
+              <Image
+              source={mbsImage[run.mbLvl - 1]}
+              style={{ width: 20, height: 20, resizeMode: "contain" }}
+            ></Image>
+            </View>
+          );
+        }}
+        fromZero={true}
+        style={{
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: "black",
+          shadowColor: "black",
+          shadowOpacity: 1,
+          shadowRadius: 1,
+          shadowOffset: {
+            width: 4,
+            height: 4,
+          },
+        }}
+      /> */}
       {/* <Footer styles={styles}></Footer> */}
     </View>
   );

@@ -2,14 +2,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
-  ImageBackground,
-  Image,
   Alert,
-  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Footer from "../footer";
 import Header from "./header";
 import { getAllTemporality } from "../../services/mps/index";
 import Marketplace from "./marketplace";
@@ -17,7 +12,7 @@ import ProgressLoader from "rn-progress-loader";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export default function MarketplaceScreen({ navigation }) {
-  const [selectedContent, setSelectedContents] = useState([]);
+  const [selectedContent, setSelectedContent] = useState([]);
   const [selectedRealm, setSelectedRealm] = useState("Solana");
   const [mpsDay, setMpsDay] = useState([]);
   const [mpsWeek, setMpsWeek] = useState([]);
@@ -30,18 +25,19 @@ export default function MarketplaceScreen({ navigation }) {
 
   const myFunction = async (realm) => {
     try {
-      setLoading(true);
       if (realm) {
-        setMpsDay(await getAllTemporality(realm, "Day"));
-        setMpsWeek(await getAllTemporality(realm, "Week"));
-        setMpsMonth(await getAllTemporality(realm, "Month"));
+        setLoading(true);
+        await setMpsDay(await getAllTemporality(realm, "Day"));
+        await setMpsWeek(await getAllTemporality(realm, "Week"));
+        await setMpsMonth(await getAllTemporality(realm, "Month"));
+        setLoading(false);
       } else {
-        setMpsDay(await getAllTemporality(selectedRealm, "Day"));
-        setMpsWeek(await getAllTemporality(selectedRealm, "Week"));
-        setMpsMonth(await getAllTemporality(selectedRealm, "Month"));
+        setLoading(true);
+        await setMpsDay(await getAllTemporality(selectedRealm, "Day"));
+        await setMpsWeek(await getAllTemporality(selectedRealm, "Week"));
+        await setMpsMonth(await getAllTemporality(selectedRealm, "Month"));
+        setLoading(false);
       }
-
-      setLoading(false);
     } catch (err) {
       console.log(err);
       Alert.alert("Error");
@@ -76,7 +72,7 @@ export default function MarketplaceScreen({ navigation }) {
           {selectedTab === 0 ? (
             <Marketplace
               selectedContent={selectedContent}
-              setSelectedContents={setSelectedContents}
+              setSelectedContent={setSelectedContent}
               selectedRealm={selectedRealm}
               navigation={navigation}
               mpsDay={mpsDay}

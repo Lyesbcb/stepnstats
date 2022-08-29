@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Alert } from "react-native";
 import HomeScreen from "./components/homeScreen";
 import AllNftsScreen from "./components/nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./components/mysteryBox/allMysteryBoxScreen";

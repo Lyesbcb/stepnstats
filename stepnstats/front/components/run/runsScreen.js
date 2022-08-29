@@ -3,11 +3,7 @@ import {
   Text,
   View,
   Pressable,
-  ImageBackground,
-  Image,
   Alert,
-  TouchableOpacity,
-  ScrollView,
   FlatList,
   RefreshControl,
 } from "react-native";
@@ -121,8 +117,6 @@ export default function RunsScreen({ navigation }) {
         <Text
           style={{
             ...styles.text,
-            top: "18%",
-            position: "absolute",
           }}
         >
           Runs
@@ -131,16 +125,15 @@ export default function RunsScreen({ navigation }) {
           style={{
             justifyContent: "space-between",
             alignItems: "center",
-            position: "absolute",
-            bottom: "20%",
-            height: "35%",
+            height: "40%",
+            width: "100%"
           }}
         >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
-              width: "80%",
+              justifyContent: "space-evenly",
+              width: "90%",
             }}
           >
             <View style={{ flexDirection: "column" }}>
@@ -259,7 +252,7 @@ export default function RunsScreen({ navigation }) {
                 top: "5%",
                 left: "5%",
               }}
-            ></Text>
+            >Add run</Text>
             <Text
               style={{
                 fontSize: RFValue(16, 800),
@@ -306,7 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0FEF3",
     width: "100%",
     height: "30%",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     flexDirection: "column",
   },

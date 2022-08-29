@@ -35,7 +35,7 @@ export default function Header({ selectedTab, SetSelectedTab }) {
         </Pressable>
         <Pressable
           style={selectedTab === 1 ? styles.activeTab : styles.tab}
-          onPress={() => Alert.alert("Comming soon!")}
+          onPress={() => Alert.alert("Coming soon!")}
         >
           <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Notifications</Text>
         </Pressable>

@@ -1,9 +1,16 @@
-import { Text, View, Pressable, Image, Alert, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Pressable,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { Icon } from "react-native-elements";
 import Legend from "./legend";
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import Modal from "react-native-modal";
 import Filter from "./filter";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -16,7 +23,7 @@ export default function Marketplace({
   mpsMonth,
   myFunction,
   selectedContent,
-  setSelectedContents,
+  setSelectedContent,
 }) {
   const color = ["#BABCBE", "#AED144", "#47ACED", "#A398EB", "#F5A836"];
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
@@ -95,6 +102,7 @@ export default function Marketplace({
     },
     useShadowColorFromDataset: true,
   };
+
   const chartConfigDollars = {
     backgroundGradientFrom: "white",
     backgroundGradientTo: "white",
@@ -111,11 +119,12 @@ export default function Marketplace({
     },
     useShadowColorFromDataset: true,
   };
+
   function setLegends() {
     return selectedContent.map((content, i) => {
       return (
         <Legend
-          setSelectedContents={setSelectedContents}
+          setSelectedContent={setSelectedContent}
           selectedContent={selectedContent}
           key={i}
           id={i}
@@ -139,8 +148,7 @@ export default function Marketplace({
               tempDatasets[y].data.push(mpsDay[i][selectedContent[y]]);
             } else {
               tempDatasets[y].data.push(
-                Number(mpsDay[i][selectedContent[y]]) *
-                  mpsDay[i][selectedRealm]
+                Number(mpsDay[i][selectedContent[y]]) * mpsDay[i][selectedRealm]
               );
             }
           }
@@ -369,7 +377,7 @@ export default function Marketplace({
           myFunction={myFunction}
           selectedRealm={selectedRealm}
           selectedContent={selectedContent}
-          setSelectedContents={setSelectedContents}
+          setSelectedContent={setSelectedContent}
           setModalVisible={setModalVisible}
         ></Filter>
       </Modal>
@@ -600,7 +608,7 @@ export default function Marketplace({
           </Text>
           <Pressable
             onPress={() => {
-              setSelectedContents([]);
+              setSelectedContent([]);
             }}
           >
             <Text
@@ -614,10 +622,13 @@ export default function Marketplace({
             </Text>
           </Pressable>
         </View>
-        <View
-          style={{ flexDirection: "column", marginTop: "4%", height: "100%" }}
-        >
-          {setLegends()}
+        <View style={{ marginTop: "4%", height: "100%" }}>
+          <ScrollView
+            style={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {setLegends()}
+          </ScrollView>
         </View>
       </View>
     </View>

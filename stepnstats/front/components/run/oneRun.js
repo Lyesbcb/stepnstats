@@ -73,11 +73,11 @@ export default function OneRun({ navigation, run, myFunction }) {
     ],
   };
   function dateFormat(date) {
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDate();
-    let hour = date.getHours();
-    let minute = date.getMinutes();
+    let year = date.getUTCFullYear();
+    let month = date.getUTCMonth();
+    let day = date.getUTCDate();
+    let hour = date.getUTCHours();
+    let minute = date.getUTCMinutes();
     if (minute < 10) {
       minute = "0" + minute;
     }
@@ -85,7 +85,7 @@ export default function OneRun({ navigation, run, myFunction }) {
       hour = "0" + hour;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = "0" + Number(month+1);
     }
     if (day < 10) {
       day = "0" + day;
