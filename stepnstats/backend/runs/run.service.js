@@ -2,7 +2,7 @@
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
 var spawn = require("child_process").spawn;
-var fs = require('fs')
+var fs = require("fs");
 
 module.exports = {
   getAll,
@@ -12,6 +12,7 @@ module.exports = {
   update,
   delete: _delete,
   uploadFile,
+  getGstData,
 };
 
 function NumToTime(num) {
@@ -57,7 +58,7 @@ async function uploadFile(req, res) {
     run.stderr.setEncoding("utf8");
     await run.stderr.on("data", async function (data) {
       console.log(data)
-      console.log("ErrorScript")
+      
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -108,21 +109,21 @@ async function getById(req) {
 }
 
 async function create(params) {
-  var res
+  var res;
   try {
     res = await db.Run.findOne({
       where: { userId: params.userId, date: params.date, nftId: params.nftId },
-    })     
-  }catch {
+    });
+  } catch {
     throw "Error on recognizing image";
   }
-  if(res){
+  if (res) {
     throw "This run is already exists.";
   }
-  try{
+  try {
     return await db.Run.create(params);
-  }catch (err) {
-    console.log(err)
+  } catch (err) {
+    console.log(err);
     throw "Error on recognizing image";
   }
   // save run
@@ -164,4 +165,20 @@ async function getRun(id) {
   const run = await db.Run.findByPk(id);
   if (!run) throw "Run not found.";
   return run;
+}
+
+async function getGstData(req) {
+  const efficiency = req.query.efficiency;
+  const type = req.query.type;
+  const run = await db.sequelize.query(
+    `SELECT ROUND((gst/(energy*5)), 1) value, count(*) as count FROM (SELECT * FROM runs where type= '${type}') u LEFT JOIN nfts p ON p.nftId = u.nftId WHERE p.nftId IS NOT NULL && efficiencyIncreased >= ${efficiency}* 0.95 && efficiencyIncreased <= ${efficiency}* 1.05 group by 1 ORDER BY ROUND((gst/(energy*5)), 1) ASC LIMIT 10 ;`
+  );
+  if (!run) throw "No data.";
+  var countArray = [];
+  var valueArray = [];
+  for (var i = 0; i < run[0].length; i++) {
+    countArray.push(run[0][i].count);
+    valueArray.push(run[0][i].value);
+  }
+  return { count: countArray, value: valueArray };
 }

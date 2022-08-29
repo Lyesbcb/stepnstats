@@ -50,7 +50,7 @@ async function uploadFile(req, res) {
     nft.stderr.setEncoding("utf8");
     await nft.stderr.on("data", async function (data) {
       console.log(data)
-      console.log("ErrorScript")
+      
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {

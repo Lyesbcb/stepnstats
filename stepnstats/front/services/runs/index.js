@@ -12,6 +12,7 @@ module.exports = {
   uploadRun,
   updateRun,
   getAllMyRun,
+  getGstData,
 };
 const baseURL = config.baseUrl + "/runs";
 
@@ -131,13 +132,40 @@ async function getAllMyRun(page) {
   };
 
   return await axios(config)
-  .then(async (response) => {
-    if (response.data) {
-      return await response.data.rows
+    .then(async (response) => {
+      if (response.data) {
+        return await response.data.rows;
+      }
+      throw await response;
+    })
+    .catch(async function (error) {
+      throw await error.message;
+    });
+}
+
+async function getGstData(efficiency, type) { 
+  var token = await getSecuretValueFor("token");
+  var config = {
+    method: "get",
+    url: baseURL + "/gstdata",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      efficiency,
+      type,
     }
-    throw await response
-  })
-  .catch(async function (error) {
-    throw await error.message
-  });
+  };
+  return await axios(config)
+    .then(async (response) => {
+      if (response.data) {
+        return await response.data
+      }
+      throw await response;
+    })
+    .catch(async function (error) {
+      console.log(error);
+      throw await error.message;
+    });
 }

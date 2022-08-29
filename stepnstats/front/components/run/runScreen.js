@@ -17,30 +17,14 @@ import { Dimensions } from "react-native";
 import { getByNftId } from "../../services/nfts/index";
 import { RFValue } from "react-native-responsive-fontsize";
 import LittleNfts from "../nfts/littleNfts";
-import { deleteRun } from "../../services/runs/index";
+import { deleteRun, getGstData } from "../../services/runs/index";
 export default function RunScreen({ navigation, route }) {
   const [run, setRun] = useState(JSON.parse(route.params).run);
   const [nft, setNft] = useState(0);
+  const [gstData, setGstData] = useState({});
   useEffect(() => {
     myFunction();
   }, []);
-
-  const chartData = {
-    labels: [
-      1.4, 1.48, 1.86, 1.87, 1.88, 1.92, 1.98, 2, 2.02, 2.03, 2.04, 2.05, 2.06,
-      2.07, 2.08, 2.09, 2.1, 2.11, 2.12, 2.13, 2.14, 2.15, 2.16, 2.17, 2.18,
-      2.2, 2.22, 2.23, 2.24, 2.25, 2.27, 2.28, 2.29, 2.3, 2.33, 2.37, 2.38, 2.4,
-      3.85,
-    ],
-    datasets: [
-      {
-        data: [
-          1, 1, 1, 1, 1, 1, 3, 8, 2, 1, 3, 1, 4, 3, 8, 6, 3, 2, 4, 2, 3, 3, 6,
-          3, 3, 8, 3, 2, 1, 1, 1, 3, 1, 2, 1, 1, 1, 1, 1,
-        ],
-      },
-    ],
-  };
 
   const mbsImage = [
     require("../../assets/mb/lvl1.png"),
@@ -61,6 +45,18 @@ export default function RunScreen({ navigation, route }) {
       if (tempNft) {
         setNft(tempNft);
       }
+      try {
+        var tempGstData = await getGstData(
+          tempNft.efficiencyIncreased,
+          tempNft.type
+        );
+        if (tempGstData) {
+          setGstData(tempGstData);
+        }
+      } catch (error) {
+        console.log(error);
+        setGstData({});
+      }
     } catch (error) {
       Alert.alert(error);
       setNft(0);
@@ -71,12 +67,14 @@ export default function RunScreen({ navigation, route }) {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
       {
-        data: [Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100],
+        data: [
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+        ],
       },
     ],
   };
@@ -404,35 +402,64 @@ export default function RunScreen({ navigation, route }) {
           </Text>
         </View>
       </View>
-      <BarChart
-        data={chartData}
-        width={Dimensions.get("window").width - 50}
-        height={Dimensions.get("window").width - 150}
-        chartConfig={{
-          backgroundColor: "white",
-          backgroundGradientFrom: "white",
-          backgroundGradientTo: "white",
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-        }}
-        fromZero={true}
-        style={{
-          borderRadius: 12,
-          borderWidth: 1,
-          borderColor: "black",
-          shadowColor: "black",
-          shadowOpacity: 1,
-          shadowRadius: 1,
-          shadowOffset: {
-            width: 4,
-            height: 4,
-          },
-        }}
-      />
+      {gstData.count ? (
+        <BarChart
+          data={{
+            labels: gstData.value,
+            datasets: [
+              {
+                data: gstData.count,
+              },
+            ],
+          }}
+          width={Dimensions.get("window").width - 50}
+          height={Dimensions.get("window").width - 150}
+          chartConfig={{
+            backgroundColor: "white",
+            backgroundGradientFrom: "white",
+            backgroundGradientTo: "white",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+          }}
+          fromZero={true}
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: "black",
+            shadowColor: "black",
+            shadowOpacity: 1,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 4,
+              height: 4,
+            },
+          }}
+        >
+          <Text></Text>
+        </BarChart>
+      ) : (
+        <View
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: "black",
+            shadowColor: "black",
+            alignItems: "center",
+            justifyContent: "center",
+            width: Dimensions.get("window").width - 50,
+            height: Dimensions.get("window").width - 150,
+          }}
+        >
+          <Text style={{ fontSize: RFValue(12, 800) }}>
+            Add your sneaker with inscred stats to see data
+          </Text>
+        </View>
+      )}
+
       {/* <LineChart
         data={{
           labels: ["10", "20", "30", "40", "50", "60"],
