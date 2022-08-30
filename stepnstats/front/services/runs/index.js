@@ -13,6 +13,7 @@ module.exports = {
   updateRun,
   getAllMyRun,
   getGstData,
+  dailyIncome,
 };
 const baseURL = config.baseUrl + "/runs";
 
@@ -169,3 +170,28 @@ async function getGstData(efficiency, type) {
       throw await error.message;
     });
 }
+
+async function dailyIncome(data) { 
+  var token = await getSecuretValueFor("token");
+  var config = {
+    method: "get",
+    url: baseURL + "/dailyincome",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    params: data
+  };
+  return await axios(config)
+    .then(async (response) => {
+      if (response.data) {
+        return await response.data
+      }
+      throw await response;
+    })
+    .catch(async function (error) {
+      console.log(error);
+      throw await error.message;
+    });
+}
+

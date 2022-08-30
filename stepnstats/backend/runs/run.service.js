@@ -13,6 +13,8 @@ module.exports = {
   delete: _delete,
   uploadFile,
   getGstData,
+  getGstEnergy,
+  getDurabilityLost,
 };
 
 function NumToTime(num) {
@@ -34,8 +36,8 @@ async function uploadFile(req, res) {
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {
-      console.log(req.file.path)
-      console.log(data)
+      console.log(req.file.path);
+      console.log(data);
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
@@ -44,21 +46,27 @@ async function uploadFile(req, res) {
       try {
         return res.send(await create(params));
       } catch (error) {
-        fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
-          if (err) throw err
-        })
-        console.log("ErrorDatabase")
-        if(error){
+        fs.rename(
+          req.file.path,
+          "./upload/error/run/" + req.file.filename,
+          function (err) {
+            if (err) throw err;
+          }
+        );
+        console.log("ErrorDatabase");
+        if (error) {
           return res.status(400).json({ message: error });
-        }else{
-          return res.status(400).json({ message: "Error on recognizing image" });
+        } else {
+          return res
+            .status(400)
+            .json({ message: "Error on recognizing image" });
         }
       }
     });
     run.stderr.setEncoding("utf8");
     await run.stderr.on("data", async function (data) {
-      console.log(data)
-      
+      console.log(data);
+
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -68,10 +76,14 @@ async function uploadFile(req, res) {
       throw stderr;
     }
   } catch (error) {
-    fs.rename(req.file.path, "./upload/error/run/"+req.file.filename, function (err) {
-      if (err) throw err
-    })
-    console.log("ErrorGlobal")
+    fs.rename(
+      req.file.path,
+      "./upload/error/run/" + req.file.filename,
+      function (err) {
+        if (err) throw err;
+      }
+    );
+    console.log("ErrorGlobal");
     return res.status(400).json({ message: error });
   }
 }
@@ -182,3 +194,25 @@ async function getGstData(req) {
   }
   return { count: countArray, value: valueArray };
 }
+
+async function getGstEnergy(req) {
+  const efficiency = req.query.efficiency;
+  const type = req.query.type;
+  const run = await db.sequelize.query(
+    `SELECT AVG(gst/energy) gstEnergy FROM (SELECT * FROM runs where type='${type}') u LEFT JOIN nfts p ON p.nftId = u.nftId WHERE  p.nftId  IS NOT NULL && efficiencyIncreased >= ${efficiency} * 0.95 && efficiencyIncreased <= ${efficiency} * 1.05;`
+  );
+  if (!run) throw "No data.";
+  return run[0][0].gstEnergy;
+}
+
+async function getDurabilityLost(req) {
+  const resilience = req.query.resilience;
+  const type = req.query.type;
+  const run = await db.sequelize.query(
+    `SELECT AVG(durabilityLost/energy) durabilityLost FROM (SELECT * FROM runs where type='${type}') u LEFT JOIN nfts p ON p.nftId = u.nftId WHERE  p.nftId  IS NOT NULL && resilienceIncreased >= ${resilience} * 0.95 && resilienceIncreased <= ${resilience} * 1.05;
+    `
+  );
+  if (!run) throw "No data.";
+  return run[0][0].durabilityLost;
+}
+

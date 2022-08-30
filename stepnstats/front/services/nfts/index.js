@@ -218,7 +218,7 @@ function getClosestEnergyLuck(energy, luck) {
     }
   }
   return Math.min(closestEnergy, closestLuck);
-}
+}!
 
 function socketValue(socket, value) {
   var finalValue = value;
