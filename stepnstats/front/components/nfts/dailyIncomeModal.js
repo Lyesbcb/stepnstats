@@ -47,7 +47,7 @@ export default function DailyIncomeModal({
 
   useEffect(() => {
     myFunction(); // This is be executed when the state changes
-}, [energy]);
+  }, [energy]);
 
   async function myFunction() {
     data.energy = energy;
@@ -87,182 +87,241 @@ export default function DailyIncomeModal({
         activeOpacity={1}
         onPressOut={() => setModalVisible(false)}
       >
-        <View
-          style={{
-            backgroundColor: "white",
-            height: "60%",
-            width: "80%",
-            borderRadius: 30,
-            justifyContent: "space-evenly",
-            borderWidth: 1,
-            alignItems: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            elevation: 5,
-          }}
-        >
-          <Text style={{ fontSize: RFValue(24, 800), fontWeight: "800" }}>Daily Income</Text>
+        <TouchableWithoutFeedback>
           <View
             style={{
-              justifyContent: "space-between",
-              height: "10%",
-              width: "60%",
+              backgroundColor: "white",
+              height: "60%",
+              width: "80%",
+              borderRadius: 30,
+              justifyContent: "space-evenly",
+              borderWidth: 1,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
-            <Text style={{ fontSize: RFValue(14, 800), fontWeight: "700" }}>
-              Energy
+            <View
+              style={{
+                position: "absolute",
+                top: "4%",
+                right: "4%",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+              }}
+            >
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: 32,
+                  height: 32,
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => setModalVisible(false)}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="close"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            </View>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "800" }}>
+              Daily Income
             </Text>
+            <View
+              style={{
+                justifyContent: "space-between",
+                height: "10%",
+                width: "60%",
+              }}
+            >
+              <Text style={{ fontSize: RFValue(14, 800), fontWeight: "700" }}>
+                Energy
+              </Text>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  alignContent: "center",
+                  flexDirection: "row",
+                  width: "100%",
+                }}
+              >
+                <Pressable
+                  style={{ width: "25%", height: "100%" }}
+                  onPress={() => setLessEnergy()}
+                >
+                  <Icon
+                    size={RFValue(40, 800)}
+                    type="antdesign"
+                    name="minus"
+                    color="black"
+                  ></Icon>
+                </Pressable>
+                <Text
+                  style={{
+                    fontWeight: "800",
+                    fontSize: RFValue(24, 800),
+                    textAlign: "center",
+                    width: "50%",
+                  }}
+                >
+                  {String(energy) + ".0"}
+                </Text>
+                <Pressable
+                  style={{ width: "25%", height: "100%" }}
+                  onPress={() => setMoreEnergy()}
+                >
+                  <Icon
+                    size={RFValue(40, 800)}
+                    type="antdesign"
+                    name="plus"
+                    color="black"
+                  ></Icon>
+                </Pressable>
+              </View>
+            </View>
             <View
               style={{
                 justifyContent: "space-between",
                 alignItems: "center",
                 alignContent: "center",
                 flexDirection: "row",
-                width: "100%",
+                height: "10%",
+                width: "90%",
               }}
             >
-              <Pressable
-                style={{ width: "25%", height: "100%" }}
-                onPress={() => setLessEnergy()}
-              >
-                <Icon
-                  size={RFValue(40, 800)}
-                  type="antdesign"
-                  name="minus"
-                  color="black"
-                ></Icon>
-              </Pressable>
-              <Text
-                style={{
-                  fontWeight: "800",
-                  fontSize: RFValue(24, 800),
-                  textAlign: "center",
-                  width: "50%",
-                }}
-              >
-                {String(energy) + ".0"}
+              <Image
+                source={require("../../assets/gst.png")}
+                style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+              ></Image>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                Daily GST
               </Text>
-              <Pressable
-                style={{ width: "25%", height: "100%" }}
-                onPress={() => setMoreEnergy()}
-              >
-                <Icon
-                  size={RFValue(40, 800)}
-                  type="antdesign"
-                  name="plus"
-                  color="black"
-                ></Icon>
-              </Pressable>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                {dailyIncome.gstTotal ? dailyIncome.gstTotal : "?"}
+              </Text>
             </View>
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "10%",
+                width: "90%",
+              }}
+            >
+              <Image
+                source={require("../../assets/gst.png")}
+                style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+              ></Image>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                Durability lost
+              </Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                {dailyIncome.gstTotal ? dailyIncome.durabilityLost : "?"}
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "10%",
+                width: "90%",
+              }}
+            >
+              <Image
+                source={require("../../assets/gst.png")}
+                style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+              ></Image>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                Repair cost
+              </Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                {dailyIncome.gstTotal ? dailyIncome.repairCost : "?"}
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "10%",
+                width: "90%",
+              }}
+            >
+              <Image
+                source={require("../../assets/gem/comfort/lvl1.png")}
+                style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+              ></Image>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                Hp lost
+              </Text>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                {dailyIncome.gstTotal ? dailyIncome.hpLost : "?"}
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "10%",
+                width: "90%",
+              }}
+            >
+              {dailyIncome.mb ? (
+                <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                  Average mystery box: Lvl{dailyIncome.mb}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                  No mystery box
+                </Text>
+              )}
+              {dailyIncome.mb ? (
+                <Image
+                  source={mbsImage[dailyIncome.mb - 1]}
+                  style={{
+                    width: "15%",
+                    height: "100%",
+                    resizeMode: "contain",
+                  }}
+                ></Image>
+              ) : (
+                <View></View>
+              )}
+            </View>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}>
+              Selected stats:{" "}
+              {focused.charAt(0).toUpperCase() + focused.slice(1)}
+            </Text>
           </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              alignContent: "center",
-              flexDirection: "row",
-              height: "10%",
-              width: "90%",
-            }}
-          >
-            <Image
-              source={require("../../assets/gst.png")}
-              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            ></Image>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
-              Daily GST
-            </Text>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              {dailyIncome.gstTotal ? dailyIncome.gstTotal : "?"}
-            </Text>
-          </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              alignContent: "center",
-              flexDirection: "row",
-              height: "10%",
-              width: "90%",
-            }}
-          >
-            <Image
-              source={require("../../assets/gst.png")}
-              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            ></Image>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
-              Durability lost
-            </Text>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              {dailyIncome.gstTotal ? dailyIncome.durabilityLost : "?"}
-            </Text>
-          </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              alignContent: "center",
-              flexDirection: "row",
-              height: "10%",
-              width: "90%",
-            }}
-          >
-            <Image
-              source={require("../../assets/gst.png")}
-              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            ></Image>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
-              Repair cost
-            </Text>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              {dailyIncome.gstTotal ? dailyIncome.repairCost : "?"}
-            </Text>
-          </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              alignContent: "center",
-              flexDirection: "row",
-              height: "10%",
-              width: "90%",
-            }}
-          >
-            <Image
-              source={require("../../assets/gem/comfort/lvl1.png")}
-              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            ></Image>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
-              Hp lost
-            </Text>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              {dailyIncome.gstTotal ? dailyIncome.hpLost : "?"}
-            </Text>
-          </View>
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              alignContent: "center",
-              flexDirection: "row",
-              height: "10%",
-              width: "90%",
-            }}
-          >
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
-              Average mystery box
-            </Text>
-            <Image
-              source={mbsImage[dailyIncome.mb - 1]}
-              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
-            ></Image>
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
       </TouchableOpacity>
     </Modal>
   );

@@ -35,6 +35,7 @@
     "react-native": "0.68.2",
     "react-native-bouncing-preloaders": "^1.0.0",
     "react-native-chart-kit": "^6.12.0",
+    "react-native-chart-kit-with-pressable-bar-graph": "^6.11.4",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-modal": "^13.0.1",

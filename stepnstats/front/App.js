@@ -6,7 +6,6 @@ import AllRunsScreen from "./components/run/runsScreen";
 import OneRunScreen from "./components/run/runScreen";
 import React, { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react-native";
-import TestScreen from "./components/test";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -14,9 +13,11 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import Invenrtory from "./components/inventory";
 import Marketplace from "./components/marketplace/marketplaceScreen";
 import { RFValue } from "react-native-responsive-fontsize";
-
+import axios from "axios";
+import config from "./config.json";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+import ProgressLoader from "rn-progress-loader";
 
 Sentry.init({
   dsn: "https://aba7681e4758413f9025831056b576e1@o1332793.ingest.sentry.io/6597674",
@@ -30,6 +31,46 @@ Sentry.init({
 });
 
 function App() {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    testServer();
+  }, []);
+  async function testServer() {
+    setLoading(true);
+    await axios
+      .get(config.baseUrl)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        if (err.includes("timeout")) {
+          Alert.alert(
+            "Error",
+            "STEPNstats server are in maintenance. Please try later",
+            [
+              {
+                text: "Reload",
+                onPress: () => testServer(),
+                style: "cancel",
+              },
+            ]
+          );
+        } else {
+          Alert.alert(
+            "Error",
+            "STEPNstats need internet connection to run. Check your connection and retry.",
+            [
+              {
+                text: "Reload",
+                onPress: () => testServer(),
+                style: "cancel",
+              },
+            ]
+          );
+        }
+      });
+    setLoading(false);
+  }
   const isTabBarVisible = (navState) => {
     if (!navState) {
       return true;
@@ -41,17 +82,19 @@ function App() {
   };
   return (
     <NavigationContainer>
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      />
       <StatusBar barStyle={"dark-content"} />
       <Tab.Navigator
         initialRouteName="Home"
         activeColor="#ff0071"
         inactiveColor="#000"
-        barStyle={{ backgroundColor: "#fff" }}
         screenOptions={({ route, navigation }) => ({
-          tabBarIconStyle: {
-            textAlignVertical: "center",
-            justifyContent: "center",
-          },
           tabBarItemStyle: {
             alignItems: "center",
             justifyContent: "center",
@@ -59,6 +102,7 @@ function App() {
           },
           headerShown: false,
           tabBarStyle: {
+            paddingTop: 10,
             position: "absolute",
             bottom: "5%",
             height: "8%",
@@ -97,6 +141,12 @@ function App() {
                   name={iconName}
                   size={RFValue(30, 800)}
                   color={color}
+                  style={{
+                    textAlignVertical: "center",
+                    alignItems: "center",
+                    alignContent: "center",
+                    justifyContent: "center",
+                  }}
                 />
               </View>
             );
@@ -108,8 +158,6 @@ function App() {
         <Tab.Screen name="runs" component={Runs} />
         <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
         {/* <Tab.Screen name="test" component={TestScreen} /> */}
-
-        {/* <Tab.Screen name="marketplace" component={MarketplaceScreen} /> */}
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -10,10 +10,11 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { Icon } from "react-native-elements";
 import Legend from "./legend";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-native-modal";
 import Filter from "./filter";
 import { RFValue } from "react-native-responsive-fontsize";
+import { Svg, Text as TextSVG, Rect } from "react-native-svg";
 
 export default function Marketplace({
   selectedRealm,
@@ -29,7 +30,16 @@ export default function Marketplace({
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
   const [isModalVisible, setModalVisible] = useState(false);
   const [currency, setCurrency] = useState("Dollars");
+  let [tooltipPos, setTooltipPos] = useState({
+    x: 0,
+    y: 0,
+    visible: false,
+    value: 0,
+  });
 
+  useEffect(() => {
+    setTooltipPos({ x: 0, y: 0, visible: false, value: 0 });
+  }, [currency, selectedTemporality]);
   const colors = {
     efficiencyLvl1: "#A4976B",
     efficiencyLvl2: "#B6A361",
@@ -172,6 +182,51 @@ export default function Marketplace({
         }
         return (
           <LineChart
+            decorator={() => {
+              return tooltipPos.visible ? (
+                <View>
+                  <Svg>
+                    <Rect
+                      rx={10}
+                      x={tooltipPos.x - 30}
+                      y={tooltipPos.y + 10}
+                      width="60"
+                      height="30"
+                      fill="black"
+                    />
+                    <TextSVG
+                      x={tooltipPos.x}
+                      y={tooltipPos.y + 30}
+                      fill="white"
+                      fontSize={RFValue(12, 800)}
+                      fontWeight="bold"
+                      textAnchor="middle"
+                    >
+                      {tooltipPos.value.toFixed(2)}
+                    </TextSVG>
+                  </Svg>
+                </View>
+              ) : null;
+            }}
+            onDataPointClick={(data) => {
+              let isSamePoint =
+                tooltipPos.x === data.x && tooltipPos.y === data.y;
+
+              isSamePoint
+                ? setTooltipPos((previousState) => {
+                    return {
+                      ...previousState,
+                      value: data.value,
+                      visible: !previousState.visible,
+                    };
+                  })
+                : setTooltipPos({
+                    x: data.x,
+                    value: data.value,
+                    y: data.y,
+                    visible: true,
+                  });
+            }}
             fromZero={true}
             verticalLabelRotation={80}
             data={{
@@ -238,6 +293,51 @@ export default function Marketplace({
         }
         return (
           <LineChart
+            decorator={() => {
+              return tooltipPos.visible ? (
+                <View>
+                  <Svg>
+                    <Rect
+                      rx={10}
+                      x={tooltipPos.x - 30}
+                      y={tooltipPos.y + 10}
+                      width="60"
+                      height="30"
+                      fill="black"
+                    />
+                    <TextSVG
+                      x={tooltipPos.x}
+                      y={tooltipPos.y + 30}
+                      fill="white"
+                      fontSize={RFValue(12, 800)}
+                      fontWeight="bold"
+                      textAnchor="middle"
+                    >
+                      {tooltipPos.value.toFixed(2)}
+                    </TextSVG>
+                  </Svg>
+                </View>
+              ) : null;
+            }}
+            onDataPointClick={(data) => {
+              let isSamePoint =
+                tooltipPos.x === data.x && tooltipPos.y === data.y;
+
+              isSamePoint
+                ? setTooltipPos((previousState) => {
+                    return {
+                      ...previousState,
+                      value: data.value,
+                      visible: !previousState.visible,
+                    };
+                  })
+                : setTooltipPos({
+                    x: data.x,
+                    value: data.value,
+                    y: data.y,
+                    visible: true,
+                  });
+            }}
             fromZero={true}
             verticalLabelRotation={80}
             data={{
@@ -301,6 +401,51 @@ export default function Marketplace({
         }
         return (
           <LineChart
+            decorator={() => {
+              return tooltipPos.visible ? (
+                <View>
+                  <Svg>
+                    <Rect
+                      rx={10}
+                      x={tooltipPos.x - 30}
+                      y={tooltipPos.y + 10}
+                      width="60"
+                      height="30"
+                      fill="black"
+                    />
+                    <TextSVG
+                      x={tooltipPos.x}
+                      y={tooltipPos.y + 30}
+                      fill="white"
+                      fontSize={RFValue(12, 800)}
+                      fontWeight="bold"
+                      textAnchor="middle"
+                    >
+                      {tooltipPos.value.toFixed(2)}
+                    </TextSVG>
+                  </Svg>
+                </View>
+              ) : null;
+            }}
+            onDataPointClick={(data) => {
+              let isSamePoint =
+                tooltipPos.x === data.x && tooltipPos.y === data.y;
+
+              isSamePoint
+                ? setTooltipPos((previousState) => {
+                    return {
+                      ...previousState,
+                      value: data.value,
+                      visible: !previousState.visible,
+                    };
+                  })
+                : setTooltipPos({
+                    x: data.x,
+                    value: data.value,
+                    y: data.y,
+                    visible: true,
+                  });
+            }}
             fromZero={true}
             verticalLabelRotation={80}
             data={{

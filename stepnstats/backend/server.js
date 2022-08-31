@@ -16,6 +16,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // api routes
+app.get("/", (req, res) => {
+  res.json({ ok: true });
+});
 app.use("/users", require("./users/users.controller"));
 app.use("/runs", require("./runs/runs.controller"));
 app.use("/mbs", require("./mbs/mbs.controller"));

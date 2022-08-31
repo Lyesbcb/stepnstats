@@ -32,7 +32,6 @@ import DetailMysteryBox from "./detailMysteryBox";
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import { RFValue } from "react-native-responsive-fontsize";
-
 export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
   const [realm, setRealm] = useState("Solana");
@@ -82,7 +81,6 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
 
   const pickImage = async () => {
     setmodalRealmVisible(false);
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 0.2,

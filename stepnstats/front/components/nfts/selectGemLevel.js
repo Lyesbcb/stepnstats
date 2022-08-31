@@ -17,7 +17,6 @@ import { RFValue } from "react-native-responsive-fontsize";
 export default function SelectGemLevel({
   setModalVisible,
   setGem,
-  gem,
   nextStep,
   previousStep,
   data,
@@ -131,267 +130,314 @@ export default function SelectGemLevel({
   }
   return (
     <TouchableWithoutFeedback>
-    <View
-      style={{
-        backgroundColor: "white",
-        height: "40%",
-        width: "80%",
-        borderRadius: 30,
-        justifyContent: "space-evenly",
-        borderWidth: 1,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-      }}
-    >
-      <TouchableOpacity style={styles.return} onPressIn={() => previousStep()}>
-        <Icon type="antdesign" name="left" size={RFValue(20, 800)} color="black"></Icon>
-      </TouchableOpacity>
-      <Pressable
-        style={{
-          backgroundColor: "#9DF8B6",
-          justifyContent: "center",
-          alignContent: "center",
-          width: 32,
-          height: 32,
-          borderRadius: 20,
-          position: "absolute",
-          top: "7%",
-          right: "7%",
-          borderWidth: 1,
-          borderColor: "black",
-          shadowOpacity: 1,
-          shadowRadius: 1,
-          shadowOffset: {
-            width: 1,
-            height: 1,
-          },
-        }}
-        onPress={() => setModalVisible(false)}
-      >
-        <Icon
-          style={{ width: "100%" }}
-          size={RFValue(20, 800)}
-          type="antdesign"
-          name="close"
-          color="black"
-        ></Icon>
-      </Pressable>
-      <Text
-        style={{
-          fontSize: RFValue(20, 800),
-          fontWeight: "700",
-          textAlign: "center",
-          width: "60%",
-          height: "15%",
-        }}
-      >
-        Gem level Goal
-      </Text>
       <View
         style={{
-          justifyContent: "space-evenly",
-          alignItems: "center",
+          backgroundColor: "white",
           height: "40%",
           width: "80%",
+          borderRadius: 30,
+          justifyContent: "space-evenly",
+          borderWidth: 1,
+          alignItems: "center",
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 4,
+          elevation: 5,
         }}
       >
-        <Pressable
-          style={{ position: "absolute", right: "0%", top: "-15%" }}
-          onPress={() => reset()}
+        <TouchableOpacity
+          style={styles.return}
+          onPressIn={() => previousStep()}
         >
-          <Text style={{ fontSize: RFValue(20, 800), color: "gold", fontWeight: "700" }}>
-            Reset
+          <Icon
+            type="antdesign"
+            name="left"
+            size={RFValue(20, 800)}
+            color="black"
+          ></Icon>
+        </TouchableOpacity>
+        <Pressable
+          style={{
+            backgroundColor: "#9DF8B6",
+            justifyContent: "center",
+            alignContent: "center",
+            width: 32,
+            height: 32,
+            borderRadius: 20,
+            position: "absolute",
+            top: "7%",
+            right: "7%",
+            borderWidth: 1,
+            borderColor: "black",
+            shadowOpacity: 1,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 1,
+              height: 1,
+            },
+          }}
+          onPress={() => setModalVisible(false)}
+        >
+          <Icon
+            style={{ width: "100%" }}
+            size={RFValue(20, 800)}
+            type="antdesign"
+            name="close"
+            color="black"
+          ></Icon>
+        </Pressable>
+        <Text
+          style={{
+            fontSize: RFValue(20, 800),
+            fontWeight: "700",
+            textAlign: "center",
+            width: "60%",
+            height: "15%",
+          }}
+        >
+          Gem level Goal
+        </Text>
+        <View
+          style={{
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            height: "40%",
+            width: "80%",
+          }}
+        >
+          <Pressable
+            style={{ position: "absolute", right: "0%", top: "-15%" }}
+            onPress={() => reset()}
+          >
+            <Text
+              style={{
+                fontSize: RFValue(20, 800),
+                color: "gold",
+                fontWeight: "700",
+              }}
+            >
+              Reset
+            </Text>
+          </Pressable>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "80%",
+              height: "50%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Pressable
+              style={{ width: "30%", height: "100%" }}
+              onPress={() => {
+                lvl >= 5
+                  ? setSocket(1)
+                  : Alert.alert("Socket are locked at this level");
+              }}
+            >
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Image
+                  style={styles.socketActive}
+                  source={
+                    data.socket1.includes("0") & (lvl >= 5)
+                      ? sockets[data.socket1.slice(0, -1) + "1"]
+                      : !data.socket1.includes("Lvl")
+                      ? sockets[data.socket1 + "Lvl1"]
+                      : sockets[data.socket1]
+                  }
+                ></Image>
+                {gemSocket1Lvl ? (
+                  <Image
+                    style={{
+                      width: "40%",
+                      height: "100%",
+                      resizeMode: "contain",
+                      position: "absolute",
+                    }}
+                    source={
+                      data.socket1.includes("Lvl")
+                        ? contents[data.socket1.slice(0, -1) + gemSocket1Lvl]
+                        : contents[data.socket1 + "Lvl" + gemSocket1Lvl]
+                    }
+                  ></Image>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            </Pressable>
+            <Pressable
+              style={{ width: "30%", height: "100%" }}
+              onPress={() => {
+                lvl >= 10
+                  ? setSocket(2)
+                  : Alert.alert("Socket are locked at this level");
+              }}
+            >
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Image
+                  style={styles.socketActive}
+                  source={
+                    data.socket2.includes("0") & (lvl >= 10)
+                      ? sockets[data.socket2.slice(0, -1) + "1"]
+                      : !data.socket2.includes("Lvl")
+                      ? sockets[data.socket2 + "Lvl1"]
+                      : sockets[data.socket2]
+                  }
+                ></Image>
+                {gemSocket2Lvl ? (
+                  <Image
+                    style={{
+                      width: "40%",
+                      height: "100%",
+                      resizeMode: "contain",
+                      position: "absolute",
+                    }}
+                    source={
+                      data.socket2.includes("Lvl")
+                        ? contents[data.socket2.slice(0, -1) + gemSocket2Lvl]
+                        : contents[data.socket2 + "Lvl" + gemSocket2Lvl]
+                    }
+                  ></Image>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            </Pressable>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "80%",
+              height: "50%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Pressable
+              style={{ width: "30%", height: "100%" }}
+              onPress={() => {
+                lvl >= 15
+                  ? setSocket(3)
+                  : Alert.alert("Socket are locked at this level");
+              }}
+            >
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Image
+                  style={styles.socketActive}
+                  source={
+                    data.socket3.includes("0") & (lvl >= 15)
+                      ? sockets[data.socket3.slice(0, -1) + "1"]
+                      : !data.socket3.includes("Lvl")
+                      ? sockets[data.socket3 + "Lvl1"]
+                      : sockets[data.socket3]
+                  }
+                ></Image>
+                {gemSocket3Lvl ? (
+                  <Image
+                    style={{
+                      width: "40%",
+                      height: "100%",
+                      resizeMode: "contain",
+                      position: "absolute",
+                    }}
+                    source={
+                      data.socket3.includes("Lvl")
+                        ? contents[data.socket3.slice(0, -1) + gemSocket3Lvl]
+                        : contents[data.socket3 + "Lvl" + gemSocket3Lvl]
+                    }
+                  ></Image>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            </Pressable>
+            <Pressable
+              style={{ width: "30%", height: "100%" }}
+              onPress={() => {
+                lvl >= 20
+                  ? setSocket(4)
+                  : Alert.alert("Socket are locked at this level");
+              }}
+            >
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Image
+                  style={styles.socketActive}
+                  source={
+                    data.socket4.includes("0") & (lvl >= 20)
+                      ? sockets[data.socket4.slice(0, -1) + "1"]
+                      : !data.socket4.includes("Lvl")
+                      ? sockets[data.socket4 + "Lvl1"]
+                      : sockets[data.socket4]
+                  }
+                ></Image>
+                {gemSocket4Lvl ? (
+                  <Image
+                    style={{
+                      width: "40%",
+                      height: "100%",
+                      resizeMode: "contain",
+                      position: "absolute",
+                    }}
+                    source={
+                      data.socket4.includes("Lvl")
+                        ? contents[data.socket4.slice(0, -1) + gemSocket4Lvl]
+                        : contents[data.socket4 + "Lvl" + gemSocket4Lvl]
+                    }
+                  ></Image>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            </Pressable>
+          </View>
+        </View>
+        <Pressable
+          style={{
+            width: "45%",
+            height: "15%",
+            borderRadius: 100,
+            borderWidth: 1,
+            borderColor: "black",
+            backgroundColor: "#9DF8B6",
+            shadowColor: "black",
+            shadowOpacity: 1,
+            shadowRadius: 1,
+            shadowOffset: {
+              width: 4,
+              height: 4,
+            },
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => {
+            setGem({
+              gem1: data.socket1.includes("Lvl")
+                ? data.socket1.slice(0, -1) + gemSocket1Lvl
+                : data.socket1 + "Lvl" + gemSocket1Lvl,
+              gem2: data.socket2.includes("Lvl")
+                ? data.socket2.slice(0, -1) + gemSocket2Lvl
+                : data.socket2 + "Lvl" + gemSocket2Lvl,
+              gem3: data.socket3.includes("Lvl")
+                ? data.socket3.slice(0, -1) + gemSocket3Lvl
+                : data.socket3 + "Lvl" + gemSocket3Lvl,
+              gem4: data.socket4.includes("Lvl")
+                ? data.socket4.slice(0, -1) + gemSocket4Lvl
+                : data.socket4 + "Lvl" + gemSocket4Lvl,
+            });
+            nextStep();
+          }}
+        >
+          <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
+            NEXT
           </Text>
         </Pressable>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "80%",
-            height: "50%",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Pressable
-            style={{ width: "30%", height: "100%" }}
-            onPress={() => {
-              lvl >= 5
-                ? setSocket(1)
-                : Alert.alert("Socket are locked at this level");
-            }}
-          >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Image
-                style={styles.socketActive}
-                source={
-                  data.socket1.includes(0) & (lvl >= 5)
-                    ? sockets[data.socket1.slice(0, -1) + "1"]
-                    : sockets[data.socket1]
-                }
-              ></Image>
-              {gemSocket1Lvl ? (
-                <Image
-                  style={{
-                    width: "40%",
-                    height: "100%",
-                    resizeMode: "contain",
-                    position: "absolute",
-                  }}
-                  source={contents[data.socket1.slice(0, -1) + gemSocket1Lvl]}
-                ></Image>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          </Pressable>
-          <Pressable
-            style={{ width: "30%", height: "100%" }}
-            onPress={() => {
-              lvl >= 10
-                ? setSocket(2)
-                : Alert.alert("Socket are locked at this level");
-            }}
-          >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Image
-                style={styles.socketActive}
-                source={
-                  data.socket2.includes(0) & (lvl >= 10)
-                    ? sockets[data.socket2.slice(0, -1) + "1"]
-                    : sockets[data.socket2]
-                }
-              ></Image>
-              {gemSocket2Lvl ? (
-                <Image
-                  style={{
-                    width: "40%",
-                    height: "100%",
-                    resizeMode: "contain",
-                    position: "absolute",
-                  }}
-                  source={contents[data.socket2.slice(0, -1) + gemSocket2Lvl]}
-                ></Image>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "80%",
-            height: "50%",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Pressable
-            style={{ width: "30%", height: "100%" }}
-            onPress={() => {
-              lvl >= 15
-                ? setSocket(3)
-                : Alert.alert("Socket are locked at this level");
-            }}
-          >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Image
-                style={styles.socketActive}
-                source={
-                  data.socket3.includes(0) & (lvl >= 15)
-                    ? sockets[data.socket3.slice(0, -1) + "1"]
-                    : sockets[data.socket3]
-                }
-              ></Image>
-              {gemSocket3Lvl ? (
-                <Image
-                  style={{
-                    width: "40%",
-                    height: "100%",
-                    resizeMode: "contain",
-                    position: "absolute",
-                  }}
-                  source={contents[data.socket3.slice(0, -1) + gemSocket3Lvl]}
-                ></Image>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          </Pressable>
-          <Pressable
-            style={{ width: "30%", height: "100%" }}
-            onPress={() => {
-              lvl >= 20
-                ? setSocket(4)
-                : Alert.alert("Socket are locked at this level");
-            }}
-          >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Image
-                style={styles.socketActive}
-                source={
-                  data.socket4.includes(0) & (lvl >= 20)
-                    ? sockets[data.socket4.slice(0, -1) + "1"]
-                    : sockets[data.socket4]
-                }
-              ></Image>
-              {gemSocket4Lvl ? (
-                <Image
-                  style={{
-                    width: "40%",
-                    height: "100%",
-                    resizeMode: "contain",
-                    position: "absolute",
-                  }}
-                  source={contents[data.socket4.slice(0, -1) + gemSocket4Lvl]}
-                ></Image>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          </Pressable>
-        </View>
       </View>
-      <Pressable
-        style={{
-          width: "45%",
-          height: "15%",
-          borderRadius: 100,
-          borderWidth: 1,
-          borderColor: "black",
-          backgroundColor: "#9DF8B6",
-          shadowColor: "black",
-          shadowOpacity: 1,
-          shadowRadius: 1,
-          shadowOffset: {
-            width: 4,
-            height: 4,
-          },
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onPress={() => {
-          setGem({
-            gem1: data.socket1.slice(0, -1) + gemSocket1Lvl,
-            gem2: data.socket2.slice(0, -1) + gemSocket2Lvl,
-            gem3: data.socket3.slice(0, -1) + gemSocket3Lvl,
-            gem4: data.socket4.slice(0, -1) + gemSocket4Lvl,
-          });
-          nextStep();
-        }}
-      >
-        <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>NEXT</Text>
-      </Pressable>
-    </View>
     </TouchableWithoutFeedback>
-
   );
 }
 

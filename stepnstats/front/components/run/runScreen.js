@@ -11,13 +11,14 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
-import { BarChart, LineChart } from "react-native-chart-kit";
+import { BarChart } from "react-native-chart-kit";
 import Footer from "../footer";
 import { Dimensions } from "react-native";
 import { getByNftId } from "../../services/nfts/index";
 import { RFValue } from "react-native-responsive-fontsize";
 import LittleNfts from "../nfts/littleNfts";
 import { deleteRun, getGstData } from "../../services/runs/index";
+
 export default function RunScreen({ navigation, route }) {
   const [run, setRun] = useState(JSON.parse(route.params).run);
   const [nft, setNft] = useState(0);
@@ -38,19 +39,28 @@ export default function RunScreen({ navigation, route }) {
     require("../../assets/mb/lvl9.png"),
     require("../../assets/mb/lvl10.png"),
   ];
-  function chartColors() {
-    var tempArray = [];
-    for (var i = 0; i < gstData.value.length; i++) {
-      if (
-        gstData.value[i] ===
-        Number((run.gst / minuteConverter(run.duration) / 60).toFixed(1))
-      ) {
-        tempArray.push((opacity = 1) => `red`);
-      }
-      tempArray.push((opacity = 1) => `black`);
-    }
-    return tempArray;
-  }
+  // function chartColors() {
+  //   var tempArray = [];
+  //   for (var i = 0; i < gstData.value.length; i++) {
+  //     // if (
+  //     //   gstData.value[i] ===
+  //     //   Number((run.gst / minuteConverter(run.duration) / 60).toFixed(1))
+  //     // ) {
+  //     //   tempArray.push((opacity = 1) => `red`);
+  //     // } else if (
+  //     //   (gstData.value[i + 1] ===
+  //     //     Number((run.gst / minuteConverter(run.duration) / 60).toFixed(1))) |
+  //     //   (gstData.value[i - 1] ===
+  //     //     Number((run.gst / minuteConverter(run.duration) / 60).toFixed(1)))
+  //     // ) {
+  //     //   tempArray.push((opacity = 1) => `yellow`);
+  //     // } else {
+  //     //   tempArray.push((opacity = 1) => `black`);
+  //     // }
+  //     tempArray.push((opacity = 1) => `black`);
+  //   }
+  //   return tempArray;
+  // }
   async function myFunction() {
     try {
       var tempNft = await getByNftId(run.nftId);
@@ -263,6 +273,7 @@ export default function RunScreen({ navigation, route }) {
           justifyContent: "space-between",
           flexDirection: "row",
           width: "100%",
+          height: "2%",
         }}
       >
         <View
@@ -340,7 +351,6 @@ export default function RunScreen({ navigation, route }) {
         </View>
       </View>
 
-      {/* <Text>test</Text> */}
       <View
         style={{
           justifyContent: "space-between",
@@ -397,6 +407,9 @@ export default function RunScreen({ navigation, route }) {
           </Text>
         </View>
       </View>
+      <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+        Count of run with average GST/min with the same efficiency
+      </Text>
       {gstData.count ? (
         <BarChart
           data={{
@@ -404,17 +417,26 @@ export default function RunScreen({ navigation, route }) {
             datasets: [
               {
                 data: gstData.count,
-                colors: chartColors(),
+                colors: [
+                  (opacity = 1) => "#CD6155",
+                  (opacity = 1) => "#AF7AC5",
+                  (opacity = 1) => "#5499C7",
+                  (opacity = 1) => "#48C9B0",
+                  (opacity = 1) => "#52BE80",
+                  (opacity = 1) => "#F4D03F",
+                  (opacity = 1) => "#EB984E",
+                  (opacity = 1) => "#DC7633",
+                ],
               },
             ],
           }}
-          width={Dimensions.get("window").width - 50}
-          height={Dimensions.get("window").width - 150}
+          width={Dimensions.get("window").width * 0.9}
+          height={Dimensions.get("window").width * 0.55}
           withCustomBarColorFromData={true}
           flatColor={true}
           showBarTops={false}
           chartConfig={{
-            barPercentage: 1,
+            barPercentage: 0.4,
             backgroundColor: "white",
             backgroundGradientFrom: "white",
             backgroundGradientTo: "white",
@@ -424,6 +446,7 @@ export default function RunScreen({ navigation, route }) {
           }}
           fromZero={true}
           style={{
+            paddingTop: RFValue(30, 800),
             borderRadius: 12,
             borderWidth: 1,
             borderColor: "black",
@@ -434,6 +457,7 @@ export default function RunScreen({ navigation, route }) {
               width: 4,
               height: 4,
             },
+            backgroundColor: "white",
           }}
         >
           <Text></Text>

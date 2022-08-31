@@ -494,12 +494,16 @@ export default function DetailNfts({
             <Image
               style={{ width: "100%", height: "100%", resizeMode: "contain" }}
               source={
-                data.socket1.includes(0) & (data.lvl >= 5)
-                  ? sockets[data.socket1.slice(0, -1) + "1"]
+                (stats === "optimized") & (data.lvlOptimized >= 5)
+                  ? !data.socket1.includes("Lvl")
+                    ? sockets[data.socket1 + "Lvl1"]
+                    : data.socket1.includes("0")
+                    ? sockets[data.socket1.slice(0, -1) + "1"]
+                    : sockets[data.socket1]
                   : sockets[data.socket1]
               }
             ></Image>
-            {stats === "optimized" && data.gem1Optimized ? (
+            {stats === "optimized" && !data.gem1Optimized.includes("0") ? (
               <Image
                 style={{
                   width: "40%",
@@ -534,12 +538,16 @@ export default function DetailNfts({
             <Image
               style={{ width: "100%", height: "100%", resizeMode: "contain" }}
               source={
-                data.socket2.includes(0) & (data.lvl >= 5)
-                  ? sockets[data.socket2.slice(0, -1) + "1"]
+                (stats === "optimized") & (data.lvlOptimized >= 10)
+                  ? !data.socket2.includes("Lvl")
+                    ? sockets[data.socket2 + "Lvl1"]
+                    : data.socket2.includes("0")
+                    ? sockets[data.socket2.slice(0, -1) + "1"]
+                    : sockets[data.socket2]
                   : sockets[data.socket2]
               }
             ></Image>
-            {stats === "optimized" && data.gem2Optimized ? (
+            {stats === "optimized" && !data.gem2Optimized.includes("0") ? (
               <Image
                 style={{
                   width: "40%",
@@ -647,12 +655,16 @@ export default function DetailNfts({
             <Image
               style={{ width: "100%", height: "100%", resizeMode: "contain" }}
               source={
-                data.socket3.includes(0) & (data.lvl >= 5)
-                  ? sockets[data.socket3.slice(0, -1) + "1"]
+                (stats === "optimized") & (data.lvlOptimized >= 15)
+                  ? !data.socket3.includes("Lvl")
+                    ? sockets[data.socket3 + "Lvl1"]
+                    : data.socket3.includes("0")
+                    ? sockets[data.socket3.slice(0, -1) + "1"]
+                    : sockets[data.socket3]
                   : sockets[data.socket3]
               }
             ></Image>
-            {stats === "optimized" && data.gem3Optimized ? (
+            {stats === "optimized" && !data.gem3Optimized.includes("0") ? (
               <Image
                 style={{
                   width: "40%",
@@ -687,12 +699,16 @@ export default function DetailNfts({
             <Image
               style={{ width: "100%", height: "100%", resizeMode: "contain" }}
               source={
-                data.socket4.includes(0) & (data.lvl >= 5)
-                  ? sockets[data.socket4.slice(0, -1) + "1"]
+                (stats === "optimized") & (data.lvlOptimized >= 20)
+                  ? !data.socket4.includes("Lvl")
+                    ? sockets[data.socket4 + "Lvl1"]
+                    : data.socket3.includes("0")
+                    ? sockets[data.socket4.slice(0, -1) + "1"]
+                    : sockets[data.socket4]
                   : sockets[data.socket4]
               }
             ></Image>
-            {stats === "optimized" && data.gem4Optimized ? (
+            {stats === "optimized" && !data.gem4Optimized.includes("0") ? (
               <Image
                 style={{
                   width: "40%",
@@ -761,7 +777,7 @@ export default function DetailNfts({
               borderWidth: 2,
             }}
           >
-            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
+            <Text style={{ fontSize: RFValue(10, 800), fontWeight: "700" }}>
               {data != undefined ? data.quality : "-"}
             </Text>
           </View>
@@ -789,8 +805,8 @@ export default function DetailNfts({
               borderWidth: 2,
             }}
           >
-            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
-              {/* TODO get price */}$
+            <Text style={{ fontSize: RFValue(10, 800), fontWeight: "700" }}>
+              $
             </Text>
           </View>
         </View>
@@ -811,7 +827,10 @@ export default function DetailNfts({
               fontWeight: "700",
             }}
           >
-            Level {data ? data.lvl : ""}
+            Level{" "}
+            {(stats === "Base") | (stats === "Increased")
+              ? data.lvl
+              : data.lvlOptimized}
           </Text>
         </View>
         <View
@@ -1259,7 +1278,7 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     borderWidth: 2,
     borderRadius: 20,
-    width: "25%",
+    width: "35%",
     height: "100%",
     alignItems: "center",
     justifyContent: "center",

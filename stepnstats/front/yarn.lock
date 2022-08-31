@@ -6523,6 +6523,15 @@
   dependencies:
     "prop-types" "^15.6.1"
 
+"react-native-chart-kit-with-pressable-bar-graph@^6.11.4":
+  "integrity" "sha512-dUerAsmQ/ZvpEPZLjFg3ujIocHSZY62NcmJILUPO12TvdE+X/eLLnRbU++XZmCT0TDrLyMo58JbZJ4hA0S2MeQ=="
+  "resolved" "https://registry.npmjs.org/react-native-chart-kit-with-pressable-bar-graph/-/react-native-chart-kit-with-pressable-bar-graph-6.11.4.tgz"
+  "version" "6.11.4"
+  dependencies:
+    "lodash" "^4.17.13"
+    "paths-js" "^0.4.10"
+    "point-in-polygon" "^1.0.1"
+
 "react-native-chart-kit@^6.12.0":
   "integrity" "sha512-nZLGyCFzZ7zmX0KjYeeSV1HKuPhl1wOMlTAqa0JhlyW62qV/1ZPXHgT8o9s8mkFaGxdqbspOeuaa6I9jUQDgnA=="
   "resolved" "https://registry.npmjs.org/react-native-chart-kit/-/react-native-chart-kit-6.12.0.tgz"
