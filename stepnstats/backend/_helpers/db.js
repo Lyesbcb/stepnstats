@@ -16,7 +16,7 @@ async function initialize() {
   const sequelize = new Sequelize(database, user, password, {
     port,
     host,
-    // logging: false,
+    logging: false,
     dialect: "mysql",
   });
 

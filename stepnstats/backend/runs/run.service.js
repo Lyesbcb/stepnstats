@@ -196,7 +196,17 @@ async function getGstData(req) {
 }
 
 async function getGstEnergy(req) {
-  const efficiency = req.query.efficiency;
+  const focused = req.query.focused;
+  var efficiency = 0;
+  if (focused === "increased") {
+    efficiency = req.query.efficiencyIncreased;
+  }
+  if (focused === "optimized") {
+    efficiency = req.query.efficiencyOptimized;
+  }
+  if (focused === "base") {
+    efficiency = req.query.efficiencyBase;
+  }
   const type = req.query.type;
   const run = await db.sequelize.query(
     `SELECT AVG(gst/energy) gstEnergy FROM (SELECT * FROM runs where type='${type}') u LEFT JOIN nfts p ON p.nftId = u.nftId WHERE  p.nftId  IS NOT NULL && efficiencyIncreased >= ${efficiency} * 0.95 && efficiencyIncreased <= ${efficiency} * 1.05;`
@@ -206,7 +216,17 @@ async function getGstEnergy(req) {
 }
 
 async function getDurabilityLost(req) {
-  const resilience = req.query.resilience;
+  const focused = req.query.focused;
+  var resilience = 0;
+  if (focused === "increased") {
+    resilience = req.query.resilienceIncreased;
+  }
+  if (focused === "optimized") {
+    resilience = req.query.resilienceOptimized;
+  }
+  if (focused === "base") {
+    resilience = req.query.resilienceBase;
+  }
   const type = req.query.type;
   const run = await db.sequelize.query(
     `SELECT AVG(durabilityLost/energy) durabilityLost FROM (SELECT * FROM runs where type='${type}') u LEFT JOIN nfts p ON p.nftId = u.nftId WHERE  p.nftId  IS NOT NULL && resilienceIncreased >= ${resilience} * 0.95 && resilienceIncreased <= ${resilience} * 1.05;
@@ -215,4 +235,3 @@ async function getDurabilityLost(req) {
   if (!run) throw "No data.";
   return run[0][0].durabilityLost;
 }
-

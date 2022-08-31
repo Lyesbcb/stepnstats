@@ -6,9 +6,9 @@ const authorize = require("_middleware/authorize");
 const runService = require("./run.service");
 const Role = require("_helpers/role");
 const upload = require("_middleware/uploadRun");
-const solanaMps = require("../mps/solana/solanaMp.service")
-const bnbMps = require("../mps/bnb/bnbMp.service")
-const ethereumMps = require("../mps/ethereum/ethereumMp.service")
+const solanaMps = require("../mps/solana/solanaMp.service");
+const bnbMps = require("../mps/bnb/bnbMp.service");
+const ethereumMps = require("../mps/ethereum/ethereumMp.service");
 // routes
 router.post("/create", authorize(), createSchema, create);
 router.post(
@@ -226,11 +226,22 @@ function getHpLost(quality, energy, comfort) {
 }
 
 async function getDailyIncome(req, res, next) {
-  const type = req.query.type;
-  const efficiency = req.query.efficiency;
-  const luck = req.query.luck;
-  const comfort = req.query.comfort;
-  const resilience = req.query.resilience;
+  const focused = req.query.focused;
+  var luck = 0;
+  var comfort = 0;
+  if (focused === "increased") {
+    luck = req.query.luckIncreased;
+    comfort = req.query.comfortIncreased;
+  }
+  if (focused === "optimized") {
+    luck = req.query.luckOptimized;
+    comfort = req.query.comfortOptimized;
+  }
+  if (focused === "base") {
+    luck = req.query.luckBase;
+    comfort = req.query.comfortBase;
+  }
+
   const lvl = Number(req.query.lvl);
   const energy = req.query.energy;
   const quality = String(req.query.quality);
@@ -239,20 +250,19 @@ async function getDailyIncome(req, res, next) {
   const durabilityLost = Number(
     ((await getDurabilityLost(req)) * energy).toFixed(0)
   );
-  var mps
+  var mps;
 
-    if(realm === "Solana"){
-      mps = await solanaMps.getLastRecords(1)
-    }
+  if (realm === "Solana") {
+    mps = await solanaMps.getLastRecords(1);
+  }
 
-    if(realm === "Bnb"){
-      mps = await ethereumMps.getLastRecords(1)
-    }
+  if (realm === "Bnb") {
+    mps = await ethereumMps.getLastRecords(1);
+  }
 
-    if(realm === "Ethereum"){
-      mps = await bnbMps.getLastRecords(1)[0]
-    }
-    
+  if (realm === "Ethereum") {
+    mps = await bnbMps.getLastRecords(1)[0];
+  }
 
   var json = {
     mb: await getClosestMb(energy, luck),
@@ -261,7 +271,7 @@ async function getDailyIncome(req, res, next) {
     repairCost: Number(getRepairCost(quality, lvl, durabilityLost).toFixed(2)),
     gstLimit: getGstLimit(lvl),
     hpLost: getHpLost(quality, energy, comfort),
-    mps
+    mps,
   };
   res.json(json);
 }

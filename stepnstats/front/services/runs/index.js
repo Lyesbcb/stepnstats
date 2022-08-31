@@ -13,7 +13,7 @@ module.exports = {
   updateRun,
   getAllMyRun,
   getGstData,
-  dailyIncome,
+  getDailyIncome,
 };
 const baseURL = config.baseUrl + "/runs";
 
@@ -171,7 +171,7 @@ async function getGstData(efficiency, type) {
     });
 }
 
-async function dailyIncome(data) { 
+async function getDailyIncome(data) { 
   var token = await getSecuretValueFor("token");
   var config = {
     method: "get",

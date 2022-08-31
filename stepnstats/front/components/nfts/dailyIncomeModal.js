@@ -21,13 +21,52 @@ import SelectGemLevel from "./selectGemLevel";
 import SelectName from "./selectName";
 import { getMaxMb, optimize } from "../../services/nfts/index";
 import { RFValue } from "react-native-responsive-fontsize";
+import { getDailyIncome } from "../../services/runs/index";
 
 export default function DailyIncomeModal({
   setModalVisible,
   modalVisible,
-  minLvl,
   data,
+  focused,
 }) {
+  const [energy, setEnergy] = useState(16);
+  const [dailyIncome, setDailyIncome] = useState({});
+
+  const mbsImage = [
+    require("../../assets/mb/lvl1.png"),
+    require("../../assets/mb/lvl2.png"),
+    require("../../assets/mb/lvl3.png"),
+    require("../../assets/mb/lvl4.png"),
+    require("../../assets/mb/lvl5.png"),
+    require("../../assets/mb/lvl6.png"),
+    require("../../assets/mb/lvl7.png"),
+    require("../../assets/mb/lvl8.png"),
+    require("../../assets/mb/lvl9.png"),
+    require("../../assets/mb/lvl10.png"),
+  ];
+
+  useEffect(() => {
+    myFunction(); // This is be executed when the state changes
+}, [energy]);
+
+  async function myFunction() {
+    data.energy = energy;
+    data.focused = focused;
+    setDailyIncome(await getDailyIncome(data));
+  }
+
+  function setLessEnergy() {
+    if (energy > 2) {
+      setEnergy(energy - 1);
+    }
+  }
+
+  function setMoreEnergy() {
+    if (energy < 25) {
+      setEnergy(energy + 1);
+    }
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -37,6 +76,7 @@ export default function DailyIncomeModal({
         setModalVisible(false);
         setStep(0);
       }}
+      onShow={() => myFunction()}
     >
       <TouchableOpacity
         style={{
@@ -48,26 +88,181 @@ export default function DailyIncomeModal({
         onPressOut={() => setModalVisible(false)}
       >
         <View
-        style={{
-          backgroundColor: "white",
-          height: "60%",
-          width: "80%",
-          borderRadius: 30,
-          justifyContent: "space-evenly",
-          borderWidth: 1,
-          alignItems: "center",
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 4,
-          elevation: 5,
-        }}
-      >
-        <Text>Here you daily Income</Text>
-      </View>
+          style={{
+            backgroundColor: "white",
+            height: "60%",
+            width: "80%",
+            borderRadius: 30,
+            justifyContent: "space-evenly",
+            borderWidth: 1,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+          }}
+        >
+          <Text style={{ fontSize: RFValue(24, 800), fontWeight: "800" }}>Daily Income</Text>
+          <View
+            style={{
+              justifyContent: "space-between",
+              height: "10%",
+              width: "60%",
+            }}
+          >
+            <Text style={{ fontSize: RFValue(14, 800), fontWeight: "700" }}>
+              Energy
+            </Text>
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              <Pressable
+                style={{ width: "25%", height: "100%" }}
+                onPress={() => setLessEnergy()}
+              >
+                <Icon
+                  size={RFValue(40, 800)}
+                  type="antdesign"
+                  name="minus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+              <Text
+                style={{
+                  fontWeight: "800",
+                  fontSize: RFValue(24, 800),
+                  textAlign: "center",
+                  width: "50%",
+                }}
+              >
+                {String(energy) + ".0"}
+              </Text>
+              <Pressable
+                style={{ width: "25%", height: "100%" }}
+                onPress={() => setMoreEnergy()}
+              >
+                <Icon
+                  size={RFValue(40, 800)}
+                  type="antdesign"
+                  name="plus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            </View>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+              flexDirection: "row",
+              height: "10%",
+              width: "90%",
+            }}
+          >
+            <Image
+              source={require("../../assets/gst.png")}
+              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            ></Image>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+              Daily GST
+            </Text>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              {dailyIncome.gstTotal ? dailyIncome.gstTotal : "?"}
+            </Text>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+              flexDirection: "row",
+              height: "10%",
+              width: "90%",
+            }}
+          >
+            <Image
+              source={require("../../assets/gst.png")}
+              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            ></Image>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+              Durability lost
+            </Text>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              {dailyIncome.gstTotal ? dailyIncome.durabilityLost : "?"}
+            </Text>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+              flexDirection: "row",
+              height: "10%",
+              width: "90%",
+            }}
+          >
+            <Image
+              source={require("../../assets/gst.png")}
+              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            ></Image>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+              Repair cost
+            </Text>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              {dailyIncome.gstTotal ? dailyIncome.repairCost : "?"}
+            </Text>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+              flexDirection: "row",
+              height: "10%",
+              width: "90%",
+            }}
+          >
+            <Image
+              source={require("../../assets/gem/comfort/lvl1.png")}
+              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            ></Image>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+              Hp lost
+            </Text>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              {dailyIncome.gstTotal ? dailyIncome.hpLost : "?"}
+            </Text>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              alignContent: "center",
+              flexDirection: "row",
+              height: "10%",
+              width: "90%",
+            }}
+          >
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+              Average mystery box
+            </Text>
+            <Image
+              source={mbsImage[dailyIncome.mb - 1]}
+              style={{ width: "15%", height: "100%", resizeMode: "contain" }}
+            ></Image>
+          </View>
+        </View>
       </TouchableOpacity>
     </Modal>
   );

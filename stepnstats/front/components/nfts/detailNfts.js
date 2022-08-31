@@ -14,6 +14,7 @@ import OptimizeModal from "./optimizeModal";
 import { RFValue } from "react-native-responsive-fontsize";
 import { updateNft } from "../../services/nfts/index";
 import DailyIncomeModal from "./dailyIncomeModal";
+import { getDailyIncome } from "../../services/runs/index";
 
 export default function DetailNfts({
   data,
@@ -323,6 +324,7 @@ export default function DetailNfts({
         setModalVisible={setDailyIncomeModalVisible}
         modalVisible={dailyIncomeModalVisible}
         data={data}
+        focused={stats}
       ></DailyIncomeModal>
       <View
         style={{
@@ -1022,7 +1024,7 @@ export default function DetailNfts({
                 : stats === "increased"
                 ? data.efficiencyIncreased
                 : stats === "optimized"
-                ? data.efficiencyOptimized + data.efficiencyBase
+                ? (data.efficiencyOptimized + data.efficiencyBase).toFixed(1)
                 : 0}
             </Text>
           </View>
@@ -1088,7 +1090,7 @@ export default function DetailNfts({
                 : stats === "increased"
                 ? data.luckIncreased
                 : stats === "optimized"
-                ? data.luckOptimized + Number(data.luckBase.toFixed(0))
+                ? (data.luckOptimized + data.luckBase).toFixed(1)
                 : 0}
             </Text>
           </View>
@@ -1154,7 +1156,7 @@ export default function DetailNfts({
                 : stats === "increased"
                 ? data.comfortIncreased
                 : stats === "optimized"
-                ? data.comfortOptimized + data.comfortBase
+                ? (data.comfortOptimized + data.comfortBase).toFixed(1)
                 : 0}
             </Text>
           </View>
@@ -1222,7 +1224,7 @@ export default function DetailNfts({
                 : stats === "increased"
                 ? data.resilienceIncreased
                 : stats === "optimized"
-                ? data.resilienceOptimized + data.resilienceBase
+                ? (data.resilienceOptimized + data.resilienceBase).toFixed(1)
                 : 0}
             </Text>
           </View>
