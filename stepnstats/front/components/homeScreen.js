@@ -39,7 +39,7 @@ export default function HomeScreen({ props, navigation }) {
             width: "80%",
           }}
         >
-          Welcome to Step'n Stats app Alpha
+          Welcome to Step'n Stats app Beta
         </Text>
         <Text
           style={{

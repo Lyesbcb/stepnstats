@@ -14,7 +14,6 @@ import Invenrtory from "./components/inventory";
 import Marketplace from "./components/marketplace/marketplaceScreen";
 import { RFValue } from "react-native-responsive-fontsize";
 import axios from "axios";
-import config from "./config.json";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 import ProgressLoader from "rn-progress-loader";
@@ -38,7 +37,7 @@ function App() {
   async function testServer() {
     setLoading(true);
     await axios
-      .get(config.baseUrl)
+      .get("http://46.101.90.104:4000")
       .then((res) => {
         console.log(res);
       })

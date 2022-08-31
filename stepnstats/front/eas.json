@@ -1,0 +1,29 @@
+{
+  "cli": {
+    "version": ">= 0.34.0"
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./android.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "lyes94370@hotmail.fr",
+        "ascAppId": "1636928841",
+        "appleTeamId": "99Z36ADH72"
+      }
+    }
+  },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "enterpriseProvisioning": "universal"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  }
+}
