@@ -9,7 +9,6 @@ export default function Header({ selectedTab, SetSelectedTab }) {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        position: "absolute",
         top: "10%",
         height: "8%",
         width: "90%",

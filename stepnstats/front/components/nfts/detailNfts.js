@@ -503,16 +503,20 @@ export default function DetailNfts({
                   : sockets[data.socket1]
               }
             ></Image>
-            {stats === "optimized" && !data.gem1Optimized.includes("0") ? (
-              <Image
-                style={{
-                  width: "40%",
-                  height: "100%",
-                  resizeMode: "contain",
-                  position: "absolute",
-                }}
-                source={contents[data.gem1Optimized]}
-              ></Image>
+            {stats === "optimized" && data.gem1Optimized ? (
+              !data.gem1Optimized.includes("0") ? (
+                <Image
+                  style={{
+                    width: "40%",
+                    height: "100%",
+                    resizeMode: "contain",
+                    position: "absolute",
+                  }}
+                  source={contents[data.gem1Optimized]}
+                ></Image>
+              ) : (
+                <View></View>
+              )
             ) : stats === "increased" && data.gem1Inscreased ? (
               <Image
                 style={{
@@ -547,16 +551,20 @@ export default function DetailNfts({
                   : sockets[data.socket2]
               }
             ></Image>
-            {stats === "optimized" && !data.gem2Optimized.includes("0") ? (
-              <Image
-                style={{
-                  width: "40%",
-                  height: "100%",
-                  resizeMode: "contain",
-                  position: "absolute",
-                }}
-                source={contents[data.gem2Optimized]}
-              ></Image>
+            {stats === "optimized" && data.gem2Optimized ? (
+              !data.gem2Optimized.includes("0") ? (
+                <Image
+                  style={{
+                    width: "40%",
+                    height: "100%",
+                    resizeMode: "contain",
+                    position: "absolute",
+                  }}
+                  source={contents[data.gem2Optimized]}
+                ></Image>
+              ) : (
+                <View></View>
+              )
             ) : stats === "increased" && data.gem2Inscreased ? (
               <Image
                 style={{
@@ -664,16 +672,20 @@ export default function DetailNfts({
                   : sockets[data.socket3]
               }
             ></Image>
-            {stats === "optimized" && !data.gem3Optimized.includes("0") ? (
-              <Image
-                style={{
-                  width: "40%",
-                  height: "100%",
-                  resizeMode: "contain",
-                  position: "absolute",
-                }}
-                source={contents[data.gem3Optimized]}
-              ></Image>
+            {stats === "optimized" && data.gem3Optimized ? (
+              !data.gem3Optimized.includes("0") ? (
+                <Image
+                  style={{
+                    width: "40%",
+                    height: "100%",
+                    resizeMode: "contain",
+                    position: "absolute",
+                  }}
+                  source={contents[data.gem3Optimized]}
+                ></Image>
+              ) : (
+                <View></View>
+              )
             ) : stats === "increased" && data.gem3Inscreased ? (
               <Image
                 style={{
@@ -708,16 +720,20 @@ export default function DetailNfts({
                   : sockets[data.socket4]
               }
             ></Image>
-            {stats === "optimized" && !data.gem4Optimized.includes("0") ? (
-              <Image
-                style={{
-                  width: "40%",
-                  height: "100%",
-                  resizeMode: "contain",
-                  position: "absolute",
-                }}
-                source={contents[data.gem4Optimized]}
-              ></Image>
+            {stats === "optimized" && data.gem4Optimized ? (
+              !data.gem4Optimized.includes("0") ? (
+                <Image
+                  style={{
+                    width: "40%",
+                    height: "100%",
+                    resizeMode: "contain",
+                    position: "absolute",
+                  }}
+                  source={contents[data.gem4Optimized]}
+                ></Image>
+              ) : (
+                <View></View>
+              )
             ) : stats === "increased" && data.gem4Inscreased ? (
               <Image
                 style={{

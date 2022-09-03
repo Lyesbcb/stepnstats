@@ -166,6 +166,7 @@ function InvenrtoryStack() {
   return (
     <Stack.Navigator
       initialRouteName="Inventory"
+      
       screenOptions={({ route, navigation }) => ({
         headerShown: false,
         tabBarStyle: {

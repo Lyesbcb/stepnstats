@@ -4,7 +4,7 @@ import numpy as np
 import easyocr
 import cv2 as cv
 
-reader = easyocr.Reader(['en'], gpu=False)
+reader = easyocr.Reader(['en'], gpu=True)
 
 def crop_bot(img):
     h, w, _ = img.shape

@@ -25,6 +25,7 @@ import {
   getAllMyMb,
   updateMb,
   deleteMb,
+  navigation
 } from "../../services/mbs/index";
 import * as ImagePicker from "expo-image-picker";
 import BouncingPreloader from "react-native-bouncing-preloaders";
@@ -158,6 +159,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
                 previousMb={previousMb}
                 setmodalOneMysteryBox={setmodalOneMysteryBox}
                 deleteOneMb={deleteOneMb}
+                navigation={navigation}
               ></DetailMysteryBox>
             ) : (
               <View></View>

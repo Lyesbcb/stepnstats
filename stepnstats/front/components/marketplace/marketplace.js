@@ -234,7 +234,7 @@ export default function Marketplace({
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 50}
+            height={Dimensions.get("window").height * 0.4}
             yAxisInterval={2}
             // yAxisLabel="$"
             // yAxisSuffix="k"
@@ -345,7 +345,7 @@ export default function Marketplace({
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 50}
+            height={Dimensions.get("window").height * 0.4}
             yAxisInterval={2}
             yAxisLabel={currency === "Crypto" ? "" : "$"}
             chartConfig={
@@ -453,7 +453,7 @@ export default function Marketplace({
               datasets: tempDatasets,
             }}
             width={Dimensions.get("window").width - 50}
-            height={Dimensions.get("window").width - 50}
+            height={Dimensions.get("window").height * 0.4}
             yAxisInterval={2}
             yAxisLabel={currency === "Crypto" ? "" : "$"}
             chartConfig={
@@ -479,7 +479,7 @@ export default function Marketplace({
       return (
         <View
           width={Dimensions.get("window").width - 50} // from react-native
-          height={Dimensions.get("window").width - 50}
+          height={Dimensions.get("window").height * 0.4}
           style={{
             borderRadius: 12,
             borderWidth: 1,

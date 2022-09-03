@@ -39,9 +39,9 @@ async function getMp() {
     .forBrowser("chrome")
     .setChromeOptions(
       new chrome.Options()
-        .addArguments("--no-sandbox")
-        .addArguments("--disable-dev-shm-usage")
-        .headless()
+        // .addArguments("--no-sandbox")
+        // .addArguments("--disable-dev-shm-usage")
+        // .headless()
         .windowSize(screen)
     )
     .build();
@@ -104,7 +104,6 @@ async function getMp() {
       )
       .click();
     await sleep(1000);
-    await sleep(1000);
     var solanaMp = await getAllFloorPrice(driver);
     await sleep(1000);
     // Click on sneakers tab
@@ -118,6 +117,12 @@ async function getMp() {
     await sleep(1000);
     await selectRealm(driver, "BNB");
     await sleep(1000);
+    await driver
+      .findElement(
+        By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
+      )
+      .click();
+    await sleep(1000);
     var bnbMp = await getAllFloorPrice(driver);
     await sleep(1000);
     // Click on sneakers tab
@@ -130,6 +135,12 @@ async function getMp() {
     await selectRarity(driver, "OG");
     await sleep(1000);
     await selectRealm(driver, "Ethereum");
+    await sleep(1000);
+    await driver
+    .findElement(
+      By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
+    )
+    .click();
     await sleep(1000);
     var ethereummMp = await getAllFloorPrice(driver);
     // The crypto price

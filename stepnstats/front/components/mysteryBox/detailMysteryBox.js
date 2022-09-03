@@ -2,13 +2,16 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import { Text, View, Image, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RFValue } from "react-native-responsive-fontsize";
+import { generate } from "react-native-image-generator";
+import * as MediaLibrary from 'expo-media-library';
 
 export default function DetailMysteryBox({
   data,
   nextMb,
   previousMb,
   setmodalOneMysteryBox,
-  deleteOneMb
+  deleteOneMb,
+  navigation,
 }) {
   const [date, setDate] = useState("--/--/----");
   var color;
@@ -137,6 +140,36 @@ export default function DetailMysteryBox({
       getDate();
     }
   });
+
+  // async function saveMB() {
+  //   const image = await generate(
+  //     [
+  //       {
+  //         uri: "https://picsum.photos/200/300",
+  //         width: 200,
+  //         height: 300,
+  //         x: 0,
+  //         y: 0,
+  //       },
+  //       {
+  //         text: "DESIGN",
+  //         fontSize: 23,
+  //         width: 300,
+  //         height: 300,
+  //         x: 50,
+  //         y: 50,
+  //         color: [0, 255, 0, 1.0],
+  //         fontFamily: Platform.OS === "ios" ? "Helvetica" : "Roboto",
+  //       },
+  //     ],
+  //     {
+  //       filename: "image.png",
+  //       width: 200,
+  //       height: 300,
+  //     }
+  //   );
+  //   await MediaLibrary.saveToLibraryAsync(image.filename)
+  // }
 
   function getDate() {
     var date = new Date(data.createdAt);
@@ -511,9 +544,38 @@ export default function DetailMysteryBox({
             right: "2%",
             justifyContent: "space-evenly",
             flexDirection: "row",
-            width: "35%"
+            width: "35%",
           }}
         >
+          {/* <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => {
+              saveMB();
+            }}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={RFValue(20, 800)}
+              type="material-community"
+              name="download"
+              color="black"
+            ></Icon>
+          </Pressable> */}
           <Pressable
             style={{
               backgroundColor: "#9DF8B6",
@@ -600,45 +662,54 @@ export default function DetailMysteryBox({
         <View
           style={{
             flexDirection: "row",
-            width: "100%",
-            height: "4%",
-            justifyContent: "center",
+            width: "90%",
+            height: "6%",
+            justifyContent: "space-between",
           }}
         >
           <View
             style={{
               backgroundColor: mbsColor[data.lvl - 1],
-              width: "20%",
+              width: "30%",
               borderRadius: 50,
-              marginLeft: "4%",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: RFValue(16, 800),
+                fontWeight: "700",
+              }}
+            >
               {data != undefined ? data.mbPrice : "--.--"} $
             </Text>
           </View>
           <View
             style={{
               backgroundColor: mbsColor[data.lvl - 1],
-              width: "40%",
+              width: "30%",
               borderRadius: 50,
-              marginLeft: "4%",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontSize: RFValue(12, 800) }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: RFValue(16, 800),
+                fontWeight: "700",
+              }}
+            >
               {data != undefined ? date : "../../../...."}
             </Text>
           </View>
           <View
             style={{
               backgroundColor: mbsColor[data.lvl - 1],
-              width: "20%",
+              width: "30%",
               borderRadius: 50,
-              marginLeft: "4%",
               alignItems: "center",
               justifyContent: "center",
             }}

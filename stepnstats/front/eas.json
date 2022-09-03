@@ -22,7 +22,7 @@
         "enterpriseProvisioning": "universal"
       },
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle" 
       }
     }
   }
