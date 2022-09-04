@@ -12,20 +12,17 @@ def crop_blks(img):
     h, w, _ = img.shape
 
     for x in range(w):
-        #print(np.sum(img[int(h/2):, x]))
         if np.sum(img[int(h/2):, x]) > 500: # old 500
             x1 = x
             break
 
     for x in range(w):
-        #print(np.sum(img[int(h/2):, -x]), np.sum(img[:, -x] == 0), h)
         if np.sum(img[int(h/2):, -x]) > 10000:
             x2 = x
             break
     
     for y in range(h):
         sm = np.sum(img[y, :int(w/2.2)])
-        #print(sm)
         if sm > 1000:
             y1 = y
             break
@@ -55,10 +52,6 @@ def get_mblvl(img):
         mimg = mimg[y1:y2, :]
         mimg = crop_blks(mimg)
 
-        #if len(argv) > 1:
-        #    cv.imshow('mimg', mimg)
-        #    cv.waitKey(0)
-
         results = []
         mxvl = 500000
         for box in BOXES:
@@ -74,9 +67,7 @@ def get_mblvl(img):
                 results.append(score)
             else:
                 results.append(mxvl)
-            #print(score)
 
-    #print(results)
     bscr = min(results)
 
     if bscr == mxvl:

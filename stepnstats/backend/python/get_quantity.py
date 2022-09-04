@@ -6,7 +6,8 @@ import warnings
 from resize import resize
 
 # Remove Warning because easyocr have some issue
-warnings.filterwarnings("ignore", category=UserWarning) 
+warnings.filterwarnings("ignore", category=UserWarning)
+
 
 def get_quantity(img):
     # Resize image to quickly do the code
@@ -14,7 +15,10 @@ def get_quantity(img):
     reader = easyocr.Reader(['en'], gpu=True, verbose=False)
     result = reader.readtext(img, paragraph="False", allowlist="0123456789.")
     for text in result:
-        if text[-1][1:] != "": 
-            return text[-1][1:]
+        if text[-1][1:] != "":
+            if int(text[-1][1:].replace(" ", "")) > 10:
+                return text[-1][1:].replace(" ", "")[1:]
+            else:
+                return text[-1][1:]
         else:
             return "1"
