@@ -8,8 +8,7 @@ from gifs import get_items_from_screen as get_items
 from trim import trim
 from pathlib import Path
 from get_mblvl import get_mblvl
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 # FILES FORMATS
 formats = (".png", ".jpg", ".jpeg")
 # List of all contents paths

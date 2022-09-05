@@ -3,8 +3,7 @@ from colortools import dominant
 import numpy as np
 import easyocr
 import cv2 as cv
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 reader = easyocr.Reader(['en'], gpu=False)
 
 def crop_bot(img):

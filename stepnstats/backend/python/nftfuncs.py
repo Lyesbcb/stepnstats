@@ -5,8 +5,7 @@ from text_reader import parse_text
 from runfuncs import reader
 from math import dist, prod
 import sys
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 def get_idtpqualvl(oimg, info):
     h, w, _ = oimg.shape

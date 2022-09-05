@@ -1,8 +1,7 @@
 import cv2 as cv
 from match import best_match
 import numpy as np
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 BOXES = ["./python/mb/lvl" + str(i) + ".png" for i in range(1, 11)]
 

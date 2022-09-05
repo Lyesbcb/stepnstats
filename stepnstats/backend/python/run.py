@@ -3,8 +3,7 @@ from runfuncs import *
 import os
 from get_mb_lvl_from_image import get_mblvl
 from sys import argv
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 def get_run_durab(oimg):
     img = crop_bot(oimg)

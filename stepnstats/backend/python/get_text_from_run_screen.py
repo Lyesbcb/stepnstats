@@ -8,8 +8,7 @@ import numpy as np
 import warnings
 from resize import resize
 import re
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 # Remove Warning because easyocr have some issue
 warnings.filterwarnings("ignore", category=UserWarning)
 

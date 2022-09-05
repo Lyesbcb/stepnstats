@@ -3,8 +3,7 @@ import cv2 as cv
 from math import  prod
 import numpy as np
 from mse import cmse
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 formats = (".png", ".jpg", ".jpeg")
 
 BOXES = ["./python/open_mb/lvl{}.png".format(file) for file in range(1, 11)]

@@ -1,6 +1,5 @@
 import cv2
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 # crop_img = src_img[h_start : h_end, w_start : w_end]
 
 def crop_bottom_half(img):

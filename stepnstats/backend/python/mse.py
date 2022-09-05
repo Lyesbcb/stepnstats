@@ -1,6 +1,5 @@
 import numpy as np
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 # Image, Image -> float
 # Return the mean squared error between two images
