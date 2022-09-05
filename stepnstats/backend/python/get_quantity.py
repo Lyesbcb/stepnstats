@@ -16,7 +16,7 @@ def get_quantity(img):
     result = reader.readtext(img, paragraph="False", allowlist="0123456789.")
     for text in result:
         if text[-1][1:] != "":
-            if int(text[-1][1:].replace(" ", "")) > 10:
+            if float(text[-1][1:].replace(" ", "")) > 10:
                 return text[-1][1:].replace(" ", "")[1:]
             else:
                 return text[-1][1:]
