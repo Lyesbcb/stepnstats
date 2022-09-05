@@ -3,7 +3,8 @@ import numpy as np
 from crop import *
 from math import dist
 from get_quantity import get_quantity
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 def remove_text_and_border(img):
     """
     Image -> Image

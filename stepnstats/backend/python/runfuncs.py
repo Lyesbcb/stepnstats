@@ -3,8 +3,9 @@ from colortools import dominant
 import numpy as np
 import easyocr
 import cv2 as cv
-
-reader = easyocr.Reader(['en'], gpu=True)
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+reader = easyocr.Reader(['en'], gpu=False)
 
 def crop_bot(img):
     h, w, _ = img.shape
@@ -73,15 +74,12 @@ def get_kmdt(img, tlbr, info):
 
         try:
             date = date[:10] + " " + date[10:]
+            #print(date)
             dt, tm = date.split(" ")
-            tm = tm.replace("/", "")
-            if ":" in tm:
-                if tm.index(":") == 1:
-                    tm = "0" + tm
-            else:
-                tm = tm[:2] + ":" + tm[2:]
-
-            tm = tm[:5]
+            #print(dt, tm)
+            if dt.endswith("222") and tm.index(":") == 1:
+                tm = "2" + tm
+            
             if dt[2] != "/":
                 dt = dt[:2] + "/" + dt[2:]
             if dt[5] != "/":
@@ -89,7 +87,17 @@ def get_kmdt(img, tlbr, info):
                     dt = dt[:5] + "/" + dt[5:]
                 else:
                     dt = dt[:5] + "/" + dt[6:]
+
             dt = dt[:10]
+                    
+            tm = tm.replace("/", "")
+            if ":" in tm:
+                if tm.index(":") == 1:
+                    tm = "0" + tm
+            else:
+                tm = tm[:2] + ":" + tm[2:]
+            tm = tm[:5]
+
             #print(dt, tm)
 
             day, month, year = dt.split("/")
@@ -249,14 +257,14 @@ def get_tplvlgst(img, info, nondurab=None):
         if "," in gst:
             gst = gst.replace(",", ".")
 
-        if not (":" in gst):
+        if not ("." in gst):
             gst = gst[:-2] + "." + gst[-2:]
-            
+
         return gst
 
     tp, level, qual = get_typelevelqual()
     info["type"]  = tp
-    info["lvl"] = level
+    info["level"] = level
     info["gst"]   = get_gst()
     info["quality"] = qual
 
@@ -282,6 +290,9 @@ def get_eniddlst(oimg, info):
         if durab == "":
             durab = parse_text(dst, config="--psm 7 -c tessedit_char_whitelist=-0123456789", process=False)
 
+        if "55" in durab: 
+            durab = "5"
+
         return durab.replace("-", "").replace(" ", "")
 
     def get_energy():
@@ -292,12 +303,16 @@ def get_eniddlst(oimg, info):
 
         for en in energy:
             if not ("x" in en) and ("." in en or "," in en):
+                if not ("-" in en):
+                    ten = parse_text(genimg, "--psm 12 -c tessedit_char_whitelist=-0123456789x.,", process=False)
+                    if "-" in ten:
+                        return ten[ten.index("-")+1:].replace(',', '.').replace(" ", "")
                 return en.replace("-", "").replace(",", ".").replace(" ", "")
 
         return ""
 
 
-    info["nftId"] = get_id()
+    info["nftid"] = get_id()
     info["energy"] = get_energy()
     info["durabilityLost"] = get_durab()
 
@@ -306,13 +321,17 @@ def get_kmdrstps(img, info):
     img = img[int(h/2.1):int(h/1.9), :]
     gimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-    text = reader.readtext(gimg, detail=0, allowlist="0123456789:.")
+    text = reader.readtext(gimg, detail=0, allowlist="0123456789:.,")
 
     if len(text) != 3:
         km = dur = stp = ""
     else:
         km, dur, stp = text
         dur = dur.replace('.', ':')
+        km = km.replace(',', '.')
+
+    #if not ("")
+
     info['km'] = km
     info['duration'] = dur
     info['steps'] = stp
@@ -329,7 +348,14 @@ def get_ideng(oimg, info):
 
         for en in engs:
             if not ("x" in en):
+                if not ("-" in en):
+                    energy = parse_text(enimg, config="--psm 12 -c tessedit_char_whitelist=0123456789x.-", process=False)
+                    if "-" in energy:
+                        energy = energy[energy.index("-"):]
+                        break
+
                 energy = en
+                break
 
         return energy.replace("-", "").replace(" ", "")
 

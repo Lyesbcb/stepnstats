@@ -53,7 +53,7 @@ async function uploadFile(req, res) {
             if (err) throw err;
           }
         );
-        console.log("ErrorDatabase");
+        
         if (error) {
           return res.status(400).json({ message: error });
         } else {

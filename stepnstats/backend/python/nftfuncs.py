@@ -5,7 +5,8 @@ from text_reader import parse_text
 from runfuncs import reader
 from math import dist, prod
 import sys
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def get_idtpqualvl(oimg, info):
     h, w, _ = oimg.shape
@@ -15,13 +16,14 @@ def get_idtpqualvl(oimg, info):
     def get_id():
         idimg = gimg[:int(h/12), int(w/3):int(w/1.5)]
 
-        id = "".join(reader.readtext(idimg, detail=0, allowlist="#0123456789new")).replace("#", "")[:9].replace("new", "")
+        id = "".join(reader.readtext(idimg, detail=0, allowlist="#0123456789new")).replace(
+            "#", "")[:9].replace("new", "")
 
         return id
 
     def get_qualtp():
         tpimg = gimg[int(h/8):int(h/5.5), int(w/12):int(w/1.6)]
-        
+
         result = reader.readtext(tpimg, detail=0)
         qual, tp = "", ""
 
@@ -35,19 +37,24 @@ def get_idtpqualvl(oimg, info):
                 tp = "Runner"
             elif "ainer" in tp:
                 tp = "Trainer"
-        
+
         return qual, tp
 
     def get_level():
         lvlimg = gimg[int(h/5.5):int(h/4.2), int(w/12):int(w/1.5)]
 
-        lvl = parse_text(lvlimg, config="--psm 7 -c tessedit_char_whitelist=0123456789", process=False)
-
+        lvl = parse_text(
+            lvlimg, config="--psm 7 -c tessedit_char_whitelist=0123456789", process=False)
+        if lvl == "":
+            lvl = "".join(reader.readtext(
+                lvlimg, detail=0, allowlist="0123456789lev"))
+            lvl = lvl.replace("l", "").replace("e", "").replace("v", "")
         return lvl
 
     info['nftId'] = get_id()
     info['quality'], info['type'] = get_qualtp()
     info['lvl'] = get_level()
+
 
 def get_stats(oimg, info):
     h, w, _ = oimg.shape
@@ -67,25 +74,40 @@ def get_stats(oimg, info):
                 vareas += 1
         #print("Valid Areas:", vareas)
         #cv.imshow("thresh", dst)
-        #cv.waitKey(0)
+        # cv.waitKey(0)
         return vareas > 1
 
     def get_nmbrs():
         nimg = gimg[int(h/10):, int(w/1.3):int(w/1.07)]
-        
+
         nmbs = reader.readtext(nimg, detail=0, allowlist="0123456789.")
 
         if len(nmbs) > 4:
             nmbs = nmbs[-4:]
-
+        ndnm = nmbs[1]
+        tnmbs = parse_text(
+            nimg, config="--psm 11 -c tessedit_char_whitelist=0123456789.", process=False)
+        if ndnm in tnmbs:
+            fsnm = tnmbs[:tnmbs.index(ndnm)]
+            #print(fsnm, nmbs[0])
+            if len(fsnm) < len(nmbs[0]):
+                nmbs[0] = fsnm
+            elif len(fsnm) == len(nmbs[0]):
+                nnm = ""
+                for i in range(len(fsnm)):
+                    if fsnm[i] == nmbs[0][i]:
+                        nnm += fsnm[i]
+                nmbs[0] = nnm
+        if len(nmbs[0]) >= len(nmbs[1]) + 2:
+            nmbs[0] = nmbs[0][1:]
         info["efficiency"], \
-        info["luck"],       \
-        info["comfort"],    \
-        info["resilience"] = nmbs
-
+            info["luck"],       \
+            info["comfort"],    \
+            info["resilience"] = nmbs
 
     info["base"] = str(get_base()).lower()
     get_nmbrs()
+
 
 def get_sockets(oimg, info):
     h, w, _ = oimg.shape
@@ -95,9 +117,9 @@ def get_sockets(oimg, info):
 
     def get_parts():
         nh, nw = img.shape[:2]
-        tl = gimg[:int(h/9.5),   :int(w/5)], img[:int(h/9.5),   :int(w/5)] 
+        tl = gimg[:int(h/9.5), :int(w/5)], img[:int(h/9.5), :int(w/5)]
         tr = gimg[:int(h/9.5),  -int(w/5):], img[:int(h/9.5),  -int(w/5):]
-        bl = gimg[-int(h/9.5):,  :int(w/5)], img[-int(h/9.5):,  :int(w/5)]
+        bl = gimg[-int(h/9.5):, :int(w/5)], img[-int(h/9.5):, :int(w/5)]
         br = gimg[-int(h/9.5):, -int(w/5):], img[-int(h/9.5):, -int(w/5):]
 
         return [tl[0], tr[0], bl[0], br[0]], [tl[1], tr[1], bl[1], br[1]]
@@ -116,8 +138,8 @@ def get_sockets(oimg, info):
                 if lsm > 0 and not left:
                     x1 = x
                     left = True
-                
-                if rsm > 0 and not right: 
+
+                if rsm > 0 and not right:
                     x2 = -(x + 1)
                     right = True
 
@@ -127,14 +149,14 @@ def get_sockets(oimg, info):
                     break
 
             for y in range(h):
-                tsm = np.sum(parts[i][ y, :])
+                tsm = np.sum(parts[i][y, :])
                 bsm = np.sum(parts[i][-y, :])
 
                 if tsm > 0 and not top:
                     y1 = y
                     top = True
-                
-                if bsm > 0 and not bot: 
+
+                if bsm > 0 and not bot:
                     y2 = -(y + 1)
                     bot = True
 
@@ -151,7 +173,7 @@ def get_sockets(oimg, info):
         if h < 10 or w < 10:
             return ""
 
-        wts  = np.sum(pimg == 255)
+        wts = np.sum(pimg == 255)
         blks = np.sum(pimg == 0)
         innerblks = np.sum(pimg[int(h/4):-int(h/4), int(w/4):-int(w/4)] == 0)
 
@@ -161,33 +183,33 @@ def get_sockets(oimg, info):
 
         for xn in range(x*3, 0, -1):
             clr = tuple(opimg[h//2, xn])
-            #print(clr)
+            # print(clr)
             if not ((clr[0] > 190) and
                     (clr[1] > 210) and
                     (clr[2] > 205)):
                 break
-        
+
         tps = {
-            (140, 140, 245):"comfort",
-            (100, 205, 240):"efficiency",
-            (240, 172, 148):"resilience",
-            (205, 190, 160):"luck"
+            (140, 140, 245): "comfort",
+            (100, 205, 240): "efficiency",
+            (240, 172, 148): "resilience",
+            (205, 190, 160): "luck"
         }
 
-        bdst = None 
-        tp   = None
+        bdst = None
+        tp = None
         for tpclr, name in tps.items():
             dst = dist(clr, tpclr)
 
             if bdst is None or dst < bdst:
                 bdst = dst
-                tp   = name
-        
+                tp = name
+
         corners = pimg[y, x], pimg[y, -x], pimg[-(y*3), x], pimg[-(y*3), -x]
         lvl = 1
         if blks > wts:
             lvl = 0
-        elif innerblks < 50: 
+        elif innerblks < 50:
             return tp
         else:
             for corner in corners:
@@ -216,10 +238,10 @@ def get_sockets(oimg, info):
         else:
             info["socket{}".format(i+1)] = ""
 
-        #print(info)
+        # print(info)
         #cv.imshow("oparts", oparts[i])
         #cv.imshow("parts", parts[i])
-        #cv.waitKey(0)
+        # cv.waitKey(0)
 
 
 def crop(oimg):
@@ -233,7 +255,7 @@ def crop(oimg):
     max_gap = 20
 
     #cv.imshow("test", cv.resize(oimg, (500, 700)))
-    #cv.waitKey(0)
+    # cv.waitKey(0)
     lines = cv.HoughLinesP(img, rho, theta, 15, (), min_length, max_gap)
 
     cx1, cy1, cx2, cy2 = 0, h//2, w, h//2
@@ -250,7 +272,6 @@ def crop(oimg):
                     cy2 = y
 
     #cv.imshow('timg', cv.resize(timg, (500, 700)))
-    #cv.waitKey(0)
+    # cv.waitKey(0)
 
     return oimg[cy1:cy2, cx1:cx2]
-

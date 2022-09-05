@@ -1,5 +1,6 @@
 import numpy as np
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def get_lastwhite(img, x, y, key):
     """

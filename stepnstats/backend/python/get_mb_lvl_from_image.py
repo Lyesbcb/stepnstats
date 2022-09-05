@@ -1,7 +1,8 @@
 import cv2 as cv
 from match import best_match
 import numpy as np
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 BOXES = ["./python/mb/lvl" + str(i) + ".png" for i in range(1, 11)]
 
@@ -25,6 +26,11 @@ def get_mblvl(oimg):
     mx = max(results)
 
     if mx == 0:
-        return "0"
+        return ""
     else:
-        return str(results.index(mx) + 1)
+        ind = results.index(mx) + 1
+        if ind == 10 and mx < 0.45:
+            return ""
+        else:
+            return str(ind)
+

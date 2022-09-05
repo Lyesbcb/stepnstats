@@ -3,7 +3,8 @@ from runfuncs import *
 import os
 from get_mb_lvl_from_image import get_mblvl
 from sys import argv
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def get_run_durab(oimg):
     img = crop_bot(oimg)
@@ -20,25 +21,26 @@ def get_run_durab(oimg):
     botimg = bot_part(img)
 
     get_tplvlgst(botimg, info)
-    
+
     info["mbLvl"] = get_mblvl(oimg)
 
     get_eniddlst(botimg, info)
 
-    #---------------TEST CODE--------------------------------------
-    #print(info)
+    # ---------------TEST CODE--------------------------------------
+    # print(info)
     #
-    #for rect in rects:
+    # for rect in rects:
     #    img = cv.rectangle(img, rect[0], rect[1], (0, 255, 0), 5)
     #
     # print(info)
     # cv.imshow("test.png", cv.resize(img, (250, 400)))
     # cv.waitKey(0)
-    #---------------------------------------------------------------
+    # ---------------------------------------------------------------
     for k, v in info.items():
         if v == "":
-            info[k] = "0" 
+            info[k] = "0"
     return info
+
 
 def get_run_nondurab(oimg):
     img = oimg
@@ -66,15 +68,21 @@ def get_run_nondurab(oimg):
     # cv.waitKey(0)
     # --------------------------------------------------------------
     for k, v in info.items():
-            if v == "":
-                info[k] = "0"
+        if v == "":
+            info[k] = "0"
     return info
 
 
 img = cv.imread("./"+argv[1])
 b, g, r = img[0, 0]
-
-if ((b > 240 and g > 240 and r > 240) or (5 > b > 0 and 8 > g > 1 and 3 > r >= 0)):
+#print(b, g, r)
+img = cv.imread("./"+argv[1])
+if ((b > 240 and
+        g > 240 and
+        r > 240) or
+        (5 > b >= 0 and
+         8 > g >= 0 and
+         3 > r >= 0)):
     print(get_run_nondurab(img))
 else:
     print(get_run_durab(img))
@@ -98,7 +106,7 @@ else:
     #                 print("INDEX ->", i, frmt)
 
     #                 get_run(oimg)
-        #cv.imshow('test', oimg)
-        # cv.waitKey(0)
-        #info = get_run_durab(oimg)
-        #info = get_run_nondurab(oimg)
+    #cv.imshow('test', oimg)
+    # cv.waitKey(0)
+    #info = get_run_durab(oimg)
+    #info = get_run_nondurab(oimg)

@@ -1,5 +1,6 @@
 import cv2 as cv
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 # Image, Image, String, Float -> Point, Int|None, Int
 # Match given template temp with the sliding windows
 # using template matching method "method"

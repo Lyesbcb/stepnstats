@@ -2,7 +2,8 @@ import cv2 as cv
 import os
 from nftfuncs import *
 from sys import argv
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 ft = True # testing
 
 def get_nft(oimg):

@@ -2,7 +2,8 @@ from tkinter import image_names
 import cv2 as cv
 from pytesseract import image_to_string
 import pytesseract
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def parse_text(img, config="", process=True, gray=False):
     if process:
