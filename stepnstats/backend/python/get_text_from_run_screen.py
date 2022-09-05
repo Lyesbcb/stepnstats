@@ -37,8 +37,8 @@ def get_text_from_run_screen(img):
         spacer += 15
 
     plt.figure(figsize=(10, 10))
-    cv2.imshow("result", img)
-    cv2.waitKey(0)
+    # cv2.imshow("result", img)
+    # cv2.waitKey(0)
     return extract_text_and_return_json((" ".join(text_result)).upper())
 
 

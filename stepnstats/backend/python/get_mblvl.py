@@ -101,8 +101,8 @@ def get_mblvl(img):
 
     if len(mimgs) == 1:
         mimg = mimgs[0]
-        cv.imshow('mimg', mimg)
-        cv.waitKey(0)
+        # cv.imshow('mimg', mimg)
+        # cv.waitKey(0)
 
     results = []
     mxvl = 500000
@@ -129,20 +129,20 @@ def get_mblvl(img):
         return "{}".format(results.index(bscr) + 1)
 
 
-if __name__ == "__main__":
-    FILE = "mistery box/"
-    # Go through files from test1 to test56
-    for n in range(43, 128):
-        for frmt in formats:
-            path = "{}test ({}){}".format(FILE, str(n), frmt)
+# if __name__ == "__main__":
+#     FILE = "mistery box/"
+#     # Go through files from test1 to test56
+#     for n in range(43, 128):
+#         for frmt in formats:
+#             path = "{}test ({}){}".format(FILE, str(n), frmt)
 
-            if os.path.isfile(path):
-                img = cv.imread(path)
-                result = get_mblvl(img)
-                print("\n Index ->", n, frmt, "- Result:", result)
-                cv.imshow('test', img)
-                if result != "":
-                    cv.imshow('match', cv.imread(BOXES[int(result)-1]))
-                else:
-                    print("Error finding the right mblvl")
-                cv.waitKey(0)
+#             if os.path.isfile(path):
+#                 img = cv.imread(path)
+#                 result = get_mblvl(img)
+#                 print("\n Index ->", n, frmt, "- Result:", result)
+#                 # cv.imshow('test', img)
+#                 if result != "":
+#                     cv.imshow('match', cv.imread(BOXES[int(result)-1]))
+#                 else:
+#                     print("Error finding the right mblvl")
+#                 cv.waitKey(0)
