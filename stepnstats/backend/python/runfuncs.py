@@ -312,7 +312,7 @@ def get_eniddlst(oimg, info):
         return ""
 
 
-    info["nftid"] = get_id()
+    info["nftId"] = get_id()
     info["energy"] = get_energy()
     info["durabilityLost"] = get_durab()
 
