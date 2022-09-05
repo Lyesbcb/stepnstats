@@ -264,7 +264,7 @@ def get_tplvlgst(img, info, nondurab=None):
 
     tp, level, qual = get_typelevelqual()
     info["type"]  = tp
-    info["level"] = level
+    info["lvl"] = level
     info["gst"]   = get_gst()
     info["quality"] = qual
 
