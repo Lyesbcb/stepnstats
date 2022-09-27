@@ -22,6 +22,7 @@ async function initialize() {
 
   // init models and add them to the exported db object
   db.User = require("../users/user.model")(sequelize);
+  db.Notification = require("../notifications/notification.model")(sequelize);
   db.Run = require("../runs/run.model")(sequelize);
   db.Mb = require("../mbs/mb.model")(sequelize);
   db.Nft = require("../nfts/nft.model")(sequelize);

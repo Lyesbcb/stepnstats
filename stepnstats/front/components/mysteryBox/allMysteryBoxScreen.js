@@ -33,6 +33,8 @@ import DetailMysteryBox from "./detailMysteryBox";
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import { RFValue } from "react-native-responsive-fontsize";
+import HelpModal from "../modal/helpModal";
+
 export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
   const [realm, setRealm] = useState("Solana");
@@ -40,7 +42,15 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
   const [modalOneMysteryBox, setmodalOneMysteryBox] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
+  function getTotal(){
+    var total = 0
+    for(var i = 0; i <mbs.length; i++){
+      total += mbs[i].mbPrice
+    }
+    return total.toFixed(2)
+  }
   async function onRefresh() {
     await setRefreshing(true);
     await myFunction();
@@ -87,6 +97,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
       quality: 0.2,
       exif: true,
     });
+    console.log(result)
     if (!result.cancelled) {
       setLoading(true);
       try {
@@ -121,6 +132,11 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
         value={realm}
         textButton={"NEXT"}
       ></SelectRealmModal>
+       <HelpModal
+        modalHelpVisible={modalHelpVisible}
+        setModalHelpVisible={setModalHelpVisible}
+        screen={"mbs"}
+      />
       <Modal
         animationType="slide"
         transparent={true}
@@ -167,6 +183,123 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
           </View>
         </TouchableOpacity>
       </Modal>
+      <View
+        style={{
+          width: "100%",
+          height: "5%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "90%",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "70%",
+            }}
+          >
+            {/* <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Filter
+              </Text>
+            </Pressable>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Sort by: {sortBy}
+              </Text>
+            </Pressable> */}
+            <Text>Total value: {getTotal()}$</Text>
+          </View>
+
+          <View style={{ width: "20%", alignItems: "flex-end" }}>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "50%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setModalHelpVisible(true)}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                ?
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={

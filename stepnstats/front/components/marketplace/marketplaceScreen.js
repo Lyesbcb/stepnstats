@@ -1,15 +1,12 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Alert } from "react-native";
+import { useEffect, useState } from "react";
 import Header from "./header";
 import { getAllTemporality } from "../../services/mps/index";
 import Marketplace from "./marketplace";
 import ProgressLoader from "rn-progress-loader";
 import { RFValue } from "react-native-responsive-fontsize";
+import NotificationModal from "../modal/notificationModal";
+import Notifications from "./notifications";
 
 export default function MarketplaceScreen({ navigation }) {
   const [selectedContent, setSelectedContent] = useState([]);
@@ -19,6 +16,8 @@ export default function MarketplaceScreen({ navigation }) {
   const [mpsMonth, setMpsMonth] = useState([]);
   const [selectedTab, SetSelectedTab] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useState(false);
   useEffect(() => {
     myFunction();
   }, []);
@@ -82,9 +81,9 @@ export default function MarketplaceScreen({ navigation }) {
               setSelectedRealm={setSelectedRealm}
             ></Marketplace>
           ) : selectedTab === 1 ? (
-            <View>
-              <Text>{selectedTab}</Text>
-            </View>
+            <Notifications
+              lastPrice={mpsDay[mpsDay.length - 1]}
+            ></Notifications>
           ) : (
             <View></View>
           )}

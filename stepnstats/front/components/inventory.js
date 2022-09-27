@@ -15,20 +15,17 @@ import AllNftsScreen from "./nfts/allNftsScreen";
 import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
 import RunsScreen from "./run/runsScreen";
 import { getAllMyMb } from "../services/mbs/index";
-import { getAllMyNft } from "../services/nfts/index";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export default function Invenrtory({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
   const [mbs, setMbs] = useState([]);
-  const [nfts, setNfts] = useState([]);
   useEffect(() => {
     myFunction();
   }, []);
 
   const myFunction = async () => {
     try {
-      setNfts(await getAllMyNft(1));
       setMbs(await getAllMyMb(1));
     } catch (error){
       Alert.alert(console.error());
@@ -57,8 +54,6 @@ export default function Invenrtory({ navigation }) {
           {selectedTab === 0 ? (
             <AllNftsScreen
               navigation={navigation}
-              nfts={nfts}
-              myFunction={myFunction}
             ></AllNftsScreen>
           ) : (
             <AllMysteryBoxScreen

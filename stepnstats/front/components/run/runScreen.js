@@ -103,7 +103,7 @@ export default function RunScreen({ navigation, route }) {
       hour = "0" + hour;
     }
     if (month < 10) {
-      month = "0" + month;
+      month = "0" + Number(month+1);
     }
     if (day < 10) {
       day = "0" + day;
@@ -335,8 +335,6 @@ export default function RunScreen({ navigation, route }) {
             }}
             onPress={async () => {
               await deleteRun(run.id);
-              // JSON.parse(route.params).myFunction();
-              console.log(JSON.parse(route.params));
               navigation.navigate("AllRunsScreen");
             }}
           >

@@ -9,7 +9,7 @@ import warnings
 from resize import resize
 import re
 
-# Remove Warning because easyocr have some issue
+# Remove Warning because easyocr have some warning and we don't want to have it in the logs
 warnings.filterwarnings("ignore", category=UserWarning)
 
 

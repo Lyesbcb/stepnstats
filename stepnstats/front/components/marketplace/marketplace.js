@@ -15,6 +15,7 @@ import Modal from "react-native-modal";
 import Filter from "./filter";
 import { RFValue } from "react-native-responsive-fontsize";
 import { Svg, Text as TextSVG, Rect } from "react-native-svg";
+import NotificationModal from "../modal/notificationModal";
 
 export default function Marketplace({
   selectedRealm,
@@ -30,6 +31,9 @@ export default function Marketplace({
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
   const [isModalVisible, setModalVisible] = useState(false);
   const [currency, setCurrency] = useState("Dollars");
+  const [modalNotificationVisible, setModalNotificationVisible] =
+    useState(false);
+  const [notificationContent, setNotificationContent] = useState("");
   let [tooltipPos, setTooltipPos] = useState({
     x: 0,
     y: 0,
@@ -136,6 +140,8 @@ export default function Marketplace({
         <Legend
           setSelectedContent={setSelectedContent}
           selectedContent={selectedContent}
+          setNotificationContent={setNotificationContent}
+          setModalNotificationVisible={setModalNotificationVisible}
           key={i}
           id={i}
           name={content}
@@ -510,6 +516,17 @@ export default function Marketplace({
         height: "70%",
       }}
     >
+      <NotificationModal
+        modalNotificationVisible={modalNotificationVisible}
+        setModalNotificationVisible={setModalNotificationVisible}
+        content={notificationContent}
+        lastPrice={mpsDay[mpsDay.length - 1]}
+        selectedRealm={selectedRealm}
+        setSelectedRealm={setSelectedRealm}
+        myFunction={myFunction}
+        currency={currency}
+        setCurrency={setCurrency}
+      />
       <Modal
         isVisible={isModalVisible}
         animationIn="slideInRight"

@@ -45,10 +45,10 @@ async function updateRun(id, params) {
   var config = {
     method: "put",
     url: baseURL + "/" + id,
-    headers: {
+    headers:  new Headers({
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-    },
+    }),
     data: JSON.stringify(params),
   };
 
@@ -140,6 +140,7 @@ async function getAllMyRun(page) {
       throw await response;
     })
     .catch(async function (error) {
+      console.log(error)
       throw await error.message;
     });
 }

@@ -30,13 +30,17 @@ export default function Header({ selectedTab, SetSelectedTab }) {
           style={selectedTab === 0 ? styles.activeTab : styles.tab}
           onPress={() => SetSelectedTab(0)}
         >
-          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Marketplace</Text>
+          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>
+            Marketplace
+          </Text>
         </Pressable>
         <Pressable
           style={selectedTab === 1 ? styles.activeTab : styles.tab}
-          onPress={() => Alert.alert("Coming soon!")}
+          onPress={() => SetSelectedTab(1)}
         >
-          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Notifications</Text>
+          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>
+            Notifications
+          </Text>
         </Pressable>
       </View>
     </View>

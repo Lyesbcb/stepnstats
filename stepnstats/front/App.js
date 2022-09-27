@@ -20,15 +20,9 @@ import ProgressLoader from "rn-progress-loader";
 
 Sentry.init({
   dsn: "https://aba7681e4758413f9025831056b576e1@o1332793.ingest.sentry.io/6597674",
-  tracesSampleRate: 2.0,
+  tracesSampleRate: 1.0,
   enableNative: false,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      tracingOrigins: ["localhost", /^\//],
-    }),
-  ],
 });
-
 function App() {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -38,9 +32,7 @@ function App() {
     setLoading(true);
     await axios
       .get("http://46.101.90.104:4000")
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((err) => {
         if (err.includes("timeout")) {
           Alert.alert(
@@ -166,7 +158,6 @@ function InvenrtoryStack() {
   return (
     <Stack.Navigator
       initialRouteName="Inventory"
-      
       screenOptions={({ route, navigation }) => ({
         headerShown: false,
         tabBarStyle: {

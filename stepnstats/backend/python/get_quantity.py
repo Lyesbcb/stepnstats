@@ -5,20 +5,18 @@ import numpy as np
 import warnings
 from resize import resize
 
-# Remove Warning because easyocr have some issue
+# Remove Warning because easyocr have some warning and we don't want to have it in the logs
 warnings.filterwarnings("ignore", category=UserWarning)
 
 
 def get_quantity(img):
     # Resize image to quickly do the code
-    img = cv2.cvtColor(img, cv2.THRESH_BINARY)
+    height, width, channels = img.shape
+    img = cv2.cvtColor(img[int(height/1.5):height, int(width/1.5):width], cv2.COLOR_BGR2GRAY)
     reader = easyocr.Reader(['en'], gpu=True, verbose=False)
-    result = reader.readtext(img, paragraph="False", allowlist="0123456789.")
+    result = reader.readtext(img, detail=0, paragraph="False", allowlist="0123456789.")
     for text in result:
-        if text[-1][1:] != "":
-            if float(text[-1][1:].replace(" ", "")) > 10:
-                return text[-1][1:].replace(" ", "")[1:]
-            else:
-                return text[-1][1:]
+        if text != "":
+            return text.replace(" ", "")[1:]
         else:
             return "1"

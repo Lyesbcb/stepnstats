@@ -8,6 +8,7 @@ function model(sequelize) {
         hash: { type: DataTypes.STRING, allowNull: false },
         role: { type: DataTypes.STRING, allowNull: true },
         anonymous: { type: DataTypes.BOOLEAN, allowNull: false },
+        notificationToken: { type: DataTypes.STRING, allowNull: true },
     };
 
     const options = {

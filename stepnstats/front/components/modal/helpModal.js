@@ -14,13 +14,70 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export default function HelpModal({
-  setmodalHelpVisible,
+  setModalHelpVisible,
   modalHelpVisible,
-  setRealm,
-  realm,
-  onValidate,
-  textButton,
+  screen,
 }) {
+  const [currentImage, setCurrentImage] = useState(null);
+  const [currentImageId, setCurrentImageId] = useState(0);
+  const [good, setGood] = useState(true);
+  const images = [
+    [
+      { good: true, image: require("../../assets/help/do/nft/base.png") },
+      { good: true, image: require("../../assets/help/do/nft/increased.png") },
+      {
+        good: false,
+        image: require("../../assets/help/dont/nft/cutSockets.png"),
+      },
+      {
+        good: false,
+        image: require("../../assets/help/dont/nft/cutStats.png"),
+      },
+    ],
+    [
+      {
+        good: true,
+        image: require("../../assets/help/do/run/durabilityLost.png"),
+      },
+      { good: true, image: require("../../assets/help/do/run/share.jpeg") },
+      {
+        good: false,
+        image: require("../../assets/help/dont/run/durabilityLostCut.png"),
+      },
+      { good: false, image: require("../../assets/help/dont/run/share.png") },
+    ],
+    [
+      { good: true, image: require("../../assets/help/do/mb/openMb1.png") },
+      { good: true, image: require("../../assets/help/do/mb/openMb2.png") },
+      { good: true, image: require("../../assets/help/do/mb/openMb3.png") },
+      { good: false, image: require("../../assets/help/dont/mb/closeMb.png") },
+      { good: false, image: require("../../assets/help/dont/mb/notMyMb.png") },
+    ],
+  ];
+
+  useEffect(() => {
+    var screenId = 0;
+    if (screen === "runs") {
+      screenId = 1;
+    } else if (screen === "mbs") {
+      screenId = 2;
+    }
+    setCurrentImage(images[screenId][currentImageId].image);
+    setGood(images[screenId][currentImageId].good);
+    const intervalId = setInterval(() => {
+      setCurrentImage(images[screenId][currentImageId].image);
+      setGood(images[screenId][currentImageId].good);
+      if (currentImageId + 1 === images[screenId].length) {
+        setCurrentImageId(0);
+      } else {
+        setCurrentImageId(currentImageId + 1);
+      }
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, [currentImageId]);
+
+  const text = [[], [], []];
   return (
     <Modal animationType="slide" transparent={true} visible={modalHelpVisible}>
       <TouchableOpacity
@@ -30,12 +87,12 @@ export default function HelpModal({
           alignItems: "center",
         }}
         activeOpacity={1}
-        onPressOut={() => setmodalHelpVisible(false)}
+        onPressOut={() => setModalHelpVisible(false)}
       >
         <View
           style={{
             backgroundColor: "white",
-            height: "40%",
+            height: "80%",
             width: "80%",
             borderRadius: 30,
             justifyContent: "space-evenly",
@@ -60,7 +117,7 @@ export default function HelpModal({
               height: 32,
               borderRadius: 20,
               position: "absolute",
-              top: "7%",
+              top: "3%",
               right: "7%",
               borderWidth: 1,
               borderColor: "black",
@@ -71,7 +128,7 @@ export default function HelpModal({
                 height: 1,
               },
             }}
-            onPress={() => setmodalHelpVisible(false)}
+            onPress={() => setModalHelpVisible(false)}
           >
             <Icon
               style={{ width: "100%" }}
@@ -81,13 +138,63 @@ export default function HelpModal({
               color="black"
             ></Icon>
           </Pressable>
-          <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>Help</Text>
+          <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+            Wich screen upload
+          </Text>
+          <View
+            style={
+              good
+                ? {
+                    width: "70%",
+                    height: "70%",
+                    borderWidth: 5,
+                    padding: 5,
+                    borderColor: "green",
+                    alignItems: "center",
+                  }
+                : {
+                    width: "70%",
+                    height: "70%",
+                    borderWidth: 5,
+                    padding: 5,
+                    borderColor: "red",
+                    alignItems: "center",
+                  }
+            }
+          >
+            <Image
+              style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+              source={currentImage}
+            ></Image>
+            <Text
+              style={
+                good
+                  ? {
+                      position: "absolute",
+                      top: "10%",
+                      color: "green",
+                      textAlign: "center",
+                      fontSize: 20,
+                      fontWeight: "700",
+                    }
+                  : {
+                      position: "absolute",
+                      top: "10%",
+                      color: "red",
+                      fontSize: 20,
+                      fontWeight: "700",
+                    }
+              }
+            >
+              {good ? "Good" : "Bad "}
+            </Text>
+          </View>
           <View
             style={{
               width: "90%",
               flexDirection: "row",
               justifyContent: "space-evenly",
-              height: "15%",
+              height: "5%",
             }}
           >
             <Pressable
@@ -108,32 +215,10 @@ export default function HelpModal({
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onPress={() => setmodalHelpVisible(false)}
-            >
-              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>OK</Text>
-            </Pressable>
-            <Pressable
-              style={{
-                width: "50%",
-                height: "100%",
-                borderRadius: 100,
-                borderWidth: 1,
-                borderColor: "black",
-                backgroundColor: "#9DF8B6",
-                shadowColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 4,
-                  height: 4,
-                },
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => setmodalHelpVisible(false)}
+              onPress={() => setModalHelpVisible(false)}
             >
               <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-                Report an issue
+                OK
               </Text>
             </Pressable>
           </View>

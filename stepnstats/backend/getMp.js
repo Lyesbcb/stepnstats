@@ -7,6 +7,7 @@ const bnbMpService = require("./mps/bnb/bnbMp.service");
 const ethereumMpService = require("./mps/ethereum/ethereumMp.service");
 const CoinMarketCap = require("coinmarketcap-api");
 const totp = require("totp-generator");
+const notificationService = require("./notifications/notification.service");
 
 const apiKey = config.coinMarketCap_token;
 const client = new CoinMarketCap(apiKey);
@@ -147,6 +148,7 @@ async function getMp() {
     solanaMp = Object.assign(solanaMp, cryptoPrices);
     bnbMp = Object.assign(bnbMp, cryptoPrices);
     ethereummMp = Object.assign(ethereummMp, cryptoPrices);
+  await notificationService.checkNotifications(solanaMp, solanaMp, solanaMp);
     solanaMpService.create(solanaMp).then((mp) => console.log(mp));
     bnbMpService.create(bnbMp).then((mp) => console.log(mp));
     ethereumMpService.create(ethereummMp).then((mp) => console.log(mp));
@@ -801,49 +803,49 @@ async function selectGemLevel(driver, level) {
     case 1:
       await driver
         .actions({ bridge: true })
-        .move({ x: 40, y: 370 })
+        .move({ x: 40, y: 420 })
         .click()
         .perform();
       break;
     case 2:
       await driver
         .actions({ bridge: true })
-        .move({ x: 60, y: 370 })
+        .move({ x: 60, y: 420 })
         .click()
         .perform();
       break;
     case 3:
       await driver
         .actions({ bridge: true })
-        .move({ x: 90, y: 370 })
+        .move({ x: 90, y: 420 })
         .click()
         .perform();
       break;
     case 4:
       await driver
         .actions({ bridge: true })
-        .move({ x: 120, y: 370 })
+        .move({ x: 120, y: 420 })
         .click()
         .perform();
       break;
     case 5:
       await driver
         .actions({ bridge: true })
-        .move({ x: 140, y: 370 })
+        .move({ x: 140, y: 420 })
         .click()
         .perform();
       break;
     case 6:
       await driver
         .actions({ bridge: true })
-        .move({ x: 160, y: 370 })
+        .move({ x: 160, y: 420 })
         .click()
         .perform();
       break;
     case 7:
       await driver
         .actions({ bridge: true })
-        .move({ x: 180, y: 370 })
+        .move({ x: 180, y: 420 })
         .click()
         .perform();
       break;
@@ -851,14 +853,14 @@ async function selectGemLevel(driver, level) {
     case 8:
       await driver
         .actions({ bridge: true })
-        .move({ x: 200, y: 370 })
+        .move({ x: 200, y: 420 })
         .click()
         .perform();
       break;
     case 9:
       await driver
         .actions({ bridge: true })
-        .move({ x: 200, y: 370 })
+        .move({ x: 200, y: 420 })
         .click()
         .perform();
       break;

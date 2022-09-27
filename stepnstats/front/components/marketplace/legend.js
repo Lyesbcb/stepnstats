@@ -10,6 +10,8 @@ export default function Legend({
   deleteContent,
   selectedContent,
   setSelectedContent,
+  setNotificationContent,
+  setModalNotificationVisible
 }) {
   const contents = {
     efficiencyLvl1: "Efficiency Lvl 1",
@@ -78,7 +80,10 @@ export default function Legend({
     ogRare: "OG Rare",
     ogEpic: "OG Epic",
   };
-
+  function notification(){
+    setNotificationContent(name)
+    setModalNotificationVisible(true)
+  }
   return (
     <View
       style={{
@@ -109,7 +114,7 @@ export default function Legend({
             alignItems:"center"
           }}
         >
-          <Pressable onPress={() => Alert.alert("Coming soon")}>
+          <Pressable onPress={() => notification()}>
             <Icon type="material-community" name="bell" size={20}></Icon>
           </Pressable>
           <Pressable

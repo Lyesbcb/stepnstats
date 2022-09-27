@@ -12,6 +12,7 @@ import Icon from "react-native-elements/dist/icons/Icon";
 import Footer from "../footer";
 import * as ImagePicker from "expo-image-picker";
 import { RFValue } from "react-native-responsive-fontsize";
+import HelpModal from "../modal/helpModal";
 
 import {
   createRun,
@@ -30,6 +31,7 @@ export default function RunsScreen({ navigation }) {
   const [realm, setRealm] = useState("Solana");
   const [loading, setLoading] = useState(false);
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
   async function onRefresh() {
     await setRefreshing(true);
@@ -192,6 +194,127 @@ export default function RunsScreen({ navigation }) {
         value={realm}
         textButton={"NEXT"}
       ></SelectRealmModal>
+      <HelpModal
+        modalHelpVisible={modalHelpVisible}
+        setModalHelpVisible={setModalHelpVisible}
+        screen={"runs"}
+      />
+       <View
+        style={{
+          width: "100%",
+          height: "5%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "90%",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "70%",
+            }}
+          >
+            {/* <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Filter
+              </Text>
+            </Pressable>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Sort by: {sortBy}
+              </Text>
+            </Pressable> */}
+          </View>
+
+          <View style={{ width: "20%", alignItems: "flex-end" }}>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "50%",
+                height: "80%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setModalHelpVisible(true)}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                ?
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
       <Pressable
         style={{
           height: 150,
@@ -265,6 +388,7 @@ export default function RunsScreen({ navigation }) {
           <Icon type="antdesign" name="right" size={RFValue(50, 800)} color="black"></Icon>
         </View>
       </Pressable>
+     
       <View style={{ height: "42%" }}>
         <FlatList
           showsVerticalScrollIndicator={false}

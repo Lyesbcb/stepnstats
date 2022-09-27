@@ -7,7 +7,8 @@ module.exports = {
   authenticateUser,
   updateUser,
   logoutUser,
-  firstLaunch
+  firstLaunch,
+  updatePushToken
 };
 const baseURL = config.baseUrl + "/users";
 
@@ -91,6 +92,30 @@ async function updateUser(params) {
       await secureSave("password", params.password);
       await secureSave("anonymous", String(params.anonymous));
       // Login
+    })
+    .catch(function (error) {
+      console.log(error.response.data.message);
+    });
+}
+
+
+async function updatePushToken(params) {
+  var id = await getSecuretValueFor("id");
+  var token = await getSecuretValueFor("token");
+
+  var config = {
+    method: "put",
+    url: baseURL + "/" + id,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    data: JSON.stringify(params),
+  };
+
+  await axios(config)
+    .then(async function (response) {
+      
     })
     .catch(function (error) {
       console.log(error.response.data.message);

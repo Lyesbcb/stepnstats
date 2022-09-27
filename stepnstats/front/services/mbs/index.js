@@ -78,11 +78,11 @@ async function uploadMb(image, realm) {
     let options = {
       method: "POST",
       body: formData,
-      headers: {
+      headers: new Headers({
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
-      },
+      }),
     };
     // Start waiting screen
     return await fetch(baseURL + "/upload", options)

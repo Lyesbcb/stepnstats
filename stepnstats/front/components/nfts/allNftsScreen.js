@@ -28,20 +28,73 @@ import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import { TouchableWithoutFeedback } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+import HelpModal from "../modal/helpModal";
 
-export default function AllNftsScreen({ navigation, myFunction, nfts }) {
+export default function AllNftsScreen({ navigation }) {
   const [realm, setRealm] = useState("Solana");
   const [loading, setLoading] = useState(false);
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
   const [modalOneNfts, setmodalOneNfts] = useState(false);
   const [nftsSelected, setNftsSelected] = useState(1);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [nfts, setNfts] = useState([0]);
+  const [sortBy, setSortBy] = useState(0);
+  const [modalHelpVisible, setModalHelpVisible] = useState(false);
+
+  const sortByText = ["Efficiency", "Luck", "Comfort", "Resilience", "Level"];
+  useEffect(() => {
+    myFunction();
+  }, []);
+
+  const myFunction = async () => {
+    try {
+      setNfts(await getAllMyNft(1));
+    } catch (error) {
+      Alert.alert(console.error());
+    }
+  };
+
+  useEffect(() => {
+    switch (sortBy) {
+      case "Efficiency":
+        setNfts(
+          nfts.sort((a, b) => {
+            return b.lvl - a.lvl;
+          })
+        );
+        break;
+      case "luck":
+        setNfts(
+          nfts.sort((a, b) => {
+            return b.luckBase - a.luckBase;
+          })
+        );
+        break;
+      case "comfort":
+        // code block
+        break;
+      case "resilience":
+        // code block
+        break;
+      default:
+      // code block
+    }
+  }, [sortBy, nfts]);
+
+  function nextSortBy() {
+    if (sortBy - 1 != sortByText) {
+      setSortBy(sortBy + 1);
+    } else {
+      setSortBy(0);
+    }
+  }
 
   async function onRefresh() {
     await setRefreshing(true);
     await myFunction();
     await setRefreshing(false);
   }
+
   const pickImage = async () => {
     setmodalRealmVisible(false);
     // No permissions request is necessary for launching the image library
@@ -118,6 +171,11 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
         value={realm}
         textButton={"NEXT"}
       ></SelectRealmModal>
+      <HelpModal
+        modalHelpVisible={modalHelpVisible}
+        setModalHelpVisible={setModalHelpVisible}
+        screen={"nfts"}
+      />
       <Modal
         animationType="slide"
         transparent={true}
@@ -168,6 +226,122 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
           </TouchableWithoutFeedback>
         </TouchableOpacity>
       </Modal>
+      <View
+        style={{
+          width: "100%",
+          height: "5%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "90%",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "70%",
+            }}
+          >
+            {/* <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Filter
+              </Text>
+            </Pressable>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "40%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                Sort by: {sortBy}
+              </Text>
+            </Pressable> */}
+          </View>
+
+          <View style={{ width: "20%", alignItems: "flex-end" }}>
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: "50%",
+                height: "100%",
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setModalHelpVisible(true)}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 15,
+                  fontWeight: "700",
+                }}
+              >
+                ?
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -180,14 +354,15 @@ export default function AllNftsScreen({ navigation, myFunction, nfts }) {
         columnWrapperStyle={{ justifyContent: "space-evenly" }}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        data={[0].concat(nfts)} //list of data array [{},{}]
+        data={nfts} //list of data array [{},{}]
         renderItem={({ item, index }) => (
           <Pressable
             onPress={() => {
               if (!index) {
                 setmodalRealmVisible(true);
               } else {
-                setNftsSelected(index - 1);
+                console.log(item.nftId);
+                setNftsSelected(index);
                 setmodalOneNfts(true);
               }
             }}

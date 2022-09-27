@@ -9,26 +9,50 @@ import {
   Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import * as MediaLibrary from "expo-media-library";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import FormData from "form-data";
-import Icon from "react-native-elements/dist/icons/Icon";
-import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
-import * as Clipboard from "expo-clipboard";
-import axios from "axios";
-import uuid from "react-native-uuid";
-import Footer from "./footer";
 import { firstLaunch } from "../services/users/index";
-import { getSecuretValueFor } from "../services/secureStorage/index";
+import {
+  getSecuretValueFor,
+  secureSave,
+  deleteSecuretValueFor,
+} from "../services/secureStorage/index";
 import { RFValue } from "react-native-responsive-fontsize";
+import ConnectionModal from "./modal/connectionModal";
+import NotOfficialModal from "./modal/notOfficialModal";
+import * as Notifications from "expo-notifications";
+import {updatePushToken} from "../services/users/index"
 
 export default function HomeScreen({ props, navigation }) {
+  const [modalConnectionVisible, setModalConnectionVisible] = useState(true);
+  const [modalNotOfficialVisible, setModalNotOfficialVisible] = useState(false);
   useEffect(() => {
     firstLaunch();
+    checkNotOfficialModal();
+    getNotificationToken();
   }, []);
+
+  async function checkNotOfficialModal() {
+    var temp = await getSecuretValueFor("notOfficialModal");
+    if (temp !== "true") {
+      setModalNotOfficialVisible(true);
+    }
+  }
+
+  async function getNotificationToken() {
+    // const settings = await Notifications.getPermissionsAsync();
+    await Notifications.requestPermissionsAsync()
+    const token = await Notifications.getExpoPushTokenAsync()
+    await updatePushToken({"notificationToken": token.data})
+  }
   return (
     <View style={{ width: "100%", height: "100%" }}>
+      {/* <ConnectionModal
+        setModaConnectionVisible={setModalConnectionVisible}
+        modalConnectionVisible={modalConnectionVisible}
+      ></ConnectionModal> */}
+      <NotOfficialModal
+        setModalNotOfficialVisible={setModalNotOfficialVisible}
+        modalNotOfficialVisible={modalNotOfficialVisible}
+      />
       <View style={styles.container}></View>
       <View style={styles.container2}>
         <Text

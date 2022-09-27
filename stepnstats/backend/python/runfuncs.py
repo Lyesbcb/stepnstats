@@ -3,6 +3,10 @@ from colortools import dominant
 import numpy as np
 import easyocr
 import cv2 as cv
+import warnings
+
+# Remove Warning because easyocr have some warning and we don't want to have it in the logs
+warnings.filterwarnings("ignore", category=UserWarning)
 
 reader = easyocr.Reader(['en'], gpu=False)
 

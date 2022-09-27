@@ -80,6 +80,7 @@ function updateSchema(req, res, next) {
     username: Joi.string().empty(""),
     password: Joi.string().min(6).empty(""),
     anonymous: Joi.boolean().empty(""),
+    notificationToken: Joi.string().empty(""),
   });
   validateRequest(req, next, schema);
 }
