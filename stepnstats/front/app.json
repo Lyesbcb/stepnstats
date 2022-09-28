@@ -31,21 +31,20 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/logo.png",
+          "icon": "./assets/splash.png",
           "color": "#ffffff",
           "sounds": ["./assets/get_gst.mp3"],
           "mode": "production"
         }
       ]
     ],
-    "name": "Stepn Stats",
+    "name": "savePhotosPermission Stats",
     "slug": "StepnStats",
-    "version": "0.2.1",
+    "version": "0.3.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
-      "image": "./assets/logo.png",
-      "resizeMode": "contain",
+      "image": "./assets/splash.png",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -55,15 +54,15 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lyesbenchoubane.stepnstats",
-      "buildNumber": "0.2.1"
+      "buildNumber": "0.3.1"
     },  
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/splash.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.lyesbenchoubane.stepnstats",
-      "versionCode": 6
+      "versionCode": 7
     },
     "web": {
       "favicon": "./assets/logo.png"

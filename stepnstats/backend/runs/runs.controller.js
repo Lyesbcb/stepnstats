@@ -42,6 +42,8 @@ function createSchema(req, res, next) {
     nftId: Joi.string().required(),
     quality: Joi.string().required(),
     durabilityLost: Joi.string().required(),
+    runType: Joi.string().required(),
+    utcOffset: Joi.string().required()
   });
   validateRequest(req, next, schema);
 }
@@ -87,6 +89,8 @@ function updateSchema(req, res, next) {
     fileName: Joi.string().empty(""),
     gst: Joi.string().empty(""),
     nftId: Joi.string().empty(""),
+    runType: Joi.string().required(),
+    utcOffset: Joi.string().required()
   });
   validateRequest(req, next, schema);
 }

@@ -103,7 +103,7 @@ export default function RunScreen({ navigation, route }) {
       hour = "0" + hour;
     }
     if (month < 10) {
-      month = "0" + Number(month+1);
+      month = "0" + Number(month + 1);
     }
     if (day < 10) {
       day = "0" + day;
@@ -162,7 +162,9 @@ export default function RunScreen({ navigation, route }) {
             <Text style={{ fontSize: RFValue(48, 800), fontWeight: "700" }}>
               {(run.gst / minuteConverter(run.duration) / 60).toFixed(1)}
             </Text>
-            <Text style={{}}>GST/Min</Text>
+            <Text style={{}}>
+              {run.runType === "gst" ? "GST/Min" : "GMT/Min"}
+            </Text>
           </View>
         </View>
         <View
@@ -223,7 +225,11 @@ export default function RunScreen({ navigation, route }) {
               }}
             >
               <Image
-                source={require("../../assets/gst.png")}
+                source={
+                  run.runType === "gst"
+                    ? require("../../assets/gst.png")
+                    : require("../../assets/gmt.png")
+                }
                 style={{ width: 30, height: 30, resizeMode: "contain" }}
               ></Image>
               <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
@@ -406,9 +412,11 @@ export default function RunScreen({ navigation, route }) {
         </View>
       </View>
       <Text style={{ fontSize: RFValue(12, 800), fontWeight: "700" }}>
-        Count of run with average GST/min with the same efficiency
+        {run.runType === "gst"
+          ? "Count of run with average GST/min with the same efficiency"
+          : ""}
       </Text>
-      {gstData.count ? (
+      {gstData.count && run.runType === "gst" ? (
         <BarChart
           data={{
             labels: gstData.value,
@@ -424,12 +432,14 @@ export default function RunScreen({ navigation, route }) {
                   (opacity = 1) => "#F4D03F",
                   (opacity = 1) => "#EB984E",
                   (opacity = 1) => "#DC7633",
+                  (opacity = 1) => "#DC7633",
+                  (opacity = 1) => "red",
                 ],
               },
             ],
           }}
           width={Dimensions.get("window").width * 0.9}
-          height={Dimensions.get("window").width * 0.55}
+          height={Dimensions.get("window").height * 0.25}
           withCustomBarColorFromData={true}
           flatColor={true}
           showBarTops={false}
@@ -444,7 +454,6 @@ export default function RunScreen({ navigation, route }) {
           }}
           fromZero={true}
           style={{
-            paddingTop: RFValue(30, 800),
             borderRadius: 12,
             borderWidth: 1,
             borderColor: "black",
@@ -460,7 +469,7 @@ export default function RunScreen({ navigation, route }) {
         >
           <Text></Text>
         </BarChart>
-      ) : (
+      ) : run.runType === "gst" ? (
         <View
           style={{
             borderRadius: 12,
@@ -477,6 +486,8 @@ export default function RunScreen({ navigation, route }) {
             Add your sneaker with inscred stats to see data
           </Text>
         </View>
+      ) : (
+        <View></View>
       )}
 
       {/* <LineChart

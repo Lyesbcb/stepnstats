@@ -24,13 +24,16 @@ import {
 import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import OneRun from "./oneRun";
+import SelectRunTypeModal from "../modal/selectRunTypeModal";
 
 export default function RunsScreen({ navigation }) {
   const [runs, setRuns] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [realm, setRealm] = useState("Solana");
+  const [runType, setRunType] = useState("gst");
   const [loading, setLoading] = useState(false);
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
+  const [modalRunTypeVisible, setModalRunTypeVisible] = useState(false);
   const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
   async function onRefresh() {
@@ -54,6 +57,7 @@ export default function RunsScreen({ navigation }) {
 
   const pickImage = async () => {
     setmodalRealmVisible(false);
+    setModalRunTypeVisible(false);
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -62,8 +66,13 @@ export default function RunsScreen({ navigation }) {
     });
     if (!result.cancelled) {
       setLoading(true);
+      const params = {
+        realm,
+        runType,
+        utcOffset: new Date().getTimezoneOffset(),
+      };
       try {
-        await uploadRun(result, realm);
+        await uploadRun(result, params);
       } catch (error) {
         Alert.alert(error);
       }
@@ -71,6 +80,11 @@ export default function RunsScreen({ navigation }) {
       await myFunction();
     }
   };
+
+  function closeRealmModal() {
+    setmodalRealmVisible(false);
+    setModalRunTypeVisible(true);
+  }
 
   function minuteConverter(time) {
     const [h, m, s] = time.split(":");
@@ -108,7 +122,19 @@ export default function RunsScreen({ navigation }) {
   function totalGst() {
     var total = 0;
     for (let run = 0; run < runs.length; run++) {
-      total += runs[run].gst;
+      if(runs[run].runType === "gst"){
+        total += runs[run].gst;
+      }
+    }
+    return total.toFixed(2);
+  }
+
+  function totalGmt() {
+    var total = 0;
+    for (let run = 0; run < runs.length; run++) {
+      if(runs[run].runType === "gmt"){
+        total += runs[run].gst;
+      }
     }
     return total.toFixed(2);
   }
@@ -128,7 +154,7 @@ export default function RunsScreen({ navigation }) {
             justifyContent: "space-between",
             alignItems: "center",
             height: "40%",
-            width: "100%"
+            width: "100%",
           }}
         >
           <View
@@ -176,6 +202,12 @@ export default function RunsScreen({ navigation }) {
               </Text>
               <Text style={{ fontSize: RFValue(12, 800) }}>Total Time</Text>
             </View>
+            <View style={{ flexDirection: "column" }}>
+              <Text style={{ fontSize: RFValue(20, 800), fontWeight: "600" }}>
+                {runs.length ? totalGmt() : "0"} Gmt
+              </Text>
+              <Text style={{ fontSize: RFValue(12, 800) }}>Total Gmt</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -189,17 +221,25 @@ export default function RunsScreen({ navigation }) {
       <SelectRealmModal
         modalVisible={modalRealmVisible}
         setmodalVisible={setmodalRealmVisible}
-        onValidate={pickImage}
+        onValidate={closeRealmModal}
         setValue={setRealm}
         value={realm}
         textButton={"NEXT"}
       ></SelectRealmModal>
+      <SelectRunTypeModal
+        modalVisible={modalRunTypeVisible}
+        setmodalVisible={setModalRunTypeVisible}
+        onValidate={pickImage}
+        setValue={setRunType}
+        value={runType}
+        textButton={"NEXT"}
+      ></SelectRunTypeModal>
       <HelpModal
         modalHelpVisible={modalHelpVisible}
         setModalHelpVisible={setModalHelpVisible}
         screen={"runs"}
       />
-       <View
+      <View
         style={{
           width: "100%",
           height: "5%",
@@ -375,7 +415,9 @@ export default function RunsScreen({ navigation }) {
                 top: "5%",
                 left: "5%",
               }}
-            >Add run</Text>
+            >
+              Add run
+            </Text>
             <Text
               style={{
                 fontSize: RFValue(16, 800),
@@ -385,10 +427,15 @@ export default function RunsScreen({ navigation }) {
               }}
             ></Text>
           </View>
-          <Icon type="antdesign" name="right" size={RFValue(50, 800)} color="black"></Icon>
+          <Icon
+            type="antdesign"
+            name="right"
+            size={RFValue(50, 800)}
+            color="black"
+          ></Icon>
         </View>
       </Pressable>
-     
+
       <View style={{ height: "42%" }}>
         <FlatList
           showsVerticalScrollIndicator={false}

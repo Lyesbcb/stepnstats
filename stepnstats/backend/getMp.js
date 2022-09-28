@@ -138,20 +138,20 @@ async function getMp() {
     await selectRealm(driver, "Ethereum");
     await sleep(1000);
     await driver
-    .findElement(
-      By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
-    )
-    .click();
+      .findElement(
+        By.xpath("/html/body/div/main/div/div[1]/div/div[3]/div/button[1]")
+      )
+      .click();
     await sleep(1000);
     var ethereummMp = await getAllFloorPrice(driver);
     // The crypto price
     solanaMp = Object.assign(solanaMp, cryptoPrices);
     bnbMp = Object.assign(bnbMp, cryptoPrices);
     ethereummMp = Object.assign(ethereummMp, cryptoPrices);
-  await notificationService.checkNotifications(solanaMp, solanaMp, solanaMp);
-    solanaMpService.create(solanaMp).then((mp) => console.log(mp));
-    bnbMpService.create(bnbMp).then((mp) => console.log(mp));
-    ethereumMpService.create(ethereummMp).then((mp) => console.log(mp));
+    await notificationService.checkNotifications(solanaMp, bnbMp, ethereummMp);
+    await solanaMpService.create(solanaMp)
+    await bnbMpService.create(bnbMp)
+    await ethereumMpService.create(ethereummMp)
   } catch (error) {
     console.log(error);
   } finally {
@@ -698,7 +698,7 @@ async function getGemScrollPrice(driver) {
 }
 
 async function selectQuality(driver, quality) {
-  console.log("Select nfts quaity: " + quality);
+  console.log("Select nfts quality: " + quality);
   switch (quality) {
     case "Common":
       await driver

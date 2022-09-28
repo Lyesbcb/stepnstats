@@ -12,154 +12,141 @@ import {
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import { RFValue } from "react-native-responsive-fontsize";
-import Checkbox from "expo-checkbox";
-import {
-  getSecuretValueFor,
-  secureSave,
-  deleteSecuretValueFor,
-} from "../../services/secureStorage/index";
-export default function NotOfficialModal({
-  setModalNotOfficialVisible,
-  modalNotOfficialVisible,
-}) {
-  const [isChecked, setChecked] = useState(false);
-  async function finish() {
-    console.log(isChecked);
-    await secureSave("notOfficialModal", String(isChecked));
-    setModalNotOfficialVisible(false);
-  }
-  return (
+
+export default function SelectRunTypeModal({
+  setmodalVisible,
+  modalVisible,
+  setValue,
+  value,
+  onValidate,
+  textButton
+}){
+  return(
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalNotOfficialVisible}
-    >
-      <TouchableOpacity
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        activeOpacity={1}
-        onPressOut={() => setModalNotOfficialVisible(false)}
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
       >
-        <View
+        <TouchableOpacity
           style={{
-            backgroundColor: "white",
-            height: "50%",
-            width: "80%",
-            borderRadius: 30,
-            justifyContent: "space-evenly",
-            borderWidth: 1,
+            flex: 1,
+            justifyContent: "center",
             alignItems: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            elevation: 5,
           }}
+          activeOpacity={1}
+          onPressOut={() => setmodalVisible(false)}
         >
-          <Pressable
-            style={{
-              backgroundColor: "#9DF8B6",
-              justifyContent: "center",
-              alignContent: "center",
-              width: 32,
-              height: 32,
-              borderRadius: 20,
-              position: "absolute",
-              top: "3%",
-              right: "7%",
-              borderWidth: 1,
-              borderColor: "black",
-              shadowOpacity: 1,
-              shadowRadius: 1,
-              shadowOffset: {
-                width: 1,
-                height: 1,
-              },
-            }}
-            onPress={() => setModalNotOfficialVisible(false)}
-          >
-            <Icon
-              style={{ width: "100%" }}
-              size={RFValue(20, 800)}
-              type="antdesign"
-              name="close"
-              color="black"
-            ></Icon>
-          </Pressable>
-          <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-            Disclaimer
-          </Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, 800),
-              fontWeight: "600",
-              width: "80%",
-            }}
-          >
-            STEPN Stats is a community-based App made by and for the community.
-            The official STEPN team or FindSatoshi Labs Limited does not
-            interfere with the development of the App, and has no responsibility
-            in the decisions you could make due to the STEPN Stats App. Krit and
-            Lyes are the developers of the STEPN Stats App and are not members
-            of the team, nor STEPN ambassadors.
-          </Text>
           <View
             style={{
-              width: "90%",
-              flexDirection: "row",
+              backgroundColor: "white",
+              height: "40%",
+              width: "80%",
+              borderRadius: 30,
               justifyContent: "space-evenly",
+              borderWidth: 1,
               alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
-            <Text
+            <Pressable
               style={{
-                fontSize: RFValue(12, 800),
-                fontWeight: "600",
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: 32,
+                height: 32,
+                borderRadius: 20,
+                position: "absolute",
+                top: "7%",
+                right: "7%",
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setmodalVisible(false)}
+            >
+              <Icon
+                style={{ width: "100%" }}
+                size={RFValue(20, 800)}
+                type="antdesign"
+                name="close"
+                color="black"
+              ></Icon>
+            </Pressable>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
+              Select run type
+            </Text>
+            <View
+              style={{
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                alignContent: "center",
+                flexDirection: "row",
+                height: "40%",
+                width: "100%",
               }}
             >
-              Don't show me again
-            </Text>
-            <Checkbox
-              disabled={false}
-              value={isChecked}
-              onValueChange={setChecked}
-              color={isChecked ? "#4630EB" : undefined}
-            />
+              <Pressable
+                style={{ width: "15%", height: "100%" }}
+                onPress={() => setValue("gst")}
+              >
+                <Image
+                  source={require("../../assets/gst.png")}
+                  style={value == "gst" ? styles.realmActive : styles.realm}
+                ></Image>
+              </Pressable>
+              <Pressable
+                style={{ width: "15%", height: "100%" }}
+                onPress={() => setValue("gmt")}
+              >
+                <Image
+                  source={require("../../assets/gmt.png")}
+                  style={value == "gmt" ? styles.realmActive : styles.realm}
+                ></Image>
+              </Pressable>
+            </View>
+            <Pressable
+              style={{
+                width: "45%",
+                height: "15%",
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "#9DF8B6",
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 4,
+                  height: 4,
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => {
+                value != ""
+                  ? onValidate()
+                  : Alert.alert("You must choose a realm!");
+              }}
+            >
+              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>{textButton}</Text>
+            </Pressable>
           </View>
-          <Pressable
-            style={{
-              width: "30%",
-              height: "10%",
-              borderRadius: 100,
-              borderWidth: 1,
-              borderColor: "black",
-              backgroundColor: "#9DF8B6",
-              shadowColor: "black",
-              shadowOpacity: 1,
-              shadowRadius: 1,
-              shadowOffset: {
-                width: 4,
-                height: 4,
-              },
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => finish()}
-          >
-            <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-              OK
-            </Text>
-          </Pressable>
-        </View>
-      </TouchableOpacity>
-    </Modal>
-  );
+        </TouchableOpacity>
+      </Modal>
+  )
 }
 
 const styles = StyleSheet.create({

@@ -25,6 +25,8 @@ function model(sequelize) {
     nftId: { type: DataTypes.INTEGER, allowNull: true },
     durabilityLost: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
     mbLvl: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
+    runType: { type: DataTypes.CHAR, allowNull: false, defaultValue: "gst" },
+    utcOffset: { type: DataTypes.CHAR, allowNull: true }
   };
 
   const options = {

@@ -11,7 +11,8 @@ export default function Legend({
   selectedContent,
   setSelectedContent,
   setNotificationContent,
-  setModalNotificationVisible
+  setModalNotificationVisible,
+  setContentPrice
 }) {
   const contents = {
     efficiencyLvl1: "Efficiency Lvl 1",
@@ -82,6 +83,7 @@ export default function Legend({
   };
   function notification(){
     setNotificationContent(name)
+    setContentPrice(0)
     setModalNotificationVisible(true)
   }
   return (

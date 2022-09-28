@@ -175,6 +175,7 @@ async function sendNotification(id) {
   const response = await db.sequelize.query(
     `SELECT n.id, content, contentPrice, type, notificationToken, realm FROM (SELECT * FROM notifications where id = ${id}) n LEFT JOIN users u ON userId = u.id`
   );
+  console.log(id)
   expo.sendPushNotificationsAsync([
     {
       to: response[0][0].notificationToken,

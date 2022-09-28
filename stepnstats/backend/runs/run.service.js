@@ -32,6 +32,7 @@ async function uploadFile(req, res) {
     if (req.file == undefined) {
       return res.send(`You must select a file.`);
     }
+
     var run = await spawn("python3", ["./python/run.py", req.file.path]);
 
     run.stdout.setEncoding("utf8");
@@ -42,18 +43,30 @@ async function uploadFile(req, res) {
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
+      params.runType = JSON.parse(req.body.runType).runType;
+      params.utcOffset = JSON.parse(req.body.utcOffset).utcOffset;
       params.fileName = req.file.filename;
       try {
         return res.send(await create(params));
       } catch (error) {
-        fs.rename(
-          req.file.path,
-          "./upload/error/run/" + req.file.filename,
-          function (err) {
-            if (err) throw err;
-          }
-        );
-        
+        if (JSON.parse(req.body.runType).runType === "gmt") {
+          fs.rename(
+            req.file.path,
+            "./upload/run/gmt/" + req.file.filename,
+            function (err) {
+              if (err) throw err;
+            }
+          );
+        } else {
+          fs.rename(
+            req.file.path,
+            "./upload/error/run/" + req.file.filename,
+            function (err) {
+              if (err) throw err;
+            }
+          );
+        }
+
         if (error) {
           return res.status(400).json({ message: error });
         } else {
@@ -124,7 +137,12 @@ async function create(params) {
   var res;
   try {
     res = await db.Run.findOne({
-      where: { userId: params.userId, date: params.date, nftId: params.nftId },
+      where: {
+        userId: params.userId,
+        date: params.date,
+        nftId: params.nftId,
+        runType: params.runType,
+      },
     });
   } catch {
     throw "Error on recognizing image";

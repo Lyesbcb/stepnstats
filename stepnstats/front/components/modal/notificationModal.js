@@ -16,6 +16,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import { RFValue } from "react-native-responsive-fontsize";
 import { createNotification } from "../../services/notifications/index";
+import * as Notifications from "expo-notifications";
+import { updatePushToken } from "../../services/users/index";
 
 export default function NotificationModal({
   setModalNotificationVisible,
@@ -27,9 +29,10 @@ export default function NotificationModal({
   myFunction,
   currency,
   setCurrency,
+  contentPrice,
+  setContentPrice
 }) {
   const [type, setType] = useState("above");
-  const [contentPrice, setContentPrice] = useState(0);
   const contents = {
     efficiencyLvl1: "Gem Efficiency Lvl 1",
     efficiencyLvl2: "Gem Efficiency Lvl 2",
@@ -103,6 +106,18 @@ export default function NotificationModal({
   }, [selectedRealm]);
 
   async function addNotification() {
+    var result = await Notifications.requestPermissionsAsync();
+    console.log(result);
+    if (result.status === "denied") {
+      Alert.alert(
+        "You need to accept notification in your settings to get notifications!"
+      );
+      return;
+    } else {
+      const token = await Notifications.getExpoPushTokenAsync();
+      await updatePushToken({ notificationToken: token.data });
+    }
+
     var params = {
       content,
       contentPrice,

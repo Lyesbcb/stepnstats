@@ -191,8 +191,11 @@ def get_sockets(oimg, info):
         tps = {
             (140, 140, 245): "comfort",
             (100, 205, 240): "efficiency",
-            (240, 172, 148): "resilience",
-            (205, 190, 160): "luck"
+            (240, 170, 148): "resilience",
+            (200, 162, 148): "resilience",
+            (160, 70, 30): "resilience",
+            (205, 190, 160): "luck",
+            (200, 160, 80): "luck"
         }
 
         bdst = None

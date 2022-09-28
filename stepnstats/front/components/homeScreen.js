@@ -19,31 +19,49 @@ import { RFValue } from "react-native-responsive-fontsize";
 import ConnectionModal from "./modal/connectionModal";
 import NotOfficialModal from "./modal/notOfficialModal";
 import * as Notifications from "expo-notifications";
-import {updatePushToken} from "../services/users/index"
-
+import { updatePushToken } from "../services/users/index";
+import config from "../config.json";
 export default function HomeScreen({ props, navigation }) {
   const [modalConnectionVisible, setModalConnectionVisible] = useState(true);
   const [modalNotOfficialVisible, setModalNotOfficialVisible] = useState(false);
+  const [username, setUsername] = useState("");
   useEffect(() => {
     firstLaunch();
     checkNotOfficialModal();
     getNotificationToken();
+    getUsername();
   }, []);
 
   async function checkNotOfficialModal() {
     var temp = await getSecuretValueFor("notOfficialModal");
-    if (temp !== "true") {
-      setModalNotOfficialVisible(true);
-    }
+    await setTimeout(() => {
+      if (temp !== "true") {
+        setModalNotOfficialVisible(true);
+      } else {
+        setModalNotOfficialVisible(false);
+      }
+    }, 200);
   }
 
   async function getNotificationToken() {
-    // const settings = await Notifications.getPermissionsAsync();
-    await Notifications.requestPermissionsAsync()
-    const token = await Notifications.getExpoPushTokenAsync()
-    await updatePushToken({"notificationToken": token.data})
+    await Notifications.requestPermissionsAsync();
+    const token = await Notifications.getExpoPushTokenAsync();
+    await updatePushToken({ notificationToken: token.data });
+  }
+
+  async function getUsername() {
+    setUsername(await getSecuretValueFor("username"));
   }
   return (
+    // <TouchableOpacity
+    //     style={{
+    //       flex: 1,
+    //       justifyContent: "center",
+    //       alignItems: "center",
+    //     }}
+    //     activeOpacity={1}
+    //     onPressOut={() => setModalNotOfficialVisible(false)}
+    //   ></TouchableOpacity>
     <View style={{ width: "100%", height: "100%" }}>
       {/* <ConnectionModal
         setModaConnectionVisible={setModalConnectionVisible}
@@ -63,7 +81,7 @@ export default function HomeScreen({ props, navigation }) {
             width: "80%",
           }}
         >
-          Welcome to Step'n Stats app Beta
+          Welcome to Step'n Stats app Beta {config.version}
         </Text>
         <Text
           style={{
@@ -85,6 +103,16 @@ export default function HomeScreen({ props, navigation }) {
           }}
         >
           Take a screenshot, video, or just give us a summary of the issue.
+        </Text>
+        <Text
+          style={{
+            fontSize: RFValue(18, 800),
+            fontWeight: "500",
+            textAlign: "center",
+            width: "80%",
+          }}
+        >
+          Here you username: {username}
         </Text>
         <Text
           style={{
@@ -116,9 +144,7 @@ export default function HomeScreen({ props, navigation }) {
           }}
           onPress={async () => {
             Linking.openURL(
-              `mailto:support@stepnstats.org?subject=Feedback&body=%0D%0A%0D%0AUsername=${await getSecuretValueFor(
-                "username"
-              )}`
+              `discord://discordapp.com/channels/1013742854201413652/1013756166758744086`
             );
           }}
         >

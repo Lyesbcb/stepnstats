@@ -61,9 +61,12 @@ async function updateRun(id, params) {
     });
 }
 
-async function uploadRun(image, realm) {
+async function uploadRun(image, params) {
   if (!image.cancelled) {
     var token = await getSecuretValueFor("token");
+    var realm = params.realm
+    var runType = params.runType
+    var utcOffset = params.utcOffset
     let uriParts = image.uri.split(".");
     let fileType = uriParts[uriParts.length - 1];
     let formData = new FormData();
@@ -73,6 +76,8 @@ async function uploadRun(image, realm) {
       type: `image/${fileType}`,
     });
     formData.append("realm", JSON.stringify({ realm }));
+    formData.append("runType", JSON.stringify({ runType }));
+    formData.append("utcOffset", JSON.stringify({ utcOffset }));
     let options = {
       method: "POST",
       body: formData,

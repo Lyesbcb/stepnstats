@@ -31,6 +31,7 @@ export default function Marketplace({
   const [selectedTemporality, setSelectedTemporality] = useState("Day");
   const [isModalVisible, setModalVisible] = useState(false);
   const [currency, setCurrency] = useState("Dollars");
+  const [contentPrice, setContentPrice] = useState(0);
   const [modalNotificationVisible, setModalNotificationVisible] =
     useState(false);
   const [notificationContent, setNotificationContent] = useState("");
@@ -142,6 +143,7 @@ export default function Marketplace({
           selectedContent={selectedContent}
           setNotificationContent={setNotificationContent}
           setModalNotificationVisible={setModalNotificationVisible}
+          setContentPrice={setContentPrice}
           key={i}
           id={i}
           name={content}
@@ -526,6 +528,8 @@ export default function Marketplace({
         myFunction={myFunction}
         currency={currency}
         setCurrency={setCurrency}
+        setContentPrice={setContentPrice}
+        contentPrice={contentPrice}
       />
       <Modal
         isVisible={isModalVisible}
