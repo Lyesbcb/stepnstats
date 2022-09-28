@@ -81,7 +81,7 @@ export default function HomeScreen({ props, navigation }) {
             width: "80%",
           }}
         >
-          Welcome to Step'n Stats app Beta {config.version}
+          Welcome to STEPN Stats app beta {config.version}
         </Text>
         <Text
           style={{
@@ -122,7 +122,7 @@ export default function HomeScreen({ props, navigation }) {
             width: "80%",
           }}
         >
-          Thank you so much to help Step'n Community!
+          Thank you so much to help STEPN Community!
         </Text>
         <Pressable
           style={{

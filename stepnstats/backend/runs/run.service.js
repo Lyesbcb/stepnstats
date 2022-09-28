@@ -43,8 +43,12 @@ async function uploadFile(req, res) {
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
-      params.runType = JSON.parse(req.body.runType).runType;
-      params.utcOffset = JSON.parse(req.body.utcOffset).utcOffset;
+      if (JSON.parse(req.body.runType).runType) {
+        params.runType = JSON.parse(req.body.runType).runType;
+      }
+      if (JSON.parse(req.body.utcOffset).utcOffset) {
+        params.utcOffset = JSON.parse(req.body.utcOffset).utcOffset;
+      }
       params.fileName = req.file.filename;
       try {
         return res.send(await create(params));
