@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Modal,
   Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
@@ -43,120 +44,140 @@ export default function NotOfficialModal({
         activeOpacity={1}
         onPressOut={() => setModalNotOfficialVisible(false)}
       >
-        <View
-          style={{
-            backgroundColor: "white",
-            height: "50%",
-            width: "80%",
-            borderRadius: 30,
-            justifyContent: "space-evenly",
-            borderWidth: 1,
-            alignItems: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            elevation: 5,
-          }}
-        >
-          <Pressable
-            style={{
-              backgroundColor: "#9DF8B6",
-              justifyContent: "center",
-              alignContent: "center",
-              width: 32,
-              height: 32,
-              borderRadius: 20,
-              position: "absolute",
-              top: "3%",
-              right: "7%",
-              borderWidth: 1,
-              borderColor: "black",
-              shadowOpacity: 1,
-              shadowRadius: 1,
-              shadowOffset: {
-                width: 1,
-                height: 1,
-              },
-            }}
-            onPress={() => setModalNotOfficialVisible(false)}
-          >
-            <Icon
-              style={{ width: "100%" }}
-              size={RFValue(20, 800)}
-              type="antdesign"
-              name="close"
-              color="black"
-            ></Icon>
-          </Pressable>
-          <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-            Disclaimer
-          </Text>
-          <Text
-            style={{
-              fontSize: RFValue(14, 800),
-              fontWeight: "600",
-              width: "80%",
-            }}
-          >
-            STEPN Stats is a community-based App made by and for the community.
-            The official STEPN team or FindSatoshi Labs Limited does not
-            interfere with the development of the App, and has no responsibility
-            in the decisions you could make due to the STEPN Stats App. Krit and
-            Lyes are the developers of the STEPN Stats App and are not members
-            of the team, nor STEPN ambassadors.
-          </Text>
+        <TouchableWithoutFeedback>
           <View
             style={{
-              width: "90%",
-              flexDirection: "row",
+              backgroundColor: "white",
+              height: "50%",
+              width: "80%",
+              borderRadius: 30,
               justifyContent: "space-evenly",
+              borderWidth: 1,
               alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: 32,
+                height: 32,
+                borderRadius: 20,
+                position: "absolute",
+                top: "3%",
+                right: "7%",
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={() => setModalNotOfficialVisible(false)}
+            >
+              <Icon
+                style={{ width: "100%" }}
+                size={RFValue(20, 800)}
+                type="antdesign"
+                name="close"
+                color="black"
+              ></Icon>
+            </Pressable>
+            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+              Disclaimer
+            </Text>
             <Text
               style={{
-                fontSize: RFValue(12, 800),
+                fontSize: RFValue(14, 800),
                 fontWeight: "600",
+                width: "80%",
               }}
             >
-              Don't show me again
+              STEPN Stats is a community-based App made by and for the
+              community. Krit and
             </Text>
-            <Checkbox
-              disabled={false}
-              value={isChecked}
-              onValueChange={setChecked}
-              color={isChecked ? "#4630EB" : undefined}
-            />
+            <Text
+              style={{
+                fontSize: RFValue(14, 800),
+                fontWeight: "600",
+                width: "80%",
+              }}
+            >
+              The official STEPN team or FindSatoshi Labs Limited does not
+              interfere with the development of the App, and has no
+              responsibility in the decisions you could make due to the STEPN
+              Stats App.
+            </Text>
+            <Text
+              style={{
+                fontSize: RFValue(14, 800),
+                fontWeight: "600",
+                width: "80%",
+              }}
+            >
+              Lyes are the developers of the STEPN Stats App and are not members
+              of the team, nor STEPN ambassadors.
+            </Text>
+            <View
+              style={{
+                width: "90%",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: RFValue(12, 800),
+                  fontWeight: "600",
+                }}
+              >
+                Don't show me again
+              </Text>
+              <Checkbox
+                disabled={false}
+                value={isChecked}
+                onValueChange={setChecked}
+                color={isChecked ? "#4630EB" : undefined}
+              />
+            </View>
+            <Pressable
+              style={{
+                width: "30%",
+                height: "10%",
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: "black",
+                backgroundColor: "#9DF8B6",
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 4,
+                  height: 4,
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => finish()}
+            >
+              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
+                OK
+              </Text>
+            </Pressable>
           </View>
-          <Pressable
-            style={{
-              width: "30%",
-              height: "10%",
-              borderRadius: 100,
-              borderWidth: 1,
-              borderColor: "black",
-              backgroundColor: "#9DF8B6",
-              shadowColor: "black",
-              shadowOpacity: 1,
-              shadowRadius: 1,
-              shadowOffset: {
-                width: 4,
-                height: 4,
-              },
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => finish()}
-          >
-            <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-              OK
-            </Text>
-          </Pressable>
-        </View>
+        </TouchableWithoutFeedback>
       </TouchableOpacity>
     </Modal>
   );

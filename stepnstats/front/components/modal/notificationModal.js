@@ -11,6 +11,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
@@ -30,7 +31,7 @@ export default function NotificationModal({
   currency,
   setCurrency,
   contentPrice,
-  setContentPrice
+  setContentPrice,
 }) {
   const [type, setType] = useState("above");
   const contents = {
@@ -143,294 +144,324 @@ export default function NotificationModal({
       transparent={true}
       visible={modalNotificationVisible}
     >
-      <KeyboardAvoidingView
-        behavior={"position"}
-        style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        activeOpacity={1}
+        onPressOut={() => setModalNotificationVisible(false)}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
+        <TouchableWithoutFeedback>
+          <KeyboardAvoidingView
+            behavior={"position"}
             style={{
-              backgroundColor: "white",
-              height: "60%",
-              width: "80%",
-              borderRadius: 30,
-              justifyContent: "space-evenly",
-              borderWidth: 1,
+              flex: 1,
+              justifyContent: "flex-end",
               alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
             }}
           >
-            <Pressable
-              style={{
-                backgroundColor: "#9DF8B6",
-                justifyContent: "center",
-                alignContent: "center",
-                width: 32,
-                height: 32,
-                borderRadius: 20,
-                position: "absolute",
-                top: "3%",
-                right: "7%",
-                borderWidth: 1,
-                borderColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 1,
-                  height: 1,
-                },
-              }}
-              onPress={() => setModalNotificationVisible(false)}
-            >
-              <Icon
-                style={{ width: "100%" }}
-                size={RFValue(20, 800)}
-                type="antdesign"
-                name="close"
-                color="black"
-              ></Icon>
-            </Pressable>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              {contents[content]}
-            </Text>
-            <View
-              style={{
-                justifyContent: "space-arround",
-                alignItems: "center",
-                alignContent: "center",
-                height: "10%",
-                width: "80%",
-              }}
-            >
-              <Text style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}>
-                Floor price is:
-              </Text>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View
                 style={{
+                  backgroundColor: "white",
+                  height: "60%",
+                  width: "80%",
+                  borderRadius: 30,
                   justifyContent: "space-evenly",
+                  borderWidth: 1,
                   alignItems: "center",
-                  alignContent: "center",
-                  height: "90%",
-                  width: "100%",
-                  flexDirection: "row",
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 4,
+                  elevation: 5,
                 }}
               >
                 <Pressable
-                  style={type === "below" ? styles.typeActive : styles.type}
-                  onPress={() => setType("below")}
+                  style={{
+                    backgroundColor: "#9DF8B6",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 20,
+                    position: "absolute",
+                    top: "3%",
+                    right: "7%",
+                    borderWidth: 1,
+                    borderColor: "black",
+                    shadowOpacity: 1,
+                    shadowRadius: 1,
+                    shadowOffset: {
+                      width: 1,
+                      height: 1,
+                    },
+                  }}
+                  onPress={() => setModalNotificationVisible(false)}
                 >
-                  <Text
-                    style={{ fontWeight: "800", fontSize: RFValue(16, 800) }}
-                    adjustsFontSizeToFit
-                  >
-                    {"<="}
-                  </Text>
+                  <Icon
+                    style={{ width: "100%" }}
+                    size={RFValue(20, 800)}
+                    type="antdesign"
+                    name="close"
+                    color="black"
+                  ></Icon>
                 </Pressable>
-                <Pressable
-                  style={type === "above" ? styles.typeActive : styles.type}
-                  onPress={() => setType("above")}
+                <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
+                  {contents[content]}
+                </Text>
+                <View
+                  style={{
+                    justifyContent: "space-arround",
+                    alignItems: "center",
+                    alignContent: "center",
+                    height: "10%",
+                    width: "80%",
+                  }}
                 >
                   <Text
-                    style={{ fontWeight: "800", fontSize: RFValue(16, 800) }}
-                    adjustsFontSizeToFit
+                    style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}
                   >
-                    {">="}
+                    Floor price is:
                   </Text>
+                  <View
+                    style={{
+                      justifyContent: "space-evenly",
+                      alignItems: "center",
+                      alignContent: "center",
+                      height: "90%",
+                      width: "100%",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Pressable
+                      style={type === "below" ? styles.typeActive : styles.type}
+                      onPress={() => setType("below")}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "800",
+                          fontSize: RFValue(16, 800),
+                        }}
+                        adjustsFontSizeToFit
+                      >
+                        {"<="}
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      style={type === "above" ? styles.typeActive : styles.type}
+                      onPress={() => setType("above")}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "800",
+                          fontSize: RFValue(16, 800),
+                        }}
+                        adjustsFontSizeToFit
+                      >
+                        {">="}
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    alignContent: "center",
+                    flexDirection: "row",
+                    height: "20%",
+                    width: "100%",
+                  }}
+                >
+                  <Pressable
+                    style={{ width: "15%", height: "100%" }}
+                    onPress={() => setSelectedRealm("Solana")}
+                  >
+                    <Image
+                      source={require("../../assets/sol_realm.png")}
+                      style={
+                        selectedRealm == "Solana"
+                          ? styles.realmActive
+                          : styles.realm
+                      }
+                    ></Image>
+                  </Pressable>
+                  <Pressable
+                    style={{ width: "15%", height: "100%" }}
+                    onPress={() => setSelectedRealm("Bnb")}
+                  >
+                    <Image
+                      source={require("../../assets/bsc_realm.png")}
+                      style={
+                        selectedRealm == "Bnb"
+                          ? styles.realmActive
+                          : styles.realm
+                      }
+                    ></Image>
+                  </Pressable>
+                  <Pressable
+                    style={{ width: "15%", height: "100%" }}
+                    onPress={() => setSelectedRealm("Ethereum")}
+                  >
+                    <Image
+                      source={require("../../assets/eth_realm.png")}
+                      style={
+                        selectedRealm == "Ethereum"
+                          ? styles.realmActive
+                          : styles.realm
+                      }
+                    ></Image>
+                  </Pressable>
+                </View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "20%",
+                    width: "70%",
+                  }}
+                >
+                  <Text>
+                    Current price:{" "}
+                    {lastPrice != undefined
+                      ? currency === "Crypto"
+                        ? lastPrice[content]
+                        : (
+                            lastPrice[content] * lastPrice[selectedRealm]
+                          ).toFixed(2) + "$"
+                      : 0}
+                  </Text>
+                  <TextInput
+                    style={{
+                      height: "50%",
+                      borderWidth: 1,
+                      paddingHorizontal: "20%",
+                      borderRadius: 20,
+                    }}
+                    onChangeText={setContentPrice}
+                    placeholder={String(
+                      lastPrice != undefined
+                        ? currency === "Crypto"
+                          ? lastPrice[content]
+                          : (
+                              lastPrice[content] * lastPrice[selectedRealm]
+                            ).toFixed(2)
+                        : 0
+                    )}
+                    placeholderTextColor={"grey"}
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                  />
+                </View>
+                <View
+                  style={{
+                    width: "90%",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    height: "10%",
+                  }}
+                >
+                  <Pressable
+                    style={{
+                      width: "30%",
+                      height: "100%",
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: "black",
+                      backgroundColor: "#9DF8B6",
+                      shadowColor: "black",
+                      shadowOpacity: 1,
+                      shadowRadius: 1,
+                      shadowOffset: {
+                        width: 4,
+                        height: 4,
+                      },
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onPress={() => addNotification()}
+                  >
+                    <Text
+                      style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}
+                    >
+                      ADD
+                    </Text>
+                  </Pressable>
+                </View>
+                <Pressable
+                  style={{
+                    width: RFValue(30, 800),
+                    height: RFValue(30, 800),
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    borderColor: "black",
+                    borderWidth: 2,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    shadowOpacity: 1,
+                    shadowRadius: 1,
+                    shadowOffset: {
+                      width: 2,
+                      height: 2,
+                    },
+                    bottom: "5%",
+                    left: "5%",
+                    position: "absolute",
+                  }}
+                  onPress={() => {
+                    currency === "Crypto"
+                      ? setCurrency("Dollars")
+                      : setCurrency("Crypto");
+                  }}
+                >
+                  {currency === "Crypto" ? (
+                    <Text
+                      style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}
+                    >
+                      $
+                    </Text>
+                  ) : selectedRealm === "Solana" ? (
+                    <Image
+                      source={require("../../assets/solana.png")}
+                      style={{
+                        width: "60%",
+                        height: "100%",
+                        resizeMode: "contain",
+                      }}
+                    ></Image>
+                  ) : selectedRealm === "Ethereum" ? (
+                    <Image
+                      source={require("../../assets/ethereum.png")}
+                      style={{
+                        width: "60%",
+                        height: "100%",
+                        resizeMode: "contain",
+                      }}
+                    ></Image>
+                  ) : selectedRealm === "Bnb" ? (
+                    <Image
+                      source={require("../../assets/bnb.png")}
+                      style={{
+                        width: "60%",
+                        height: "100%",
+                        resizeMode: "contain",
+                      }}
+                    ></Image>
+                  ) : (
+                    <View></View>
+                  )}
                 </Pressable>
               </View>
-            </View>
-            <View
-              style={{
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                alignContent: "center",
-                flexDirection: "row",
-                height: "20%",
-                width: "100%",
-              }}
-            >
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setSelectedRealm("Solana")}
-              >
-                <Image
-                  source={require("../../assets/sol_realm.png")}
-                  style={
-                    selectedRealm == "Solana"
-                      ? styles.realmActive
-                      : styles.realm
-                  }
-                ></Image>
-              </Pressable>
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setSelectedRealm("Bnb")}
-              >
-                <Image
-                  source={require("../../assets/bsc_realm.png")}
-                  style={
-                    selectedRealm == "Bnb" ? styles.realmActive : styles.realm
-                  }
-                ></Image>
-              </Pressable>
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setSelectedRealm("Ethereum")}
-              >
-                <Image
-                  source={require("../../assets/eth_realm.png")}
-                  style={
-                    selectedRealm == "Ethereum"
-                      ? styles.realmActive
-                      : styles.realm
-                  }
-                ></Image>
-              </Pressable>
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                height: "20%",
-                width: "70%",
-              }}
-            >
-              <Text>
-                Current price:{" "}
-                {lastPrice != undefined
-                  ? currency === "Crypto"
-                    ? lastPrice[content]
-                    : (lastPrice[content] * lastPrice[selectedRealm]).toFixed(
-                        2
-                      ) + "$"
-                  : 0}
-              </Text>
-              <TextInput
-                style={{
-                  height: "50%",
-                  borderWidth: 1,
-                  paddingHorizontal: "20%",
-                  borderRadius: 20,
-                }}
-                onChangeText={setContentPrice}
-                placeholder={String(
-                  lastPrice != undefined
-                    ? currency === "Crypto"
-                      ? lastPrice[content]
-                      : (lastPrice[content] * lastPrice[selectedRealm]).toFixed(
-                          2
-                        )
-                    : 0
-                )}
-                placeholderTextColor={"grey"}
-                keyboardType="numeric"
-                returnKeyType="done"
-              />
-            </View>
-            <View
-              style={{
-                width: "90%",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                height: "10%",
-              }}
-            >
-              <Pressable
-                style={{
-                  width: "30%",
-                  height: "100%",
-                  borderRadius: 100,
-                  borderWidth: 1,
-                  borderColor: "black",
-                  backgroundColor: "#9DF8B6",
-                  shadowColor: "black",
-                  shadowOpacity: 1,
-                  shadowRadius: 1,
-                  shadowOffset: {
-                    width: 4,
-                    height: 4,
-                  },
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => addNotification()}
-              >
-                <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-                  ADD
-                </Text>
-              </Pressable>
-            </View>
-            <Pressable
-              style={{
-                width: RFValue(30, 800),
-                height: RFValue(30, 800),
-                backgroundColor: "white",
-                borderRadius: 5,
-                borderColor: "black",
-                borderWidth: 2,
-                alignItems: "center",
-                justifyContent: "center",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 2,
-                  height: 2,
-                },
-                bottom: "5%",
-                left: "5%",
-                position: "absolute",
-              }}
-              onPress={() => {
-                currency === "Crypto"
-                  ? setCurrency("Dollars")
-                  : setCurrency("Crypto");
-              }}
-            >
-              {currency === "Crypto" ? (
-                <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-                  $
-                </Text>
-              ) : selectedRealm === "Solana" ? (
-                <Image
-                  source={require("../../assets/solana.png")}
-                  style={{
-                    width: "60%",
-                    height: "100%",
-                    resizeMode: "contain",
-                  }}
-                ></Image>
-              ) : selectedRealm === "Ethereum" ? (
-                <Image
-                  source={require("../../assets/ethereum.png")}
-                  style={{
-                    width: "60%",
-                    height: "100%",
-                    resizeMode: "contain",
-                  }}
-                ></Image>
-              ) : selectedRealm === "Bnb" ? (
-                <Image
-                  source={require("../../assets/bnb.png")}
-                  style={{
-                    width: "60%",
-                    height: "100%",
-                    resizeMode: "contain",
-                  }}
-                ></Image>
-              ) : (
-                <View></View>
-              )}
-            </Pressable>
-          </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      </TouchableOpacity>
     </Modal>
   );
 }

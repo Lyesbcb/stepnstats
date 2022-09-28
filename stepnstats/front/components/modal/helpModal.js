@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Modal,
   Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
@@ -89,6 +90,8 @@ export default function HelpModal({
         activeOpacity={1}
         onPressOut={() => setModalHelpVisible(false)}
       >
+                <TouchableWithoutFeedback>
+
         <View
           style={{
             backgroundColor: "white",
@@ -139,7 +142,7 @@ export default function HelpModal({
             ></Icon>
           </Pressable>
           <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-            Wich screen upload
+            Which screen upload
           </Text>
           <View
             style={
@@ -223,6 +226,8 @@ export default function HelpModal({
             </Pressable>
           </View>
         </View>
+                </TouchableWithoutFeedback>
+
       </TouchableOpacity>
     </Modal>
   );
