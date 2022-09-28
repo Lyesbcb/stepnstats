@@ -37,7 +37,7 @@ export default function AllNftsScreen({ navigation }) {
   const [modalOneNfts, setmodalOneNfts] = useState(false);
   const [nftsSelected, setNftsSelected] = useState(1);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [nfts, setNfts] = useState([0]);
+  const [nfts, setNfts] = useState([]);
   const [sortBy, setSortBy] = useState(0);
   const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
@@ -354,14 +354,13 @@ export default function AllNftsScreen({ navigation }) {
         columnWrapperStyle={{ justifyContent: "space-evenly" }}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        data={nfts} //list of data array [{},{}]
+        data={[0].concat(nfts)}
         renderItem={({ item, index }) => (
           <Pressable
             onPress={() => {
               if (!index) {
                 setmodalRealmVisible(true);
               } else {
-                console.log(item.nftId);
                 setNftsSelected(index);
                 setmodalOneNfts(true);
               }

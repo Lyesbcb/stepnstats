@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "473453017858",
+    "project_id": "stepn-stats-29f9f",
+    "storage_bucket": "stepn-stats-29f9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473453017858:android:9e1541e4b398b057d2601b",
+        "android_client_info": {
+          "package_name": "com.lyesbenchoubane.stepnstats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473453017858-017r630kmq47v0scs7654sv1vpvt50ts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSVyvUbxJw8Abphg3tmJ73lKVCnkU0VqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473453017858-017r630kmq47v0scs7654sv1vpvt50ts.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

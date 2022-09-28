@@ -19,6 +19,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import ConnectionModal from "./modal/connectionModal";
 import NotOfficialModal from "./modal/notOfficialModal";
 import * as Notifications from "expo-notifications";
+import * as TaskManager from "expo-task-manager";
 import { updatePushToken } from "../services/users/index";
 import config from "../config.json";
 export default function HomeScreen({ props, navigation }) {
@@ -44,6 +45,19 @@ export default function HomeScreen({ props, navigation }) {
   }
 
   async function getNotificationToken() {
+    TaskManager.defineTask(
+      "BACKGROUND_NOTIFICATION_TASK",
+      ({ data, error, executionInfo }) =>
+        handleNewNotification(data.notification)
+    );
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+    Notifications.registerTaskAsync("BACKGROUND_NOTIFICATION_TASK");
     await Notifications.requestPermissionsAsync();
     const token = await Notifications.getExpoPushTokenAsync();
     await updatePushToken({ notificationToken: token.data });
