@@ -37,30 +37,40 @@ async function uploadFile(req, res) {
 
     run.stdout.setEncoding("utf8");
     await run.stdout.on("data", async function (data) {
-      console.log(req.file.path);
-      console.log(data);
+      console.log(data)
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
-      if (JSON.parse(req.body.runType).runType) {
+      if (req.body.runType != undefined) {
         params.runType = JSON.parse(req.body.runType).runType;
       }
-      if (JSON.parse(req.body.utcOffset).utcOffset) {
+      if (req.body.utcOffset != undefined) {
         params.utcOffset = JSON.parse(req.body.utcOffset).utcOffset;
       }
       params.fileName = req.file.filename;
       try {
+        console.log(params)
         return res.send(await create(params));
       } catch (error) {
-        if (JSON.parse(req.body.runType).runType === "gmt") {
-          fs.rename(
-            req.file.path,
-            "./upload/run/gmt/" + req.file.filename,
-            function (err) {
-              if (err) throw err;
-            }
-          );
+        if (req.body.runType) {
+          if (JSON.parse(req.body.runType).runType === "gmt") {
+            fs.rename(
+              req.file.path,
+              "./upload/run/gmt/" + req.file.filename,
+              function (err) {
+                if (err) throw err;
+              }
+            );
+          } else {
+            fs.rename(
+              req.file.path,
+              "./upload/error/run/" + req.file.filename,
+              function (err) {
+                if (err) throw err;
+              }
+            );
+          }
         } else {
           fs.rename(
             req.file.path,
@@ -83,7 +93,6 @@ async function uploadFile(req, res) {
     run.stderr.setEncoding("utf8");
     await run.stderr.on("data", async function (data) {
       console.log(data);
-
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -145,7 +154,6 @@ async function create(params) {
         userId: params.userId,
         date: params.date,
         nftId: params.nftId,
-        runType: params.runType,
       },
     });
   } catch {

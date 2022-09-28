@@ -217,7 +217,7 @@ export default function NotificationModal({
                 </Text>
                 <View
                   style={{
-                    justifyContent: "space-arround",
+                    justifyContent: "space-evenly",
                     alignItems: "center",
                     alignContent: "center",
                     height: "10%",
@@ -225,7 +225,7 @@ export default function NotificationModal({
                   }}
                 >
                   <Text
-                    style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}
+                    style={{ fontSize: RFValue(12, 800), fontWeight: "600"}}
                   >
                     Floor price is:
                   </Text>
@@ -246,7 +246,7 @@ export default function NotificationModal({
                       <Text
                         style={{
                           fontWeight: "800",
-                          fontSize: RFValue(16, 800),
+                          fontSize: RFValue(14, 800),
                         }}
                         adjustsFontSizeToFit
                       >
@@ -260,7 +260,7 @@ export default function NotificationModal({
                       <Text
                         style={{
                           fontWeight: "800",
-                          fontSize: RFValue(16, 800),
+                          fontSize: RFValue(14, 800),
                         }}
                         adjustsFontSizeToFit
                       >
@@ -275,7 +275,7 @@ export default function NotificationModal({
                     alignItems: "center",
                     alignContent: "center",
                     flexDirection: "row",
-                    height: "20%",
+                    height: "15%",
                     width: "100%",
                   }}
                 >

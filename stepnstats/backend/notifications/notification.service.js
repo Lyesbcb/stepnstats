@@ -74,56 +74,11 @@ async function checkNotifications(solanaMp, ethereumMp, bnbMp) {
   for (var i = 0; i < notifications.length; i++) {
     if (notifications[i].type === "below") {
       if (notifications[i].realm === "Solana") {
-        if (notifications[i].currency === "crypto") {
-          if (
-            solanaMp[notifications[i].content] > notifications[i].contentPrice
-          ) {
-            console.log(notifications[i].content);
-            idToNotify.push(notifications[i].id);
-          }
-        } else {
-          if (
-            solanaMp[notifications[i].content] * solanaMp.Solana >
-            notifications[i].contentPrice
-          ) {
-            idToNotify.push(notifications[i].id);
-          }
-        }
-      } else if (notifications[i].realm === "Ethereum") {
-        if (notifications[i].currency === "crypto") {
-          if (
-            ethereumMp[notifications[i].content] > notifications[i].contentPrice
-          ) {
-            idToNotify.push(notifications[i].id);
-          }
-        } else {
-          if (
-            ethereumMp[notifications[i].content] * ethereumMp.Ethereum >
-            notifications[i].contentPrice
-          ) {
-            idToNotify.push(notifications[i].id);
-          }
-        }
-      } else if (notifications[i].realm === "Bnb") {
-        if (notifications[i].currency === "crypto") {
-          if (bnbMp[notifications[i].content] > notifications[i].contentPrice) {
-            idToNotify.push(notifications[i].id);
-          }
-        } else {
-          if (
-            bnbMp[notifications[i].content] * bnbMp.Bnb >
-            notifications[i].contentPrice
-          ) {
-            idToNotify.push(notifications[i].id);
-          }
-        }
-      }
-    } else if (notifications[i].type === "above") {
-      if (notifications[i].realm === "Solana") {
-        if (notifications[i].currency === "crypto") {
+        if (notifications[i].currency === "Crypto") {
           if (
             solanaMp[notifications[i].content] < notifications[i].contentPrice
           ) {
+            console.log(notifications[i].content);
             idToNotify.push(notifications[i].id);
           }
         } else {
@@ -135,7 +90,7 @@ async function checkNotifications(solanaMp, ethereumMp, bnbMp) {
           }
         }
       } else if (notifications[i].realm === "Ethereum") {
-        if (notifications[i].currency === "crypto") {
+        if (notifications[i].currency === "Crypto") {
           if (
             ethereumMp[notifications[i].content] < notifications[i].contentPrice
           ) {
@@ -150,13 +105,59 @@ async function checkNotifications(solanaMp, ethereumMp, bnbMp) {
           }
         }
       } else if (notifications[i].realm === "Bnb") {
-        if (notifications[i].currency === "crypto") {
+        if (notifications[i].currency === "Crypto") {
           if (bnbMp[notifications[i].content] < notifications[i].contentPrice) {
             idToNotify.push(notifications[i].id);
           }
         } else {
+          console.log(bnbMp[notifications[i].content] * bnbMp.Bnb)
           if (
             bnbMp[notifications[i].content] * bnbMp.Bnb <
+            notifications[i].contentPrice
+          ) {
+            idToNotify.push(notifications[i].id);
+          }
+        }
+      }
+    } else if (notifications[i].type === "above") {
+      if (notifications[i].realm === "Solana") {
+        if (notifications[i].currency === "Crypto") {
+          if (
+            solanaMp[notifications[i].content] > notifications[i].contentPrice
+          ) {
+            idToNotify.push(notifications[i].id);
+          }
+        } else {
+          if (
+            solanaMp[notifications[i].content] * solanaMp.Solana >
+            notifications[i].contentPrice
+          ) {
+            idToNotify.push(notifications[i].id);
+          }
+        }
+      } else if (notifications[i].realm === "Ethereum") {
+        if (notifications[i].currency === "Crypto") {
+          if (
+            ethereumMp[notifications[i].content] > notifications[i].contentPrice
+          ) {
+            idToNotify.push(notifications[i].id);
+          }
+        } else {
+          if (
+            ethereumMp[notifications[i].content] * ethereumMp.Ethereum >
+            notifications[i].contentPrice
+          ) {
+            idToNotify.push(notifications[i].id);
+          }
+        }
+      } else if (notifications[i].realm === "Bnb") {
+        if (notifications[i].currency === "Crypto") {
+          if (bnbMp[notifications[i].content] > notifications[i].contentPrice) {
+            idToNotify.push(notifications[i].id);
+          }
+        } else {
+          if (
+            bnbMp[notifications[i].content] * bnbMp.Bnb >
             notifications[i].contentPrice
           ) {
             idToNotify.push(notifications[i].id);
@@ -173,17 +174,15 @@ async function checkNotifications(solanaMp, ethereumMp, bnbMp) {
 
 async function sendNotification(id) {
   const response = await db.sequelize.query(
-    `SELECT n.id, content, contentPrice, type, notificationToken, realm FROM (SELECT * FROM notifications where id = ${id}) n LEFT JOIN users u ON userId = u.id`
+    `SELECT currency, n.id, content, contentPrice, type, notificationToken, realm FROM (SELECT * FROM notifications where id = ${id}) n LEFT JOIN users u ON userId = u.id`
   );
-  console.log(id)
   expo.sendPushNotificationsAsync([
     {
       to: response[0][0].notificationToken,
       sound: "default",
       body: `${contents[response[0][0].content]} ${response[0][0].type} ${
         response[0][0].contentPrice
-      } ${response[0][0].currency === "crypto" ? response[0][0].realm : "$"}`,
-      badge: 1,
+      } ${response[0][0].currency === "Crypto" ? response[0][0].realm : "$"}`,
       title: "Marketplace Alert",
     },
   ]);

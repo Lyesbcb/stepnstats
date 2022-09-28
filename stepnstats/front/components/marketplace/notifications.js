@@ -18,7 +18,7 @@ import {
 import OneNotification from "./oneNotification";
 
 export default function Notifications({ lastPrice }) {
-  const [myNotifications, setMyNotifications] = useState(null);
+  const [myNotifications, setMyNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   async function onRefresh() {
@@ -54,28 +54,34 @@ export default function Notifications({ lastPrice }) {
         marginTop: "10%",
       }}
     >
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          width: "90%",
-        }}
-        refreshControl={
-          <RefreshControl
-            tintColor={"black"}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        keyExtractor={(item) => item.id}
-        data={myNotifications}
-        renderItem={({ item }) => (
-          <OneNotification
-            lastPrice={lastPrice}
-            data={item}
-            removeNotification={removeNotification}
-          />
-        )}
-      />
+      {myNotifications.length ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            width: "90%",
+          }}
+          refreshControl={
+            <RefreshControl
+              tintColor={"black"}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          keyExtractor={(item) => item.id}
+          data={myNotifications}
+          renderItem={({ item }) => (
+            <OneNotification
+              lastPrice={lastPrice}
+              data={item}
+              removeNotification={removeNotification}
+            />
+          )}
+        />
+      ) : (
+        <Text  style={{ fontWeight: "700", fontSize: RFValue(24, 800), textAlign: "center" }}>
+          You can add notifications on marketplace screen! Click on the bell.
+        </Text>
+      )}
     </View>
   );
 }
