@@ -12,6 +12,7 @@ export default function DetailMysteryBox({
   setmodalOneMysteryBox,
   deleteOneMb,
   navigation,
+  update
 }) {
   const [date, setDate] = useState("--/--/----");
   var color;
@@ -174,14 +175,14 @@ export default function DetailMysteryBox({
   function getDate() {
     var date = new Date(data.createdAt);
     let year = date.getFullYear();
-    let month = date.getMonth();
+    let month = date.getMonth() +1;
     let day = date.getDate();
-
+    console.log(month)
     if (month < 10) {
-      month = "0" + Number(month+1);
+      month = "0" + Number(month);
     }
     if (day < 10) {
-      day = "0" + day;
+      day = "0" + Number(day);
     }
     var date = `${day}/${month}/${year}`;
     setDate(date);
@@ -600,7 +601,7 @@ export default function DetailMysteryBox({
                 height: 1,
               },
             }}
-            onPress={() => Alert.alert("Soon available")}
+            onPress={() => update(data)}
           >
             <Icon
               style={{ width: "100%" }}

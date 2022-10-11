@@ -8,7 +8,7 @@ import warnings
 # Remove Warning because easyocr have some warning and we don't want to have it in the logs
 warnings.filterwarnings("ignore", category=UserWarning)
 
-reader = easyocr.Reader(['en'], gpu=False)
+reader = easyocr.Reader(['en'], gpu=False, verbose=False)
 
 def crop_bot(img):
     h, w, _ = img.shape
@@ -71,15 +71,15 @@ def get_kmdt(img, tlbr, info):
 
     def get_date():
         dtimg = img[int(h/1.5):,int(w/5):int(w/1.8)]
-        dtimg = cv.cvtColor(dtimg, cv.COLOR_BGR2GRAY)
-
+        dtimg = cv.cvtColor(dtimg, cv.IMREAD_GRAYSCALE)
+        # cv.imshow("test", dtimg)
+        # cv.waitKey(0)
         date = "".join(reader.readtext(dtimg, detail=0, allowlist="0123456789/:")).replace(" ", "")
+        # print(date)
 
         try:
             date = date[:10] + " " + date[10:]
-            #print(date)
             dt, tm = date.split(" ")
-            #print(dt, tm)
             if dt.endswith("222") and tm.index(":") == 1:
                 tm = "2" + tm
             

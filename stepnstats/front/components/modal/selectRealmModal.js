@@ -18,149 +18,199 @@ export default function SelectRealmModal({
   modalVisible,
   setValue,
   value,
+  setValue2,
+  value2,
   onValidate,
-  textButton
-}){
-  return(
-    <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
+  textButton,
+}) {
+  return (
+    <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        activeOpacity={1}
+        onPressOut={() => setmodalVisible(false)}
       >
-        <TouchableOpacity
+        <View
           style={{
-            flex: 1,
-            justifyContent: "center",
+            backgroundColor: "white",
+            height: "40%",
+            width: "80%",
+            borderRadius: 30,
+            justifyContent: "space-evenly",
+            borderWidth: 1,
             alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
           }}
-          activeOpacity={1}
-          onPressOut={() => setmodalVisible(false)}
         >
+          <Pressable
+            style={{
+              backgroundColor: "#9DF8B6",
+              justifyContent: "center",
+              alignContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: 20,
+              position: "absolute",
+              top: "7%",
+              right: "7%",
+              borderWidth: 1,
+              borderColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 1,
+                height: 1,
+              },
+            }}
+            onPress={() => setmodalVisible(false)}
+          >
+            <Icon
+              style={{ width: "100%" }}
+              size={RFValue(20, 800)}
+              type="antdesign"
+              name="close"
+              color="black"
+            ></Icon>
+          </Pressable>
+          <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
+            Select realm
+          </Text>
           <View
             style={{
-              backgroundColor: "white",
-              height: "40%",
-              width: "80%",
-              borderRadius: 30,
               justifyContent: "space-evenly",
-              borderWidth: 1,
               alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
+              alignContent: "center",
+              flexDirection: "row",
+              height: "20%",
+              width: "100%",
             }}
           >
             <Pressable
-              style={{
-                backgroundColor: "#9DF8B6",
-                justifyContent: "center",
-                alignContent: "center",
-                width: 32,
-                height: 32,
-                borderRadius: 20,
-                position: "absolute",
-                top: "7%",
-                right: "7%",
-                borderWidth: 1,
-                borderColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 1,
-                  height: 1,
-                },
-              }}
-              onPress={() => setmodalVisible(false)}
+              style={{ width: "15%", height: "100%" }}
+              onPress={() => setValue("Solana")}
             >
-              <Icon
-                style={{ width: "100%" }}
-                size={RFValue(20, 800)}
-                type="antdesign"
-                name="close"
-                color="black"
-              ></Icon>
+              <Image
+                source={require("../../assets/sol_realm.png")}
+                style={value == "Solana" ? styles.realmActive : styles.realm}
+              ></Image>
             </Pressable>
-            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
-              Select realm
-            </Text>
-            <View
-              style={{
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                alignContent: "center",
-                flexDirection: "row",
-                height: "40%",
-                width: "100%",
-              }}
-            >
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setValue("Solana")}
-              >
-                <Image
-                  source={require("../../assets/sol_realm.png")}
-                  style={value == "Solana" ? styles.realmActive : styles.realm}
-                ></Image>
-              </Pressable>
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setValue("Bnb")}
-              >
-                <Image
-                  source={require("../../assets/bsc_realm.png")}
-                  style={value == "Bnb" ? styles.realmActive : styles.realm}
-                ></Image>
-              </Pressable>
-              <Pressable
-                style={{ width: "15%", height: "100%" }}
-                onPress={() => setValue("Ethereum")}
-              >
-                <Image
-                  source={require("../../assets/eth_realm.png")}
-                  style={
-                    value == "Ethereum" ? styles.realmActive : styles.realm
-                  }
-                ></Image>
-              </Pressable>
-            </View>
             <Pressable
-              style={{
-                width: "45%",
-                height: "15%",
-                borderRadius: 100,
-                borderWidth: 1,
-                borderColor: "black",
-                backgroundColor: "#9DF8B6",
-                shadowColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 4,
-                  height: 4,
-                },
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => {
-                value != ""
-                  ? onValidate()
-                  : Alert.alert("You must choose a realm!");
-              }}
+              style={{ width: "15%", height: "100%" }}
+              onPress={() => setValue("Bnb")}
             >
-              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>{textButton}</Text>
+              <Image
+                source={require("../../assets/bsc_realm.png")}
+                style={value == "Bnb" ? styles.realmActive : styles.realm}
+              ></Image>
+            </Pressable>
+            <Pressable
+              style={{ width: "15%", height: "100%" }}
+              onPress={() => setValue("Ethereum")}
+            >
+              <Image
+                source={require("../../assets/eth_realm.png")}
+                style={value == "Ethereum" ? styles.realmActive : styles.realm}
+              ></Image>
             </Pressable>
           </View>
-        </TouchableOpacity>
-      </Modal>
-  )
+          <View
+            style={{
+              width: "90%",
+              height: "10%",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+              flexDirection: "row",
+            }}
+          >
+            <Pressable
+              style={
+                value2 == "screenshots" ? styles.manualActive : styles.manual
+              }
+              onPress={() => setValue2("screenshots")}
+            >
+              <Text>Screenshot</Text>
+            </Pressable>
+            <Pressable
+              style={value2 == "manual" ? styles.manualActive : styles.manual}
+              onPress={() => setValue2("manual")}
+            >
+              <Text>Manual</Text>
+            </Pressable>
+          </View>
+          <Pressable
+            style={{
+              width: "45%",
+              height: "15%",
+              borderRadius: 100,
+              borderWidth: 1,
+              borderColor: "black",
+              backgroundColor: "#9DF8B6",
+              shadowColor: "black",
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 4,
+                height: 4,
+              },
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => {
+              value != ""
+                ? onValidate()
+                : Alert.alert("You must choose a realm!");
+            }}
+          >
+            <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
+              {textButton}
+            </Text>
+          </Pressable>
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  );
 }
 
 const styles = StyleSheet.create({
+  manualActive: {
+    width: "30%",
+    height: "100%",
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "#9DF8B6",
+    shadowColor: "black",
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowOffset: {
+      width: 4,
+      height: 4,
+    },
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  manual: {
+    width: "30%",
+    height: "100%",
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "#9DF8B6",
+    shadowColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   realm: {
     width: "100%",
     height: "100%",

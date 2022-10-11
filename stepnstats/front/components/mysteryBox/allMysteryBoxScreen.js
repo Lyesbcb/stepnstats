@@ -25,7 +25,7 @@ import {
   getAllMyMb,
   updateMb,
   deleteMb,
-  navigation
+  navigation,
 } from "../../services/mbs/index";
 import * as ImagePicker from "expo-image-picker";
 import BouncingPreloader from "react-native-bouncing-preloaders";
@@ -34,22 +34,62 @@ import ProgressLoader from "rn-progress-loader";
 import SelectRealmModal from "../modal/selectRealmModal";
 import { RFValue } from "react-native-responsive-fontsize";
 import HelpModal from "../modal/helpModal";
+import ManualModal from "./manualModal";
 
 export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
   const [mbSelected, setMbSelected] = useState(mbs.length != 0 ? 0 : null);
   const [realm, setRealm] = useState("Solana");
+  const [manual, setManual] = useState("screenshots");
   const [loading, setLoading] = useState(false);
   const [modalRealmVisible, setmodalRealmVisible] = useState(false);
   const [modalOneMysteryBox, setmodalOneMysteryBox] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [modalHelpVisible, setModalHelpVisible] = useState(false);
+  const [modalManualVisible, setManualModalVisible] = useState(false);
+  const [mysteryBoxLevel, setMysteryBoxLevel] = useState(0);
+  const [contents, setContents] = useState([
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  const [contentsQuantity, setContentsQuantity] = useState([
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  const [editingId, setEditingId] = useState(null);
 
-  function getTotal(){
-    var total = 0
-    for(var i = 0; i <mbs.length; i++){
-      total += mbs[i].mbPrice
+  useEffect(() => {
+    console.log(editingId);
+  }, [editingId]);
+  function update(data) {
+    setmodalOneMysteryBox(false);
+    for (var i = 1; i < 7; i++) {
+      if (data["content" + i] !== null) {
+        contents[i - 1] = String(data["content" + i]);
+        contentsQuantity[i - 1] = String(data["content" + i + "Quantity"]);
+      }
     }
-    return total.toFixed(2)
+    setMysteryBoxLevel(data.lvl);
+    setRealm(data.realm);
+    setEditingId(data.id);
+    setTimeout(function () {
+      setManualModalVisible(true);
+    }, 500);
+  }
+
+  function getTotal() {
+    var total = 0;
+    for (var i = 0; i < mbs.length; i++) {
+      total += mbs[i].mbPrice;
+    }
+    return total.toFixed(2);
   }
   async function onRefresh() {
     await setRefreshing(true);
@@ -92,21 +132,24 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
 
   const pickImage = async () => {
     setmodalRealmVisible(false);
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      quality: 0.2,
-      exif: true,
-    });
-    console.log(result)
-    if (!result.cancelled) {
-      setLoading(true);
-      try {
-        await uploadMb(result, realm);
-      } catch (error) {
-        Alert.alert(error);
+    if (manual === "screenshots") {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        quality: 0.2,
+        exif: true,
+      });
+      if (!result.cancelled) {
+        setLoading(true);
+        try {
+          await uploadMb(result, realm);
+        } catch (error) {
+          Alert.alert(error);
+        }
+        setLoading(false);
+        await myFunction();
       }
-      setLoading(false);
-      await myFunction();
+    } else {
+      setManualModalVisible(true);
     }
   };
 
@@ -124,15 +167,31 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
         hudColor={"#000000"}
         color={"#FFFFFF"}
       />
+      <ManualModal
+        setModalVisible={setManualModalVisible}
+        modalVisible={modalManualVisible}
+        myFunction={myFunction}
+        realm={realm}
+        mysteryBoxLevel={mysteryBoxLevel}
+        setMysteryBoxLevel={setMysteryBoxLevel}
+        contents={contents}
+        setContents={setContents}
+        contentsQuantity={contentsQuantity}
+        setContentsQuantity={setContentsQuantity}
+        editingId={editingId}
+        setEditing={setEditingId}
+      ></ManualModal>
       <SelectRealmModal
         modalVisible={modalRealmVisible}
         setmodalVisible={setmodalRealmVisible}
         onValidate={pickImage}
         setValue={setRealm}
         value={realm}
+        setValue2={setManual}
+        value2={manual}
         textButton={"NEXT"}
       ></SelectRealmModal>
-       <HelpModal
+      <HelpModal
         modalHelpVisible={modalHelpVisible}
         setModalHelpVisible={setModalHelpVisible}
         screen={"mbs"}
@@ -176,6 +235,7 @@ export default function AllMysteryBoxScreen({ myFunction, mbs, navigation }) {
                 setmodalOneMysteryBox={setmodalOneMysteryBox}
                 deleteOneMb={deleteOneMb}
                 navigation={navigation}
+                update={update}
               ></DetailMysteryBox>
             ) : (
               <View></View>

@@ -13,7 +13,7 @@ function model(sequelize) {
     },
     realm: { type: DataTypes.CHAR, allowNull: false },
     lvl: { type: DataTypes.INTEGER, allowNull: false },
-    fileName: { type: DataTypes.CHAR, allowNull: false },
+    fileName: { type: DataTypes.CHAR, allowNull: true },
     content1: { type: DataTypes.CHAR, allowNull: false },
     content1Quantity: { type: DataTypes.FLOAT, allowNull: false },
     content2: { type: DataTypes.CHAR, allowNull: true },
@@ -27,6 +27,7 @@ function model(sequelize) {
     content6: { type: DataTypes.CHAR, allowNull: true },
     content6Quantity: { type: DataTypes.FLOAT, allowNull: true },
     mbPrice: { type: DataTypes.FLOAT, allowNull: false },
+    manual: { type: DataTypes.BOOLEAN, allowNull: false },
   };
 
   const options = {

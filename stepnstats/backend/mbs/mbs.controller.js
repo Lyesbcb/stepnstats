@@ -22,7 +22,7 @@ function createSchema(req, res, next) {
   const schema = Joi.object({
     lvl: Joi.string().required(),
     realm: Joi.string().required(),
-    fileName: Joi.string().required(),
+    fileName: Joi.string().empty(""),
     content1: Joi.string().required(),
     content1Quantity: Joi.string().required(),
     content2: Joi.string().empty(""),
@@ -35,6 +35,7 @@ function createSchema(req, res, next) {
     content5Quantity: Joi.string().empty(""),
     content6: Joi.string().empty(""),
     content6Quantity: Joi.string().empty(""),
+    manual: Joi.boolean().required()
   });
   validateRequest(req, next, schema);
 }
@@ -84,6 +85,7 @@ function updateSchema(req, res, next) {
     content5Quantity: Joi.string().empty(""),
     content6: Joi.string().empty(""),
     content6Quantity: Joi.string().empty(""),
+    manual: Joi.boolean().required()
   });
   validateRequest(req, next, schema);
 }

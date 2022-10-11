@@ -39,6 +39,8 @@ async function createMb(params) {
 }
 
 async function updateMb(id, params) {
+  console.log(params.id, id)
+  var token = await getSecuretValueFor("token");
   var config = {
     method: "put",
     url: baseURL + "/" + id,
@@ -52,11 +54,6 @@ async function updateMb(id, params) {
   await axios(config)
     .then(async function (response) {
       console.log(response.data);
-      // Save username and password
-      await secureSave("username", response.data.username);
-      await secureSave("password", params.password);
-      await secureSave("anonymous", String(params.anonymous));
-      // Login
     })
     .catch(function (error) {
       console.log(error.response.data.message);

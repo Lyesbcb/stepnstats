@@ -361,7 +361,7 @@ export default function AllNftsScreen({ navigation }) {
               if (!index) {
                 setmodalRealmVisible(true);
               } else {
-                setNftsSelected(index);
+                setNftsSelected(index -1);
                 setmodalOneNfts(true);
               }
             }}

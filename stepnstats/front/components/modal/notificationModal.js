@@ -225,7 +225,7 @@ export default function NotificationModal({
                   }}
                 >
                   <Text
-                    style={{ fontSize: RFValue(12, 800), fontWeight: "600"}}
+                    style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}
                   >
                     Floor price is:
                   </Text>

@@ -9,182 +9,137 @@ import {
   Modal,
   Alert,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
 import { RFValue } from "react-native-responsive-fontsize";
-import Checkbox from "expo-checkbox";
-import {
-  getSecuretValueFor,
-  secureSave,
-  deleteSecuretValueFor,
-} from "../../services/secureStorage/index";
+import Step1 from "./components/step1";
+import Step2 from "./components/step2";
 
-export default function NotOfficialModal({
-  setModalNotOfficialVisible,
-  modalNotOfficialVisible,
+export default function SelectContent({
+  setContents,
+  contents,
+  nextStep,
+  previousStep,
+  setModalVisible,
+  contentsQuantity,
+  setContentsQuantity,
+  resetAll,
 }) {
-  const [isChecked, setChecked] = useState(false);
-  async function finish() {
-    console.log(isChecked);
-    await secureSave("notOfficialModal", String(isChecked));
-    setModalNotOfficialVisible(false);
-  }
+  const [step, setStep] = useState(0);
+  const [contentNumber, setContentNumber] = useState(0);
+  const contentImage = {
+    efficiencyLvl1: require("../../assets/gem/efficiency/lvl1.png"),
+    efficiencyLvl2: require("../../assets/gem/efficiency/lvl2.png"),
+    efficiencyLvl3: require("../../assets/gem/efficiency/lvl3.png"),
+    efficiencyLvl4: require("../../assets/gem/efficiency/lvl4.png"),
+    efficiencyLvl5: require("../../assets/gem/efficiency/lvl5.png"),
+    efficiencyLvl6: require("../../assets/gem/efficiency/lvl6.png"),
+    efficiencyLvl7: require("../../assets/gem/efficiency/lvl7.png"),
+    efficiencyLvl8: require("../../assets/gem/efficiency/lvl8.png"),
+    efficiencyLvl9: require("../../assets/gem/efficiency/lvl9.png"),
+    luckLvl1: require("../../assets/gem/luck/lvl1.png"),
+    luckLvl2: require("../../assets/gem/luck/lvl2.png"),
+    luckLvl3: require("../../assets/gem/luck/lvl3.png"),
+    luckLvl4: require("../../assets/gem/luck/lvl4.png"),
+    luckLvl5: require("../../assets/gem/luck/lvl5.png"),
+    luckLvl6: require("../../assets/gem/luck/lvl6.png"),
+    luckLvl7: require("../../assets/gem/luck/lvl7.png"),
+    luckLvl8: require("../../assets/gem/luck/lvl8.png"),
+    luckLvl9: require("../../assets/gem/luck/lvl9.png"),
+    comfortLvl1: require("../../assets/gem/comfort/lvl1.png"),
+    comfortLvl2: require("../../assets/gem/comfort/lvl2.png"),
+    comfortLvl3: require("../../assets/gem/comfort/lvl3.png"),
+    comfortLvl4: require("../../assets/gem/comfort/lvl4.png"),
+    comfortLvl5: require("../../assets/gem/comfort/lvl5.png"),
+    comfortLvl6: require("../../assets/gem/comfort/lvl6.png"),
+    comfortLvl7: require("../../assets/gem/comfort/lvl7.png"),
+    comfortLvl8: require("../../assets/gem/comfort/lvl8.png"),
+    comfortLvl9: require("../../assets/gem/comfort/lvl9.png"),
+    resilienceLvl1: require("../../assets/gem/resilience/lvl1.png"),
+    resilienceLvl2: require("../../assets/gem/resilience/lvl2.png"),
+    resilienceLvl3: require("../../assets/gem/resilience/lvl3.png"),
+    resilienceLvl4: require("../../assets/gem/resilience/lvl4.png"),
+    resilienceLvl5: require("../../assets/gem/resilience/lvl5.png"),
+    resilienceLvl6: require("../../assets/gem/resilience/lvl6.png"),
+    resilienceLvl7: require("../../assets/gem/resilience/lvl7.png"),
+    resilienceLvl8: require("../../assets/gem/resilience/lvl8.png"),
+    resilienceLvl9: require("../../assets/gem/resilience/lvl9.png"),
+    commonScroll: require("../../assets/scroll/common.png"),
+    uncommonScroll: require("../../assets/scroll/uncommon.png"),
+    rareScroll: require("../../assets/scroll/rare.png"),
+    epicScroll: require("../../assets/scroll/epic.png"),
+    legendaryScroll: require("../../assets/scroll/legendary.png"),
+    gst: require("../../assets/gst.png"),
+  };
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalNotOfficialVisible}
-    >
-      <TouchableOpacity
+    <TouchableWithoutFeedback>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
-          flex: 1,
-          justifyContent: "center",
+          backgroundColor: "white",
+          height: "60%",
+          width: "80%",
+          borderRadius: 30,
+          justifyContent: "space-evenly",
+          borderWidth: 1,
           alignItems: "center",
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 4,
+          elevation: 5,
         }}
-        activeOpacity={1}
-        onPressOut={() => setModalNotOfficialVisible(false)}
       >
-        <TouchableWithoutFeedback>
-          <View
-            style={{
-              backgroundColor: "white",
-              height: "50%",
-              width: "80%",
-              borderRadius: 30,
-              justifyContent: "space-evenly",
-              borderWidth: 1,
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
-            }}
-          >
-            <Pressable
-              style={{
-                backgroundColor: "#9DF8B6",
-                justifyContent: "center",
-                alignContent: "center",
-                width: 32,
-                height: 32,
-                borderRadius: 20,
-                position: "absolute",
-                top: "3%",
-                right: "7%",
-                borderWidth: 1,
-                borderColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 1,
-                  height: 1,
-                },
-              }}
-              onPress={() => setModalNotOfficialVisible(false)}
-            >
-              <Icon
-                style={{ width: "100%" }}
-                size={RFValue(20, 800)}
-                type="antdesign"
-                name="close"
-                color="black"
-              ></Icon>
-            </Pressable>
-            <Text style={{ fontSize: RFValue(20, 800), fontWeight: "700" }}>
-              Disclaimer
-            </Text>
-            <Text
-              style={{
-                fontSize: RFValue(14, 800),
-                fontWeight: "600",
-                width: "80%",
-              }}
-            >
-              STEPN Stats is a community-based App made by and for the
-              community.
-            </Text>
-            <Text
-              style={{
-                fontSize: RFValue(14, 800),
-                fontWeight: "600",
-                width: "80%",
-              }}
-            >
-              The official STEPN team or FindSatoshi Labs Limited does not
-              interfere with the development of the App, and has no
-              responsibility in the decisions you could make due to the STEPN
-              Stats App.
-            </Text>
-            <Text
-              style={{
-                fontSize: RFValue(14, 800),
-                fontWeight: "600",
-                width: "80%",
-              }}
-            >
-              Krit and Lyes are the developers of the STEPN Stats App and are not members
-              of the team, nor STEPN ambassadors.
-            </Text>
-            <View
-              style={{
-                width: "90%",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: RFValue(12, 800),
-                  fontWeight: "600",
-                }}
-              >
-                Don't show me again
-              </Text>
-              <Checkbox
-                disabled={false}
-                value={isChecked}
-                onValueChange={setChecked}
-                color={isChecked ? "#4630EB" : undefined}
-              />
-            </View>
-            <Pressable
-              style={{
-                width: "30%",
-                height: "10%",
-                borderRadius: 100,
-                borderWidth: 1,
-                borderColor: "black",
-                backgroundColor: "#9DF8B6",
-                shadowColor: "black",
-                shadowOpacity: 1,
-                shadowRadius: 1,
-                shadowOffset: {
-                  width: 4,
-                  height: 4,
-                },
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => finish()}
-            >
-              <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-                OK
-              </Text>
-            </Pressable>
-          </View>
-        </TouchableWithoutFeedback>
-      </TouchableOpacity>
-    </Modal>
+        {step === 0 ? (
+          <Step1
+            contents={contents}
+            setContents={setContents}
+            contentsQuantity={contentsQuantity}
+            setContentsQuantity={setContentsQuantity}
+            setStep={setStep}
+            setContentNumber={setContentNumber}
+            previousStep={previousStep}
+            nextStep={nextStep}
+            setModalVisible={setModalVisible}
+            contentImage={contentImage}
+            resetAll={resetAll}
+          ></Step1>
+        ) : (
+          <Step2
+            contents={contents}
+            setContents={setContents}
+            contentsQuantity={contentsQuantity}
+            setContentsQuantity={setContentsQuantity}
+            setStep={setStep}
+            setContentNumber={setContentNumber}
+            contentNumber={contentNumber}
+            setModalVisible={setModalVisible}
+            contentImage={contentImage}
+            resetAll={resetAll}
+          ></Step2>
+        )}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
+  mb: {
+    resizeMode: "contain",
+    width: "100%",
+    height: "100%",
+    opacity: 0.4,
+  },
+  activeMb: {
+    resizeMode: "contain",
+    width: "100%",
+    height: "100%",
+  },
   realm: {
     width: "100%",
     height: "100%",

@@ -17,4 +17,3 @@ async function getSecuretValueFor(key) {
 async function deleteSecuretValueFor(key){
   await SecureStore.deleteItemAsync(key)
 }
-

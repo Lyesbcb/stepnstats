@@ -134,13 +134,14 @@ export default function LittleMysteryBox({ data }) {
   function getDate() {
     var date = new Date(data.createdAt);
     let year = date.getFullYear();
-    let month = date.getMonth();
+    let month = date.getMonth() +1;
     let day = date.getDate();
+    console.log(month)
     if (month < 10) {
-      month = "0" + Number(month+1);
+      month = "0" + Number(month);
     }
     if (day < 10) {
-      day = "0" + day;
+      day = "0" + Number(day);
     }
     var date = `${day}/${month}/${year}`;
     setDate(date);

@@ -2,7 +2,7 @@
 const db = require("_helpers/db");
 const Role = require("_helpers/role");
 var spawn = require("child_process").spawn;
-var fs = require('fs')
+var fs = require("fs");
 
 module.exports = {
   getAll,
@@ -45,13 +45,14 @@ async function uploadFile(req, res) {
 
     get_content_from_screen.stdout.setEncoding("utf8");
     await get_content_from_screen.stdout.on("data", async function (data) {
-      console.log(req.file.path)
-      console.log(data)
+      console.log(req.file.path);
+      console.log(data);
       data = data.replace(/'/g, '"');
       params = JSON.parse(data);
       params.userId = req.user.id;
       params.realm = JSON.parse(req.body.realm).realm;
       params.fileName = req.file.filename;
+      params.manual = false
       var prices;
       if (params.realm == "Solana") {
         prices = await db.SolanaMp.findAll({
@@ -79,18 +80,22 @@ async function uploadFile(req, res) {
       try {
         return res.send(await db.Mb.create(params));
       } catch (error) {
-        fs.rename(req.file.path, "./upload/error/mb/"+req.file.filename, function (err) {
-          if (err) throw err
-        })
-        console.log("ErrorDatabase")
-        console.log(error)
+        fs.rename(
+          req.file.path,
+          "./upload/error/mb/" + req.file.filename,
+          function (err) {
+            if (err) throw err;
+          }
+        );
+        console.log("ErrorDatabase");
+        console.log(error);
         return res.status(400).send({ message: "Error on recognizing image" });
       }
     });
     get_content_from_screen.stderr.setEncoding("utf8");
     await get_content_from_screen.stderr.on("data", async function (data) {
-      console.log(data)
-      
+      console.log(data);
+
       stderr = "Error on recognizing image";
     });
     const exitCode = await new Promise((resolve, reject) => {
@@ -103,10 +108,14 @@ async function uploadFile(req, res) {
     if (error == "") {
       return res.status(400).json({ message: "Error on recognizing image" });
     }
-    fs.rename(req.file.path, "./upload/error/mb/"+req.file.filename, function (err) {
-      if (err) throw err
-    })
-    console.log("ErrorGlobal")
+    fs.rename(
+      req.file.path,
+      "./upload/error/mb/" + req.file.filename,
+      function (err) {
+        if (err) throw err;
+      }
+    );
+    console.log("ErrorGlobal");
     return res.status(400).json({ message: error });
   }
 }
@@ -127,31 +136,6 @@ async function getAllMy(req) {
     limit: 1000,
     subQuery: false,
   });
-  for (var i = 0; i < mbs.length; i++) {
-    var prices;
-    if (mbs[i].realm == "Solana") {
-      prices = await db.SolanaMp.findAll({
-        limit: 1,
-        order: [["createdAt", "DESC"]],
-        subQuery: false,
-      });
-    }
-    if (mbs[i].realm == "Bnb") {
-      prices = await db.BNBMp.findAll({
-        limit: 1,
-        order: [["createdAt", "DESC"]],
-        subQuery: false,
-      });
-    }
-    if (mbs[i].realm == "Ethereum") {
-      prices = await db.EthereumMp.findAll({
-        limit: 1,
-        order: [["createdAt", "DESC"]],
-        subQuery: false,
-      });
-    }
-    mbs[i].setDataValue("prices", prices);
-  }
   return mbs;
 }
 
@@ -169,32 +153,74 @@ async function getById(req) {
 }
 
 async function create(params, userId) {
-  if (
-    await db.Mb.findOne({
-      where: { userId: userId, fileName: params.fileName },
-    })
-  ) {
-    throw "This mb is already exists.";
+  var prices;
+  if (params.realm == "Solana") {
+    prices = await db.SolanaMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
   }
+  if (params.realm == "Bnb") {
+    prices = await db.BNBMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
+  }
+  if (params.realm == "Ethereum") {
+    prices = await db.EthereumMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
+  }
+  params.prices = prices[0];
+  params.mbPrice = await getMbPrice(params);
   params.userId = userId;
-  // save rmbun
   return await db.Mb.create(params);
 }
 
 async function update(req) {
-  const mb = await getMb(req.params.id);
+  console.log(req.params)
   const currentUser = req.user;
+  const mb = await getMb(req.params.id);
+  console.log(mb)
   const userId = mb.userId;
-
   // only allow admins to access other user records
   if (userId !== currentUser.id && currentUser.role !== Role.Admin) {
     throw "Unauthorized";
   }
   id = req.params.id;
-  params = req.body;
+  var params = req.body;
+  var prices;
+  if (params.realm == "Solana") {
+    prices = await db.SolanaMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
+  }
+  if (params.realm == "Bnb") {
+    prices = await db.BNBMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
+  }
+  if (params.realm == "Ethereum") {
+    prices = await db.EthereumMp.findAll({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+      subQuery: false,
+    });
+  }
+  params.prices = prices[0];
+  params.mbPrice = await getMbPrice(params);
+
   // copy params to mbs and save
   Object.assign(mb, params);
-  await mb.save();
+  console.log(await mb.save())
 
   return getMb(id);
 }

@@ -92,7 +92,7 @@ export default function DetailNfts({
     defineMaxStat();
   });
   var color;
-
+  
   const qualityColor = {
     Common: "#BABCBE",
     Uncommon: "#AED144",

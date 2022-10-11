@@ -28,7 +28,7 @@ export default function Header({selectedTab, SetSelectedTab}) {
         }}
       >
         <Pressable style={selectedTab === 0 ? styles.activeTab1 : styles.tab} onPress={() => SetSelectedTab(0)}>
-          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Nfts</Text>
+          <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Sneakers</Text>
         </Pressable>
         <Pressable style={selectedTab === 1 ? styles.activeTab2 : styles.tab} onPress={() => SetSelectedTab(1)}>
           <Text style={{ fontWeight: "800", fontSize: RFValue(20, 800) }}>Mystery Box</Text>
