@@ -42,6 +42,7 @@ export default function Marketplace({
     value: 0,
   });
 
+  
   useEffect(() => {
     setTooltipPos({ x: 0, y: 0, visible: false, value: 0 });
   }, [currency, selectedTemporality]);
@@ -797,6 +798,7 @@ export default function Marketplace({
           </ScrollView>
         </View>
       </View>
+      
     </View>
   );
 }

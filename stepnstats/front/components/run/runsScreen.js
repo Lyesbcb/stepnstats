@@ -13,6 +13,7 @@ import Footer from "../footer";
 import * as ImagePicker from "expo-image-picker";
 import { RFValue } from "react-native-responsive-fontsize";
 import HelpModal from "../modal/helpModal";
+import { AdMobBanner } from "expo-ads-admob";
 
 import {
   createRun,
@@ -36,6 +37,11 @@ export default function RunsScreen({ navigation }) {
   const [modalRunTypeVisible, setModalRunTypeVisible] = useState(false);
   const [modalHelpVisible, setModalHelpVisible] = useState(false);
 
+  const adUnitID = Platform.select({
+    ios: "ca-app-pub-3940256099942544/2934735716",
+    android: "ca-app-pub-4155099656026970/2128753822",
+  });
+  
   async function onRefresh() {
     await setRefreshing(true);
     await myFunction();
@@ -460,6 +466,23 @@ export default function RunsScreen({ navigation }) {
       </View>
 
       {/* <Footer styles={styles}></Footer> */}
+      <View
+        style={{
+          width: "100%",
+          position: "absolute",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          bottom: 0,
+        }}
+      >
+        <AdMobBanner
+          bannerSize="banner"
+          adUnitID={adUnitID} // Test ID, Replace with your-admob-unit-id
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={(err) => console.log(err)}
+        />
+      </View>
     </View>
   );
 }

@@ -16,10 +16,15 @@ import AllMysteryBoxScreen from "./mysteryBox/allMysteryBoxScreen";
 import RunsScreen from "./run/runsScreen";
 import { getAllMyMb } from "../services/mbs/index";
 import { RFValue } from "react-native-responsive-fontsize";
+import { AdMobBanner } from "expo-ads-admob";
 
 export default function Invenrtory({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
   const [mbs, setMbs] = useState([]);
+  const adUnitID = Platform.select({
+    ios: "ca-app-pub-3940256099942544/2934735716",
+    android: "ca-app-pub-4155099656026970/2128753822",
+  });
   useEffect(() => {
     myFunction();
   }, []);
@@ -65,6 +70,23 @@ export default function Invenrtory({ navigation }) {
         </View>
 
         {/* <Footer styles={styles}></Footer> */}
+      </View>
+      <View
+        style={{
+          width: "100%",
+          position: "absolute",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          bottom: 0,
+        }}
+      >
+        <AdMobBanner
+          bannerSize="banner"
+          adUnitID={adUnitID} // Test ID, Replace with your-admob-unit-id
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={(err) => console.log(err)}
+        />
       </View>
     </View>
   );

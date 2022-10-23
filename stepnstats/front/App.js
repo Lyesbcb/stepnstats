@@ -17,6 +17,7 @@ import axios from "axios";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 import ProgressLoader from "rn-progress-loader";
+import Account from "./components/accountScreen";
 
 Sentry.init({
   dsn: "https://aba7681e4758413f9025831056b576e1@o1332793.ingest.sentry.io/6597674",
@@ -95,7 +96,7 @@ function App() {
           tabBarStyle: {
             paddingTop: 10,
             position: "absolute",
-            bottom: "5%",
+            bottom: "7%",
             height: "8%",
             borderRadius: 50,
             left: "2%",
@@ -124,6 +125,8 @@ function App() {
               iconName = focused ? "toolbox" : "toolbox";
             } else if (route.name === "MarketplaceStack") {
               iconName = focused ? "chart-box" : "chart-box";
+            }else if (route.name === "Account") {
+              iconName = focused ? "account" : "account";
             }
             return (
               <View>
@@ -148,6 +151,7 @@ function App() {
         <Tab.Screen name="InvenrtoryStack" component={InvenrtoryStack} />
         <Tab.Screen name="runs" component={Runs} />
         <Tab.Screen name="MarketplaceStack" component={MarketplaceStack} />
+        <Tab.Screen name="Account" component={Account} />
         {/* <Tab.Screen name="test" component={TestScreen} /> */}
       </Tab.Navigator>
     </NavigationContainer>

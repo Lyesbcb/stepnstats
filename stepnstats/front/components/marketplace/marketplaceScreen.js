@@ -7,6 +7,7 @@ import ProgressLoader from "rn-progress-loader";
 import { RFValue } from "react-native-responsive-fontsize";
 import NotificationModal from "../modal/notificationModal";
 import Notifications from "./notifications";
+import { AdMobBanner } from "expo-ads-admob";
 
 export default function MarketplaceScreen({ navigation }) {
   const [selectedContent, setSelectedContent] = useState([]);
@@ -17,6 +18,10 @@ export default function MarketplaceScreen({ navigation }) {
   const [selectedTab, SetSelectedTab] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  const adUnitID = Platform.select({
+    ios: "ca-app-pub-3940256099942544/2934735716",
+    android: "ca-app-pub-4155099656026970/2128753822",
+  });
   useState(false);
   useEffect(() => {
     myFunction();
@@ -90,6 +95,23 @@ export default function MarketplaceScreen({ navigation }) {
         </View>
 
         {/* <Footer styles={styles}></Footer> */}
+        <View
+          style={{
+            width: "100%",
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <AdMobBanner
+            bannerSize="banner"
+            adUnitID={adUnitID} // Test ID, Replace with your-admob-unit-id
+            servePersonalizedAds // true or false
+            onDidFailToReceiveAdWithError={(err) => console.log(err)}
+          />
+        </View>
       </View>
     </View>
   );

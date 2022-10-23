@@ -70,6 +70,7 @@ export default function OptimizeModal({
       };
       setMaxMb(getMaxMb(myNft));
       if ((strategy === "GST") & (step === 3)) {
+        console.log("ici")
         setStep(step + 2);
         const myNft = {
           energy: energy,

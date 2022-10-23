@@ -397,7 +397,7 @@ export default function Step1({
               paddingHorizontal: "20%",
               borderRadius: 20,
             }}
-            defaultValue={String(contentsQuantity[contentNumber])}
+            defaultValue={ contentsQuantity[contentNumber] !== null ? String(contentsQuantity[contentNumber]): ""}
             onChangeText={(text) => {
                 var temp = contentsQuantity;
                 temp[contentNumber] = text;

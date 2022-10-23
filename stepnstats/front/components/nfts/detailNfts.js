@@ -34,6 +34,13 @@ export default function DetailNfts({
   const [optimizeModalVisible, setOptimizeModalVisible] = useState(false);
   const [dailyIncomeModalVisible, setDailyIncomeModalVisible] = useState(false);
   const [optimized, setOptimized] = useState({});
+  const [editing, setEditing] = useState(false);
+  const [base, setBase] = useState({
+    efficiencyBase: data.efficiencyBase,
+    luckBase: data.luckBase,
+    comfortBase: data.comfortBase,
+    resilienceBase: data.resilienceBase,
+  });
   const imagePath = {
     walker: [
       require("../../assets/shoes/walker/shoe1.png"),
@@ -92,7 +99,13 @@ export default function DetailNfts({
     defineMaxStat();
   });
   var color;
-  
+
+  useEffect(() => {
+    if (stats === "increased" || stats === "optimize") {
+      setEditing(false);
+    }
+  }, [stats]);
+
   const qualityColor = {
     Common: "#BABCBE",
     Uncommon: "#AED144",
@@ -135,28 +148,29 @@ export default function DetailNfts({
     data != 0 ? (color = qualityColor[data.quality]) : (color = "#BABCBE");
   }
   async function remake() {
-    try {
-      await updateNft(
-        {
-          lvlOptimized: null,
-          efficiencyOptimized: null,
-          luckOptimized: null,
-          comfortOptimized: null,
-          resilienceOptimized: null,
-          gem1Optimized: null,
-          gem2Optimized: null,
-          gem3Optimized: null,
-          gem4Optimized: null,
-          id: data.id,
-        },
-        data.id
-      );
-      await defineMaxStat();
-      setStats("base");
-      setOptimizeModalVisible(true);
-    } catch (error) {
-      Alert.alert(error);
-    }
+    Alert.alert("Coming soon!")
+    // try {
+    //   await updateNft(
+    //     {
+    //       lvlOptimized: null,
+    //       efficiencyOptimized: null,
+    //       luckOptimized: null,
+    //       comfortOptimized: null,
+    //       resilienceOptimized: null,
+    //       gem1Optimized: null,
+    //       gem2Optimized: null,
+    //       gem3Optimized: null,
+    //       gem4Optimized: null,
+    //       id: data.id,
+    //     },
+    //     data.id
+    //   );
+    //   await defineMaxStat();
+    //   setStats("base");
+    //   setOptimizeModalVisible(true);
+    // } catch (error) {
+    //   Alert.alert(error);
+    // }
   }
   function defineMaxStat() {
     if (stats === "base" && data.efficiencyBase === null) {
@@ -320,8 +334,8 @@ export default function DetailNfts({
             backgroundColor: "#9DF8B6",
             justifyContent: "center",
             alignContent: "center",
-            width: 32,
-            height: 32,
+            width: RFValue(32, 800),
+            height: RFValue(32, 800),
             borderRadius: 20,
             borderWidth: 1,
             borderColor: "black",
@@ -350,8 +364,8 @@ export default function DetailNfts({
             backgroundColor: "#9DF8B6",
             justifyContent: "center",
             alignContent: "center",
-            width: 32,
-            height: 32,
+            width: RFValue(32, 800),
+            height: RFValue(32, 800),
             borderRadius: 20,
             borderWidth: 1,
             borderColor: "black",
@@ -362,7 +376,15 @@ export default function DetailNfts({
               height: 1,
             },
           }}
-          onPress={() => Alert.alert("Soon available")}
+          onPress={() => {
+            if (data.efficiencyBase) {
+              setStats("base");
+              setEditing(true);
+            } else {
+              Alert.alert("You can edit just the base stats.");
+              setEditing(false);
+            }
+          }}
         >
           <Icon
             style={{ width: "100%" }}
@@ -377,8 +399,8 @@ export default function DetailNfts({
             backgroundColor: "#9DF8B6",
             justifyContent: "center",
             alignContent: "center",
-            width: 32,
-            height: 32,
+            width: RFValue(32, 800),
+            height: RFValue(32, 800),
             borderRadius: 20,
             borderWidth: 1,
             borderColor: "black",
@@ -404,8 +426,8 @@ export default function DetailNfts({
             backgroundColor: "#9DF8B6",
             justifyContent: "center",
             alignContent: "center",
-            width: 32,
-            height: 32,
+            width: RFValue(32, 800),
+            height: RFValue(32, 800),
             borderRadius: 20,
             borderWidth: 1,
             borderColor: "black",
@@ -884,11 +906,13 @@ export default function DetailNfts({
                 if (data.fileNameBase) {
                   if (data.efficiencyOptimized) {
                     if (stats !== "optimized") {
-                      setStats("optimized");
-                      defineMaxStat();
+                      // setStats("optimized");
+                      // defineMaxStat();
+                      Alert.alert("Coming soon!")
                     }
                   } else {
-                    setOptimizeModalVisible(true);
+                    // setOptimizeModalVisible(true);
+                    Alert.alert("Coming soon!")
                   }
                 } else {
                   Alert.alert(
@@ -935,21 +959,54 @@ export default function DetailNfts({
           style={{
             width: "80%",
             height: "6%",
-            justifyContent: "flex-end",
+            justifyContent: "flex-start",
             flexDirection: "row",
             alignItems: "center",
           }}
         >
           <Text
             style={{
-              position: "absolute",
-              left: 0,
               fontSize: RFValue(16, 800),
               fontWeight: "700",
+              marginRight: "5%",
             }}
           >
             Attributes
           </Text>
+          {editing ? (
+            <Pressable
+              style={{
+                backgroundColor: "#9DF8B6",
+                justifyContent: "center",
+                alignContent: "center",
+                width: RFValue(32, 800),
+                height: RFValue(32, 800),
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: "black",
+                shadowOpacity: 1,
+                shadowRadius: 1,
+                shadowOffset: {
+                  width: 1,
+                  height: 1,
+                },
+              }}
+              onPress={async () => {
+                await updateNft(base, data.id);
+                myFunction();
+              }}
+            >
+              <Icon
+                style={{ width: "100%" }}
+                size={RFValue(20, 800)}
+                type="material-community"
+                name="check"
+                color="black"
+              ></Icon>
+            </Pressable>
+          ) : (
+            <View></View>
+          )}
         </View>
         <View
           style={{
@@ -995,35 +1052,110 @@ export default function DetailNfts({
                 Efficiency
               </Text>
             </View>
-            {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
-            <View
-              style={{
-                width: "60%",
-                height: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            {!editing ? (
               <View
                 style={{
-                  width: widthEfficiency,
-                  backgroundColor: "#9DF8B6",
-                  height: "25%",
-                  borderWidth: 1,
-                  marginRight: "4%",
+                  width: "60%",
+                  height: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-              ></View>
-            </View>
+              >
+                <View
+                  style={{
+                    width: widthEfficiency,
+                    backgroundColor: "#9DF8B6",
+                    height: "25%",
+                    borderWidth: 1,
+                    marginRight: "4%",
+                  }}
+                ></View>
+              </View>
+            ) : (
+              <View></View>
+            )}
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.efficiencyBase -= 1;
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="minus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
             <Text style={{ width: "20%", marginLeft: "2%" }}>
               {stats === "base"
-                ? data.efficiencyBase
+                ? base.efficiencyBase
                 : stats === "increased"
                 ? data.efficiencyIncreased
                 : stats === "optimized"
                 ? (data.efficiencyOptimized + data.efficiencyBase).toFixed(1)
                 : 0}
             </Text>
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.efficiencyBase += 1;
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="plus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
           </View>
           <View
             style={{
@@ -1062,34 +1194,110 @@ export default function DetailNfts({
               </Text>
             </View>
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
-            <View
-              style={{
-                width: "60%",
-                height: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            {!editing ? (
               <View
                 style={{
-                  width: widthLuck,
-                  backgroundColor: "#9DF8B6",
-                  height: "25%",
-                  borderWidth: 1,
-                  marginRight: "4%",
+                  width: "60%",
+                  height: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-              ></View>
-            </View>
+              >
+                <View
+                  style={{
+                    width: widthLuck,
+                    backgroundColor: "#9DF8B6",
+                    height: "25%",
+                    borderWidth: 1,
+                    marginRight: "4%",
+                  }}
+                ></View>
+              </View>
+            ) : (
+              <View></View>
+            )}
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.luckBase -= 1;
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="minus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
             <Text style={{ width: "20%", marginLeft: "2%" }}>
               {stats === "base"
-                ? data.luckBase
+                ? base.luckBase
                 : stats === "increased"
                 ? data.luckIncreased
                 : stats === "optimized"
                 ? (data.luckOptimized + data.luckBase).toFixed(1)
                 : 0}
             </Text>
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.luckBase += 1;
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="plus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
           </View>
           <View
             style={{
@@ -1128,34 +1336,112 @@ export default function DetailNfts({
               </Text>
             </View>
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
-            <View
-              style={{
-                width: "60%",
-                height: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            {!editing ? (
               <View
                 style={{
-                  width: widthComfort,
-                  backgroundColor: "#9DF8B6",
-                  height: "25%",
-                  borderWidth: 1,
-                  marginRight: "4%",
+                  width: "60%",
+                  height: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-              ></View>
-            </View>
+              >
+                <View
+                  style={{
+                    width: widthComfort,
+                    backgroundColor: "#9DF8B6",
+                    height: "25%",
+                    borderWidth: 1,
+                    marginRight: "4%",
+                  }}
+                ></View>
+              </View>
+            ) : (
+              <View></View>
+            )}
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.comfortBase -= 1;
+                  console.log(base);
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="minus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
             <Text style={{ width: "20%", marginLeft: "2%" }}>
               {stats === "base"
-                ? data.comfortBase
+                ? base.comfortBase
                 : stats === "increased"
                 ? data.comfortIncreased
                 : stats === "optimized"
                 ? (data.comfortOptimized + data.comfortBase).toFixed(1)
                 : 0}
             </Text>
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.comfortBase += 1;
+                  console.log(base);
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="plus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
           </View>
 
           <View
@@ -1195,35 +1481,113 @@ export default function DetailNfts({
               </Text>
             </View>
             {/* TODO systeme de remplissage par rapport au max et au stats de bases */}
-            <View
-              style={{
-                width: "60%",
-                height: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              {/* TODO delimitation entre base et increased ou optimized */}
+            {!editing ? (
               <View
                 style={{
-                  width: widthResilience,
-                  backgroundColor: "#9DF8B6",
-                  height: "25%",
-                  borderWidth: 1,
-                  marginRight: "4%",
+                  width: "60%",
+                  height: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-              ></View>
-            </View>
+              >
+                {/* TODO delimitation entre base et increased ou optimized */}
+                <View
+                  style={{
+                    width: widthResilience,
+                    backgroundColor: "#9DF8B6",
+                    height: "25%",
+                    borderWidth: 1,
+                    marginRight: "4%",
+                  }}
+                ></View>
+              </View>
+            ) : (
+              <View></View>
+            )}
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.resilienceBase -= 1;
+                  console.log(base);
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="minus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
             <Text style={{ width: "20%", marginLeft: "2%" }}>
               {stats === "base"
-                ? data.resilienceBase
+                ? base.resilienceBase
                 : stats === "increased"
                 ? data.resilienceIncreased
                 : stats === "optimized"
                 ? (data.resilienceOptimized + data.resilienceBase).toFixed(1)
                 : 0}
             </Text>
+            {editing ? (
+              <Pressable
+                style={{
+                  backgroundColor: "#9DF8B6",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  width: RFValue(32, 800),
+                  height: RFValue(32, 800),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                  shadowOffset: {
+                    width: 1,
+                    height: 1,
+                  },
+                }}
+                onPress={() => {
+                  var temp = base;
+                  temp.resilienceBase += 1;
+                  console.log(base);
+                  setBase(temp);
+                  myFunction();
+                }}
+              >
+                <Icon
+                  style={{ width: "100%" }}
+                  size={RFValue(20, 800)}
+                  type="material-community"
+                  name="plus"
+                  color="black"
+                ></Icon>
+              </Pressable>
+            ) : (
+              <View></View>
+            )}
           </View>
         </View>
       </View>

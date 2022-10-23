@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   Linking,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { firstLaunch } from "../services/users/index";
@@ -22,6 +23,7 @@ import * as Notifications from "expo-notifications";
 import * as TaskManager from "expo-task-manager";
 import { updatePushToken } from "../services/users/index";
 import config from "../config.json";
+import { AdMobBanner } from "expo-ads-admob";
 export default function HomeScreen({ props, navigation }) {
   const [modalConnectionVisible, setModalConnectionVisible] = useState(true);
   const [modalNotOfficialVisible, setModalNotOfficialVisible] = useState(false);
@@ -33,6 +35,10 @@ export default function HomeScreen({ props, navigation }) {
     getUsername();
   }, []);
 
+  const adUnitID = Platform.select({
+    ios: "ca-app-pub-3940256099942544/2934735716",
+    android: "ca-app-pub-4155099656026970/2128753822",
+  });
   async function checkNotOfficialModal() {
     var temp = await getSecuretValueFor("notOfficialModal");
     await setTimeout(() => {
@@ -87,94 +93,71 @@ export default function HomeScreen({ props, navigation }) {
       />
       <View style={styles.container}></View>
       <View style={styles.container2}>
-        <Text
+        <View
           style={{
-            fontSize: RFValue(30, 800),
-            fontWeight: "700",
-            textAlign: "center",
-            width: "80%",
-          }}
-        >
-          Welcome to STEPN Stats app beta {config.version}
-        </Text>
-        <Text
-          style={{
-            fontSize: RFValue(20, 800),
-            fontWeight: "600",
-            textAlign: "center",
-            width: "80%",
-          }}
-        >
-          If you have an issue, bug, freeze, or recommendation, you can submit
-          it with this button.
-        </Text>
-        <Text
-          style={{
-            fontSize: RFValue(18, 800),
-            fontWeight: "500",
-            textAlign: "center",
-            width: "80%",
-          }}
-        >
-          Take a screenshot, video, or just give us a summary of the issue.
-        </Text>
-        <Text
-          style={{
-            fontSize: RFValue(18, 800),
-            fontWeight: "500",
-            textAlign: "center",
-            width: "80%",
-          }}
-        >
-          Here you username: {username}
-        </Text>
-        <Text
-          style={{
-            fontSize: RFValue(18, 800),
-            fontWeight: "500",
-            textAlign: "center",
-            width: "80%",
-          }}
-        >
-          Thank you so much to help STEPN Community!
-        </Text>
-        <Pressable
-          style={{
-            backgroundColor: "#9DF8B6",
+            flexWrap: "wrap",
+            width: "90%",
+            height: "80%",
+            flexDirection: "row",
             justifyContent: "center",
-            alignContent: "center",
-            width: "80%",
-            height: "10%",
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 1,
-              height: 1,
-            },
-            width: "80%",
-          }}
-          onPress={async () => {
-            Linking.openURL(
-              `discord://discordapp.com/channels/1013742854201413652/1013756166758744086`
-            );
+            alignItems: "center",
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: RFValue(30, 800),
-              fontWeight: "800",
-              textAlign: "center",
+              backgroundColor: "green",
+              width: "40%",
+              height: "40%",
+              margin: "5%",
             }}
           >
-            Send Feedback
-          </Text>
-        </Pressable>
+            <Text>Burn or Sell Gem</Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: "green",
+              width: "40%",
+              height: "40%",
+              margin: "5%",
+            }}
+          >
+            <Text>Burn or Sell Sneakers</Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: "green",
+              width: "40%",
+              height: "40%",
+              margin: "5%",
+            }}
+          ></View>
+          <View
+            style={{
+              backgroundColor: "green",
+              width: "40%",
+              height: "40%",
+              margin: "5%",
+            }}
+          ></View>
+        </View>
       </View>
-
-      {/* <Footer styles={styles}></Footer> */}
+      <View
+        style={{
+          width: "100%",
+          position: "absolute",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          bottom: 0,
+        }}
+      >
+        <AdMobBanner
+          bannerSize="banner"
+          adUnitID={adUnitID} // Test ID, Replace with your-admob-unit-id
+          servePersonalizedAds // true or false
+          onDidFailToReceiveAdWithError={(err) => console.log(err)}
+        />
+      </View>
     </View>
   );
 }

@@ -12,12 +12,12 @@ def get_mblvl(oimg):
 
     results = [] 
 
-    for box in BOXES:
+    for i, box in enumerate(BOXES):
         bimg = cv.imread(box, 0)
         bimg = cv.resize(bimg, (w, h))
         _, score = best_match(bimg, img, "cv.TM_CCOEFF_NORMED")
 
-        if score > 0.4:
+        if score > (0.4 if i != 9 else 0.48):
             results.append(score)
         else:
             results.append(0)
@@ -28,8 +28,5 @@ def get_mblvl(oimg):
         return ""
     else:
         ind = results.index(mx) + 1
-        if ind == 10 and mx < 0.45:
-            return ""
-        else:
-            return str(ind)
+        return str(ind)
 

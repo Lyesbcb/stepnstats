@@ -1,193 +1,106 @@
-import {
-  Text,
-  View,
-  Pressable,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Modal,
-  Alert,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-elements/dist/icons/Icon";
+import { LineChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
+import Footer from "./footer";
 import { RFValue } from "react-native-responsive-fontsize";
 
-export default function SelectMysteryBoxLevel({
-  setMysteryBoxLevel,
-  mysteryBoxLevel,
-  nextStep,
-  setModalVisible,
-  resetAll
-}) {
-  const mbsImage = [
-    require("../../assets/mb/lvl1.png"),
-    require("../../assets/mb/lvl2.png"),
-    require("../../assets/mb/lvl3.png"),
-    require("../../assets/mb/lvl4.png"),
-    require("../../assets/mb/lvl5.png"),
-    require("../../assets/mb/lvl6.png"),
-    require("../../assets/mb/lvl7.png"),
-    require("../../assets/mb/lvl8.png"),
-    require("../../assets/mb/lvl9.png"),
-    require("../../assets/mb/lvl10.png"),
-  ];
-  function showMysteryBox() {
-    return mbsImage.map((mb, i) => {
-      return (
-        <Pressable
-          style={{ width: "18%", height: "40%", marginBottom: "4%" }}
-          onPress={() => {
-            mysteryBoxLevel !== i + 1
-              ? setMysteryBoxLevel(i + 1)
-              : setMysteryBoxLevel(0);
-          }}
-          key={i}
-        >
-          <Image
-            style={mysteryBoxLevel === i + 1 ? styles.activeMb : styles.mb}
-            source={mb}
-          ></Image>
-        </Pressable>
-      );
-    });
-  }
+export default function Account({ navigation }) {
   return (
-    <TouchableWithoutFeedback>
-      <View
-        style={{
-          backgroundColor: "white",
-          height: "60%",
-          width: "80%",
-          borderRadius: 30,
-          justifyContent: "space-evenly",
-          borderWidth: 1,
-          alignItems: "center",
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 4,
-          elevation: 5,
-        }}
-      >
-        <Pressable
-          style={{
-            backgroundColor: "#9DF8B6",
-            justifyContent: "center",
-            alignContent: "center",
-            width: 32,
-            height: 32,
-            borderRadius: 20,
-            position: "absolute",
-            top: "7%",
-            right: "7%",
-            borderWidth: 1,
-            borderColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 1,
-              height: 1,
-            },
-          }}
-          onPress={() => {
-            resetAll();
-            setModalVisible(false);
-          }}
-        >
-          <Icon
-            style={{ width: "100%" }}
-            size={RFValue(20, 800)}
-            type="antdesign"
-            name="close"
-            color="black"
-          ></Icon>
-        </Pressable>
-        <Text
-          style={{
-            fontSize: RFValue(20, 800),
-            fontWeight: "700",
-            textAlign: "center",
-            width: "60%",
-            height: "15%",
-          }}
-        >
-          Mystery box Level
+    <View style={{ width: "100%", height: "100%" }}>
+      <View style={styles.container}></View>
+      <View style={styles.container2}>
+        <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>
+          Account
         </Text>
         <View
           style={{
+            height: "80%",
+            width: "90%",
+            alignItems: "center",
             justifyContent: "space-evenly",
-            alignItems: "center",
-            height: "40%",
-            width: "80%",
-            flexDirection: "row",
-            flexWrap: "wrap",
           }}
         >
-          {showMysteryBox()}
+          <View
+            style={{
+              backgroundColor: "white",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 6,
+                height: 6,
+              },
+              width: "100%",
+              height: "20%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>LeaderBoard</Text>
+            <Text style={{ fontSize: RFValue(15, 800), fontWeight: "600" }}>1020/3712</Text>
+            <Text style={{ fontSize: RFValue(12, 800), fontWeight: "600" }}>1020/3712</Text>
+          </View>
+          <Pressable  style={{
+              backgroundColor: "white",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 6,
+                height: 6,
+              },
+              width: "100%",
+              height: "20%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>Discord</Text>
+          </Pressable>
+          <Pressable  style={{
+              backgroundColor: "white",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 6,
+                height: 6,
+              },
+              width: "100%",
+              height: "20%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>Twitter</Text>
+          </Pressable>
+          <Pressable  style={{
+              backgroundColor: "white",
+              borderRadius: 30,
+              borderWidth: 1,
+              shadowOpacity: 1,
+              shadowRadius: 1,
+              shadowOffset: {
+                width: 6,
+                height: 6,
+              },
+              width: "100%",
+              height: "20%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+            <Text style={{ fontSize: RFValue(24, 800), fontWeight: "700" }}>Support project</Text>
+          </Pressable>
         </View>
-
-        <Pressable
-          style={{
-            width: "45%",
-            height: "15%",
-            borderRadius: 100,
-            borderWidth: 1,
-            borderColor: "black",
-            backgroundColor: "#9DF8B6",
-            shadowColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 1,
-            shadowOffset: {
-              width: 4,
-              height: 4,
-            },
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={() => {
-            mysteryBoxLevel != ""
-              ? nextStep()
-              : Alert.alert("You must choose a mystery box!");
-          }}
-        >
-          <Text style={{ fontWeight: "700", fontSize: RFValue(24, 800) }}>
-            NEXT
-          </Text>
-        </Pressable>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  mb: {
-    resizeMode: "contain",
-    width: "100%",
-    height: "100%",
-    opacity: 0.4,
-  },
-  activeMb: {
-    resizeMode: "contain",
-    width: "100%",
-    height: "100%",
-  },
-  realm: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    opacity: 0.3,
-  },
-  realmActive: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    opacity: 1,
-  },
   headerRuns: {
     top: 0,
     backgroundColor: "#E0FEF3",
@@ -360,11 +273,9 @@ const styles = StyleSheet.create({
     top: "22%",
   },
   selectorTextPrimary: {
-    color: "white",
     fontSize: RFValue(36, 800),
   },
   selectorTextSecondary: {
-    color: "white",
     fontSize: RFValue(36, 800),
   },
   selector: {
@@ -376,7 +287,6 @@ const styles = StyleSheet.create({
     width: "75%",
   },
   dateSelectorTextPrimary: {
-    color: "white",
     fontSize: RFValue(20, 800),
   },
   dateSelector: {
@@ -395,10 +305,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   container2: {
+    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    height: "80%",
+    height: "75%",
     width: "100%",
+    position: "absolute",
+    top: "10%",
+    justifyContent: "space-evenly",
   },
   image: {
     flex: 1,

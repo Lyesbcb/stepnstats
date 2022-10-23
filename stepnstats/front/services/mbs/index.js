@@ -92,9 +92,9 @@ async function uploadMb(image, realm) {
       .then(async (response) => {
         return await response;
       })
-      .catch(async function (error) {
-        throw await error.message;
-      });
+        .catch(async function (error) {
+          throw await error.message;
+        });
     // Stop wainting screen
   }
 }
